@@ -26,11 +26,17 @@ void draw(void)
             glVertex2f(300, -50);
         glEnd();
 
+
         glFlush();
 }
 
 void on_mouseClick(int button, int click_state, int x_mouse_position, int y_mouse_position)
 {
+
+        // Start 2D transformations matrix
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
 	if (click_state == GLUT_DOWN) {
 		if (button == GLUT_RIGHT_BUTTON) {
 			// Rotate blades clockwise

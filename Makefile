@@ -6,11 +6,10 @@ BINARY = ./build/output
 
 # sources directory
 # SRC = ./src/sandbox.cpp
-# # SRC = ./src/stars.c
+# SRC = ./src/stars.c
 # SRC = ./src/02-02-ExemploTransformacoes2D.c
 # SRC = ./src/exemplo_mouse.cpp
 SRC = ./t1/t1.cpp
-
 
 # includes directory
 INCLUDES = ./includes
