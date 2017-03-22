@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-SRC = template.cpp
+SRC = ./src/sandbox.cpp
 
 # includes directory
 INCLUDES = ./includes
@@ -14,7 +14,7 @@ INCLUDES = ./includes
 LIBS = -lglut -lGL -lGLU -lm
 FLAGS = -Wall -O0 -g -Wextra -pthread
 
-all: compile run
+all: compile run clean
 
 compile:
 	$(CC) -o $(BINARY) -I$(INCLUDES) $(SRC) $(LIBS)
