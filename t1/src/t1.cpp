@@ -11,55 +11,80 @@
 #include <GL/glut.h>
 #include <math.h>
 
-void rotation()
-{
-        GLfloat x, y, c_x, c_y;
-        x = 100;
-        y = 0;
-        c_x = 200;
-        c_y = 0;
+void changeSize(int w, int h) {
 
-        // Center dot
-        glBegin(GL_POINTS);
-                glColor3f(1.0f, 1.0f, 1.0f);
-                glVertex2f(c_x, c_y);
-        glEnd();
+	// Prevent a divide by zero, when window is too short
+	// (you cant make a window of zero width).
+	if (h == 0)
+	{
+		h = 1;
+	}
 
-        // Dot that will rotate
-        glBegin(GL_POINTS);
-                glColor3f(0.0f, 0.0f, 1.0f);
-                glVertex2f(x, y);
-        glEnd();
+	float ratio = 1.0* w / h;
 
-        for (int i = 0; i < 1000; i++) {
-                x = x - c_x;
-                y = y - c_y;
-                GLfloat temp_x = x;
-                GLfloat temp_y = y;
-                x = temp_x * cos(0.52) - temp_y * sin(0.52);
-                y = temp_y * cos(0.52) + temp_x * sin(0.52);
-                x += c_x;
-                y += c_y;
+	// Use the Projection Matrix
+	glMatrixMode(GL_PROJECTION);
 
-                glBegin(GL_POINTS);
-                        glColor3f(0.0f, 0.0f, 1.0f);
-                        glVertex2f(x, y);
-                glEnd();
-        }
+	// Reset Matrix
+	glLoadIdentity();
 
+	// Set the viewport to be the entire window
+	glViewport(0, 0, w, h);
+
+	// Set the correct perspective.
+	gluPerspective(45,ratio,1,600);
+
+	// Get Back to the Modelview
+	glMatrixMode(GL_MODELVIEW);
 }
+
+GLfloat x = 100;
+GLfloat y = 0;
 
 void draw(void)
 {
+
+        GLfloat c_x, c_y;
+        c_x = 200;
+        c_y = 0;
+
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
 
         // Paint background
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glPointSize(1.0); // Define dot size
+        glPointSize(10.0); // Define dot size
 
-        rotation();
+        // Center dot
+        glBegin(GL_POINTS);
+                glColor3f(1.0f, 1.0f, 1.0f);
+                glVertex2f(200, 0);
+        glEnd();
+
+        x = x - c_x;
+        y = y - c_y;
+        GLfloat temp_x = x;
+        GLfloat temp_y = y;
+        x = temp_x * cos(0.00174533) - temp_y * sin(0.00174533);
+        y = temp_y * cos(0.00174533) + temp_x * sin(0.00174533);
+        x += c_x;
+        y += c_y;
+
+        glBegin(GL_POINTS);
+                glColor3f(0.0f, 0.0f, 1.0f);
+                glVertex2f(x, y);
+        glEnd();
+
+        glBegin(GL_POINTS);
+                glColor3f(1.0f, 0.0f, 1.0f);
+                glVertex2f(x + 5, y - 5);
+        glEnd();
+
+        glBegin(GL_POINTS);
+                glColor3f(0.0f, 0.0f, 1.0f);
+                glVertex2f(x + 1, y - 1);
+        glEnd();
 
         glFlush();
 }
@@ -84,7 +109,10 @@ int main(int argc, char* argv[])
         glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // Defines the buffer display mode
         glutInitWindowSize(800, 600); // Defines the size in pixels of the window
         glutCreateWindow("Windmill"); // Defines the window title
+
         glutDisplayFunc(draw); // Set rendering function as "draw()"
+        // glutReshapeFunc(changeSize);
+        glutIdleFunc(draw);
 
         glutMouseFunc(on_mouseClick); // Handles mouse clicks
 
