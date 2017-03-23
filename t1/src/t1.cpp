@@ -3,7 +3,7 @@
  * Trabalho 1 - Windmill
  * Alunos:
  *      Felipe Scrochio Custódio - 9442688
- *      Henrique Loschiavo -''
+ *      Henrique Loschiavo - 
  *      Lucas Antognoni -
  *      Gustavo Santiago - 8937416
  **/
