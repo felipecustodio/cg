@@ -5,11 +5,10 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-# SRC = ./src/sandbox.cpp
-# SRC = ./src/stars.c
-# SRC = ./src/02-02-ExemploTransformacoes2D.c
-# SRC = ./src/exemplo_mouse.cpp
-SRC = ./t1/t1.cpp
+# SRC = ./examples/sandbox.cpp
+# SRC = ./examples/stars.c
+# SRC = ./examples/02-02-ExemploTransformacoes2D.c
+# SRC = ./examples/exemplo_mouse.cpp
 
 # includes directory
 INCLUDES = ./includes

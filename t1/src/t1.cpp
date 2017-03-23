@@ -11,18 +11,41 @@
 #include <GL/glut.h>
 #include <math.h>
 
-
-void rotation(GLfloat x, GLfloat y, GLfloat c_x, GLfloat c_y)
+void rotation()
 {
+        GLfloat x, y, c_x, c_y;
+        x = 100;
+        y = 0;
+        c_x = 200;
+        c_y = 0;
 
-        x = x - c_x;
-        y = y - c_y;
-        GLfloat temp_x = x;
-        GLfloat temp_y = y;
-        x = temp_x * cos(0.52) - temp_y * sin(0.52);
-        y = temp_y * cos(0.52) + temp_x * sin(0.52);
-        x += c_x;
-        y += c_y;
+        // Center dot
+        glBegin(GL_POINTS);
+                glColor3f(1.0f, 1.0f, 1.0f);
+                glVertex2f(c_x, c_y);
+        glEnd();
+
+        // Dot that will rotate
+        glBegin(GL_POINTS);
+                glColor3f(0.0f, 0.0f, 1.0f);
+                glVertex2f(x, y);
+        glEnd();
+
+        for (int i = 0; i < 1000; i++) {
+                x = x - c_x;
+                y = y - c_y;
+                GLfloat temp_x = x;
+                GLfloat temp_y = y;
+                x = temp_x * cos(0.52) - temp_y * sin(0.52);
+                y = temp_y * cos(0.52) + temp_x * sin(0.52);
+                x += c_x;
+                y += c_y;
+
+                glBegin(GL_POINTS);
+                        glColor3f(0.0f, 0.0f, 1.0f);
+                        glVertex2f(x, y);
+                glEnd();
+        }
 
 }
 
@@ -30,23 +53,13 @@ void draw(void)
 {
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
-        
+
         // Paint background
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glPointSize(10.0); // Define dot size
+        glPointSize(1.0); // Define dot size
 
-        // Center dot
-        glBegin(GL_POINTS);
-                glColor3f(1.0f, 1.0f, 1.0f);
-                glVertex2f(200, 0);
-        glEnd();
-
-        // Dot that will rotate
-        glBegin(GL_POINTS);
-                glColor3f(0.0f, 0.0f, 1.0f);
-                glVertex2f(100, 0);
-        glEnd();
+        rotation();
 
         glFlush();
 }

@@ -5,17 +5,17 @@ void changeSize(int w, int h) {
 
 	// Prevent a divide by zero, when window is too short
 	// (you cant make a window of zero width).
-	if(h == 0)
-  {
+	if (h == 0)
+	{
 		h = 1;
-  }
+	}
 
-  float ratio = 1.0* w / h;
+	float ratio = 1.0* w / h;
 
 	// Use the Projection Matrix
 	glMatrixMode(GL_PROJECTION);
 
-  // Reset Matrix
+	// Reset Matrix
 	glLoadIdentity();
 
 	// Set the viewport to be the entire window

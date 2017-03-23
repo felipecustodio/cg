@@ -8,8 +8,8 @@ void desenha() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	/////////////////////////////////////
 
-	// Iniciar as transformações 2D
-	glMatrixMode(GL_MODELVIEW); // Inicia-se a matriz de transformações da openGL
+	// Iniciar as transformaï¿½ï¿½es 2D
+	glMatrixMode(GL_MODELVIEW); // Inicia-se a matriz de transformaï¿½ï¿½es da openGL
 	glLoadIdentity();
 	///////////////////////////////
 
@@ -42,27 +42,23 @@ void desenha() {
 	glVertex2f(8.0f, 6.0f);
 	glEnd();
 
-
-
-
 	glFlush();
 }
 
 
-// Programa Principal 
+// Programa Principal
 int main(int argc, char* argv[])
 {
-	glutInit(&argc, argv); // Inicia uma instância da glut
+	glutInit(&argc, argv); // Inicia uma instï¿½ncia da glut
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); // Define o modo de display do buffer
 	glutInitWindowSize(800, 800); // Define o tamanho em pixels da janela
-	glutCreateWindow("Transformações 2D em triângulos");
-	glutDisplayFunc(desenha); // Estabelece que a função de rendering é a função "desenha(.)"
+	glutCreateWindow("Transformaï¿½ï¿½es 2D em triï¿½ngulos");
+	glutDisplayFunc(desenha); // Estabelece que a funï¿½ï¿½o de rendering ï¿½ a funï¿½ï¿½o "desenha(.)"
 
 
-	glMatrixMode(GL_PROJECTION); // Especificações de observação de cena
-	gluOrtho2D(0, 20, 0, 20);	// Observa-se a seção de plano [0,200]x[0,200]
+	glMatrixMode(GL_PROJECTION); // Especificaï¿½ï¿½es de observaï¿½ï¿½o de cena
+	gluOrtho2D(0, 20, 0, 20);	// Observa-se a seï¿½ï¿½o de plano [0,200]x[0,200]
 
 
 	glutMainLoop();
 }
-
