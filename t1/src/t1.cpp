@@ -3,7 +3,7 @@
  * Trabalho 1 - Windmill
  * Alunos:
  *      Felipe Scrochio Custódio - 9442688
- *      Henrique Loschiavo -
+ *      Henrique Loschiavo -''
  *      Lucas Antognoni -
  *      Gustavo Santiago -
  **/
@@ -51,7 +51,7 @@ void draw(void)
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
 
-        // Paint background
+        // Repaint screen
         glClear(GL_COLOR_BUFFER_BIT);
 
         glPointSize(10.0); // Define dot size
@@ -74,16 +74,6 @@ void draw(void)
         glBegin(GL_POINTS);
                 glColor3f(0.0f, 0.0f, 1.0f);
                 glVertex2f(x, y);
-        glEnd();
-
-        glBegin(GL_POINTS);
-                glColor3f(1.0f, 0.0f, 1.0f);
-                glVertex2f(x + 5, y - 5);
-        glEnd();
-
-        glBegin(GL_POINTS);
-                glColor3f(0.0f, 0.0f, 1.0f);
-                glVertex2f(x + 1, y - 1);
         glEnd();
 
         glFlush();
