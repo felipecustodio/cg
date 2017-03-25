@@ -11,6 +11,9 @@
 #include <GL/glut.h>
 #include <math.h>
 
+
+/** Globals **/
+/** TODO remove this **/
 GLfloat c_x = 200;
 GLfloat c_y = 0;
 GLfloat x_1 = 100;
@@ -18,6 +21,7 @@ GLfloat y_1 = 0;
 GLfloat x_2 = 150;
 GLfloat y_2 = 50;
 
+/* Draw loop */
 void draw(void)
 {
         // Background color
@@ -67,14 +71,6 @@ void draw(void)
 	    glColor3f(0.96f, 0.38f, 0.56f);
 	    glVertex2f(x_1 + 50, y_1);
 	    glVertex2f(x_2 + 20, y_2);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	    glColor3f(0.0f, 0.88f, 0.95f);
-	    glVertex2f(c_x, c_y);
-	    glColor3f(0.96f, 0.38f, 0.56f);
-	    glVertex2f(x_1 + 100, y_1);
-	    glVertex2f(x_2 + 100, y_2);
 	glEnd();
 
         glFlush();
