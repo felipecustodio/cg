@@ -6,7 +6,7 @@
 #include <math.h>
 
 /* ------------------------ TRIANGLE ------------------------ */
-typedef struct Triangle{
+typedef struct Triangle {
     float width, height;
     float angle;
 
@@ -15,13 +15,32 @@ typedef struct Triangle{
 } Triangle;
 
 Triangle *createTriangle(float width, float height);
+// TODO: draw triangle hollow and filled
 void drawTriangle(Triangle *tri);
 void freeTriangle(Triangle *tri);
 
 /* ------------------------ TRIANGLE ------------------------ */
 
+/* ------------------------ QUADRILATERAL ------------------------ */
+typedef struct Quadrilateral {
+
+        // Size
+        float width, height;
+
+        // Coordinates
+        float xA, xB, xC;
+        float yA, yB, yC;
+
+} Quadrilateral;
+
+Quadrilateral* createQuad(float width, float height);
+// TODO: draw quad filled and hollow
+void drawQuad(Quadrilateral* quad);
+void freeQuad(Quadrilateral* quad);
+/* ------------------------ QUADRILATERAL ------------------------ */
+
 /* ------------------------ CIRCLE ------------------------ */
-typedef struct Circle{
+typedef struct Circle {
     float thickness, radius;
 
     float centerX, centerY;
