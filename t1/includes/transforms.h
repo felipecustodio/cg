@@ -3,7 +3,7 @@
 
 #include "shapes.h"
 #include <stdlib.h>
-#include <GL\glut.h>
+#include <GL/glut.h>
 
 /* ------------------------ TRIANGLE ------------------------ */
 void rotateTriangleCenter(Triangle *tri, float angle);

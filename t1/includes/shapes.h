@@ -2,7 +2,7 @@
 #define SHAPES_H
 
 #include <stdlib.h>
-#include <GL\glut.h>
+#include <GL/glut.h>
 #include <math.h>
 
 /* ------------------------ TRIANGLE ------------------------ */
@@ -10,12 +10,16 @@ typedef struct Triangle {
     float width, height;
     float angle;
 
-    float xA, xB, xC;
-    float yA, yB, yC;
+    //Salvar a cor para cada triângulo ao invés de uma macro?
+    float color[3];
+
+    // Melhor 2 vetores do que 6 variáveis?
+    float x[3];
+    float y[3];
+
 } Triangle;
 
 Triangle *createTriangle(float width, float height);
-// TODO: draw triangle hollow and filled
 void drawTriangle(Triangle *tri);
 void freeTriangle(Triangle *tri);
 

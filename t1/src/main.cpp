@@ -1,8 +1,10 @@
-#include <GL\glut.h>
+#include <stdlib.h>
+#include <GL/glut.h>
+
 #include <math.h>
 
-#include "shapes.h"
-#include "transforms.h"
+#include "~/cg/t1/includes/shapes.h"
+#include "~/cg/t1/includes/transforms.h"
 
 #define BG_COL 0.5f, 0.0f, 0.75f, 1.0f
 #define OBJ_COL1 0.37f, 0.88f, 0.95f
@@ -62,6 +64,17 @@ void draw(){
         drawCircleFilled(cir2);
     freeCircle(cir2);
     /* -----------------CIR-02------------------ */
+
+
+    /* -------------TESTES DO WIKI--------------
+
+    Triangle *t1 = createTriangle(30, 20);
+
+    drawTriangle(t1);
+
+    freeTriangle(t1);
+
+    /* -------------TESTES DO WIKI-------------- */
 
     glFlush();
 }

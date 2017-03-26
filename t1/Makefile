@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-SRC = ./src/t1.cpp
+SRC = ./src/main.cpp
 
 # includes directory
 INCLUDES = ./includes
@@ -17,7 +17,7 @@ FLAGS = -Wall -O0 -g -Wextra -pthread
 all: compile run clean
 
 compile:
-	$(CC) -o $(BINARY) -I$(INCLUDES) $(SRC) $(LIBS)
+	$(CC) -o $(BINARY) -I$(INCLUDES) $(SRC) $(LIBS) $(FLAGS)
 
 test:
 	run clean debug
