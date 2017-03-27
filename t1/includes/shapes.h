@@ -7,13 +7,17 @@
 
 /* ------------------------ TRIANGLE ------------------------ */
 typedef struct Triangle {
+
+    //Size
     float width, height;
+
+    //Rotation angle(?)
     float angle;
 
-    //Salvar a cor para cada triângulo ao invés de uma macro?
+    //Color
     float color[3];
 
-    // Melhor 2 vetores do que 6 variáveis?
+    // Coordinates
     float x[3];
     float y[3];
 
@@ -31,23 +35,25 @@ typedef struct Quadrilateral {
         // Size
         float width, height;
 
+        //Color
+        float color[3];
+
         // Coordinates
-        float xA, xB, xC;
-        float yA, yB, yC;
+        float x[4];
+        float y[4];
 
 } Quadrilateral;
 
 Quadrilateral* createQuad(float width, float height);
-// TODO: draw quad filled and hollow
 void drawQuad(Quadrilateral* quad);
 void freeQuad(Quadrilateral* quad);
+
 /* ------------------------ QUADRILATERAL ------------------------ */
 
 /* ------------------------ CIRCLE ------------------------ */
 typedef struct Circle {
     float thickness, radius;
-
-    float centerX, centerY;
+    float center[2];
 } Circle;
 
 Circle *createCircle(float radius, float thickness);
