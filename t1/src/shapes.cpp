@@ -1,7 +1,41 @@
 #include "~/cg/t1/includes/shapes.h"
 
-/* ------------------------ TRIANGLE ------------------------ */
+/* ---------------------------------- TEXT ---------------------------------- */
+Text *createText(void *font, const char *string){
+    Text *newTxt = (Text *) malloc(sizeof(Text));
 
+    newTxt->font = font;
+    newTxt->string = string;
+
+    newTxt->x = 0.0;
+    newTxt->y = 0.0;
+
+    return newTxt;
+}
+
+void drawText(Text *text){
+    if(text == NULL || text->font == NULL || text->string == NULL) return;
+
+    int strsize = strlen(text->string);
+
+    glRasterPos2f(text->x, text->y);
+
+    int i = 0;
+    for(i = 0; i < strsize; i++){
+        glutBitmapCharacter(text->font, text->string[i]);
+    }
+}
+
+void freeText(Text *text){
+    if(text){
+        if(text->font)
+            free(text->font);
+        free(text);
+    }
+}
+/* ---------------------------------- TEXT ---------------------------------- */
+
+/* ------------------------ TRIANGLE ------------------------ */
 Triangle *createTriangle(float width, float height){
 
   Triangle * t;
@@ -30,11 +64,9 @@ void freeTriangle(Triangle *tri){
   free(tri);
 
 }
-
 /* ------------------------ TRIANGLE ------------------------ */
 
 /* ------------------------ QUADRILATERAL ------------------------ */
-
 Quadrilateral* createQuad(float width, float height){
 
   Quadrilateral *q;
@@ -65,3 +97,57 @@ void freeQuad(Quadrilateral* quad){
 
 }
 /* ------------------------ QUADRILATERAL ------------------------ */
+
+/* ---------------------------------- CIRCLE ---------------------------------- */
+Circle *createCircle(float radius, float thickness){
+    Circle *newCirc = (Circle *) malloc(sizeof(Circle));
+
+    if(radius > 0.0)
+        newCirc->radius = radius;
+    else
+        newCirc->radius = 1.0;
+
+    if(thickness > 0.0)
+        newCirc->thickness = thickness;
+    else
+        newCirc->thickness = 1.0;
+
+    newCirc->x = 0.0;
+    newCirc->y = 0.0;
+
+    return newCirc;
+}
+
+void drawCircleHollow(Circle *circle){
+    float x = 0.0, y = 0.0;
+
+    glLineWidth(circle->thickness);
+    glBegin(GL_LINE_LOOP);
+        int i = 0;
+        for(i = 0; i < 360; i++){
+            x = circle->x + (circle->radius * sin(i));
+            y = circle->y + (circle->radius * cos(i));
+            glVertex2f(x, y);
+        }
+    glEnd();
+}
+
+void drawCircleFilled(Circle *circle){
+    float x = 0.0, y = 0.0;
+
+    glBegin(GL_TRIANGLE_FAN);
+        int i = 0;
+        glVertex2f(circle->x, circle->y);
+        for(i = 0; i < 360; i++){
+            x = circle->x + (circle->radius * sin(i));
+            y = circle->y + (circle->radius * cos(i));
+            glVertex2f(x, y);
+        }
+    glEnd();
+}
+
+void freeCircle(Circle *circle){
+    if(circle)
+        free(circle);
+}
+/* ---------------------------------- CIRCLE ---------------------------------- */

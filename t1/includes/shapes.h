@@ -5,6 +5,19 @@
 #include <GL/glut.h>
 #include <math.h>
 
+/* ------------------------ TEXT ------------------------ */
+typedef struct Text{
+    void *font;
+    const char *string;
+
+    float x, y;
+} Text;
+
+Text *createText(void *font, const char *string);
+void drawText(Text *text);
+void freeText(Text *text);
+/* ------------------------ TEXT ------------------------ */
+
 /* ------------------------ TRIANGLE ------------------------ */
 typedef struct Triangle {
 
@@ -47,7 +60,6 @@ typedef struct Quadrilateral {
 Quadrilateral* createQuad(float width, float height);
 void drawQuad(Quadrilateral* quad);
 void freeQuad(Quadrilateral* quad);
-
 /* ------------------------ QUADRILATERAL ------------------------ */
 
 /* ------------------------ CIRCLE ------------------------ */
