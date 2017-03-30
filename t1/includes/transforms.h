@@ -6,8 +6,6 @@
 #include <GL/glut.h>
 
 /* ------------------------ TRIANGLE ------------------------ */
-void translateTriangle(Triangle *tri, float x, float y);
-void scaleTriangle(Triangle *tri, float x, float y);
 void rotateTriangleCenter(Triangle *tri, float angle);
 /* ------------------------ TRIANGLE ------------------------ */
 

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 #include <math.h>
+#include <string.h>
 
 /* ------------------------ TEXT ------------------------ */
 typedef struct Text{
@@ -24,9 +25,6 @@ void freeText(Text *text);
 typedef struct Triangle {
     //Size
     float width, height;
-
-    //Rotation angle(?)
-    float angle;
 
     //Color
     float color[3];

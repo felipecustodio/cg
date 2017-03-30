@@ -1,7 +1,7 @@
 #include "shapes.h"
 
 /* ---------------------------------- TEXT ---------------------------------- */
-Text *createText(void *font, const char *string){
+Text *createText(void *font, const char *string) {
     Text *newTxt = (Text *) malloc(sizeof(Text));
 
     newTxt->font = font;
@@ -13,7 +13,7 @@ Text *createText(void *font, const char *string){
     return newTxt;
 }
 
-void drawText(Text *text){
+void drawText(Text *text) {
     if(text == NULL || text->font == NULL || text->string == NULL) return;
 
     int strsize = strlen(text->string);
@@ -21,27 +21,30 @@ void drawText(Text *text){
     glRasterPos2f(text->x, text->y);
 
     int i = 0;
-    for(i = 0; i < strsize; i++){
+    for(i = 0; i < strsize; i++) {
         glutBitmapCharacter(text->font, text->string[i]);
     }
 }
 
-void freeText(Text *text){
-    if(text){
+void freeText(Text *text) {
+    if(text) {
         if(text->font)
             free(text->font);
+            text->font = NULL;
         free(text);
+        text = NULL;
     }
 }
 /* ---------------------------------- TEXT ---------------------------------- */
 
 /* -------------------------------- TRIANGLE -------------------------------- */
+// TODO: passar como parâmetro tipo de triângulo
+// TODO: passar coordenada inicial
 Triangle *createTriangle(float width, float height) {
     Triangle *newTri = (Triangle *) malloc(sizeof(Triangle));
 
     newTri->width = width;
     newTri->height = height;
-    newTri->angle = 0.0;
 
     newTri->x[0] = 0.0;
     newTri->y[0] = 0.0;
@@ -58,15 +61,6 @@ Triangle *createTriangle(float width, float height) {
 void drawTriangle(Triangle *tri) {
     if(tri == NULL) return;
 
-    float midX = (tri->x[0] + tri->width) / 2;
-
-    tri->x[0] = tri->x[0];
-    tri->x[1] = tri->x[0] + tri->width;
-    tri->x[2] = midX;
-    tri->y[0] = tri->y[0];
-    tri->y[1] = tri->y[0];
-    tri->y[2] = tri->height;
-
     glColor3f(tri->color[0], tri->color[1], tri->color[2]);
 
     glBegin(GL_TRIANGLES);
@@ -77,20 +71,21 @@ void drawTriangle(Triangle *tri) {
 }
 
 void freeTriangle(Triangle *tri){
-    if(tri){
+    if (tri) {
             free(tri);
+            tri = NULL;
     }
 }
 /* -------------------------------- TRIANGLE -------------------------------- */
 
 /* ----------------------------- QUADRILATERAL ------------------------------ */
+// TODO: mudar 0 para coordenada inicial
 Quadrilateral* createQuad(float width, float height) {
     Quadrilateral* quad = (Quadrilateral *) malloc(sizeof(Quadrilateral));
 
     quad->width = width;
     quad->height = height;
 
-    // TODO fix size
     quad->x[0] = 0;
     quad->x[1] = 0;
     quad->x[2] = 0 + width;
@@ -120,12 +115,14 @@ void drawQuad(Quadrilateral* quad) {
 void freeQuad(Quadrilateral* quad) {
     if(quad){
             free(quad);
+            quad = NULL;
     }
 }
 /* ----------------------------- QUADRILATERAL ------------------------------ */
 
 /* --------------------------------- CIRCLE --------------------------------- */
-Circle *createCircle(float radius, float thickness){
+//TODO: passar coordenadas iniciais como parâmetro
+Circle *createCircle(float radius, float thickness) {
     Circle *newCirc = (Circle *) malloc(sizeof(Circle));
 
     if(radius > 0.0)
@@ -144,13 +141,13 @@ Circle *createCircle(float radius, float thickness){
     return newCirc;
 }
 
-void drawCircleHollow(Circle *circle){
+void drawCircleHollow(Circle *circle) {
     float x = 0.0, y = 0.0;
 
     glLineWidth(circle->thickness);
     glBegin(GL_LINE_LOOP);
         int i = 0;
-        for(i = 0; i < 360; i++){
+        for(i = 0; i < 360; i++) {
             x = circle->center[0] + (circle->radius * sin(i));
             y = circle->center[1] + (circle->radius * cos(i));
             glVertex2f(x, y);
@@ -164,7 +161,7 @@ void drawCircleFilled(Circle *circle){
     glBegin(GL_TRIANGLE_FAN);
         int i = 0;
         glVertex2f(circle->centerX, circle->centerY);
-        for(i = 0; i < 360; i++){
+        for(i = 0; i < 360; i++) {
             x = circle->center[0] + (circle->radius * sin(i));
             y = circle->center[1] + (circle->radius * cos(i));
             glVertex2f(x, y);
@@ -175,6 +172,7 @@ void drawCircleFilled(Circle *circle){
 void freeCircle(Circle *circle){
     if(circle){
         free(circle);
+        circle = NULL;
     }
 }
 /* --------------------------------- CIRCLE --------------------------------- */
