@@ -7,9 +7,11 @@
 
 /* ------------------------ TEXT ------------------------ */
 typedef struct Text{
+    //Font, String
     void *font;
     const char *string;
 
+    //Coordinates
     float x, y;
 } Text;
 
@@ -20,7 +22,6 @@ void freeText(Text *text);
 
 /* ------------------------ TRIANGLE ------------------------ */
 typedef struct Triangle {
-
     //Size
     float width, height;
 
@@ -30,7 +31,7 @@ typedef struct Triangle {
     //Color
     float color[3];
 
-    // Coordinates
+    //Coordinates
     float x[3];
     float y[3];
 
@@ -44,17 +45,15 @@ void freeTriangle(Triangle *tri);
 
 /* ------------------------ QUADRILATERAL ------------------------ */
 typedef struct Quadrilateral {
+    //Size
+    float width, height;
 
-        // Size
-        float width, height;
+    //Color
+    float color[3];
 
-        //Color
-        float color[3];
-
-        // Coordinates
-        float x[4];
-        float y[4];
-
+    //Coordinates
+    float x[4];
+    float y[4];
 } Quadrilateral;
 
 Quadrilateral* createQuad(float width, float height);
@@ -64,7 +63,13 @@ void freeQuad(Quadrilateral* quad);
 
 /* ------------------------ CIRCLE ------------------------ */
 typedef struct Circle {
+    //Size
     float thickness, radius;
+
+    //Color
+    float color[3];
+
+    //Coordinates
     float center[2];
 } Circle;
 

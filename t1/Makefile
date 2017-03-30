@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-SRC = ./src/main.cpp
+SRC = ./src/main.c
 
 # includes directory
 INCLUDES = ./includes
