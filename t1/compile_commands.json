@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/dvco/bcc/cg/cg/t1",
+  "command": "/usr/bin/cc   -I/home/dvco/bcc/cg/cg/t1/includes -I/home/dvco/bcc/cg/cg/t1/src    -o CMakeFiles/t1.dir/src/transforms.c.o   -c /home/dvco/bcc/cg/cg/t1/src/transforms.c",
+  "file": "/home/dvco/bcc/cg/cg/t1/src/transforms.c"
+},
+{
+  "directory": "/home/dvco/bcc/cg/cg/t1",
+  "command": "/usr/bin/cc   -I/home/dvco/bcc/cg/cg/t1/includes -I/home/dvco/bcc/cg/cg/t1/src    -o CMakeFiles/t1.dir/src/main.c.o   -c /home/dvco/bcc/cg/cg/t1/src/main.c",
+  "file": "/home/dvco/bcc/cg/cg/t1/src/main.c"
+},
+{
+  "directory": "/home/dvco/bcc/cg/cg/t1",
+  "command": "/usr/bin/cc   -I/home/dvco/bcc/cg/cg/t1/includes -I/home/dvco/bcc/cg/cg/t1/src    -o CMakeFiles/t1.dir/src/shapes.c.o   -c /home/dvco/bcc/cg/cg/t1/src/shapes.c",
+  "file": "/home/dvco/bcc/cg/cg/t1/src/shapes.c"
+}
+]
