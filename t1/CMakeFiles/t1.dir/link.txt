@@ -1,1 +1,0 @@
-/usr/bin/cc      -lGL -lGLU -lglut CMakeFiles/t1.dir/src/transforms.c.o CMakeFiles/t1.dir/src/main.c.o CMakeFiles/t1.dir/src/shapes.c.o  -o t1 -rdynamic -lGLU -lGL -lSM -lICE -lX11 -lXext -lglut -lXmu -lXi 
