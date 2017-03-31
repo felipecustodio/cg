@@ -88,23 +88,29 @@ void freeTriangle(Triangle *tri){
 /* -------------------------------- TRIANGLE -------------------------------- */
 
 /* ----------------------------- QUADRILATERAL ------------------------------ */
-// TODO: mudar 0 para coordenada inicial
-Quadrilateral* createQuad(float width, float height, float thickness) {
+// 0-------1
+// |       |
+// |       |
+// 3-------2
+// Quad Coordinates
+Quadrilateral* createQuad(float c_x, float c_y, float width, float height, float thickness) {
     Quadrilateral* quad = (Quadrilateral *) malloc(sizeof(Quadrilateral));
 
     quad->width = width;
     quad->height = height;
     quad->thickness = thickness;
 
-    quad->x[0] = 0;
-    quad->x[1] = 0;
-    quad->x[2] = 0 + width;
-    quad->x[3] = 0 + width;
+    quad->x[0] = c_x;
+    quad->y[0] = c_y;
 
-    quad->y[0] = 0;
-    quad->y[1] = 0 + height;
-    quad->y[2] = 0 + height;
-    quad->y[3] = 0;
+    quad->x[1] = c_x + width;
+    quad->y[1] = c_y;
+
+    quad->x[2] = c_x + width;
+    quad->y[2] = c_y - height;
+
+    quad->x[3] = c_x;
+    quad->y[3] = c_y - height;
 
     return quad;
 }
@@ -154,9 +160,8 @@ void freeQuad(Quadrilateral* quad) {
 /* ----------------------------- QUADRILATERAL ------------------------------ */
 
 /* --------------------------------- CIRCLE --------------------------------- */
-//TODO: passar coordenadas iniciais como parâmetro
-Circle *createCircle(float radius, float thickness) {
-    Circle *newCirc = (Circle *) malloc(sizeof(Circle));
+Circle *createCircle(float radius, float thickness, float c_x, float c_y) {
+    Circle *newCirc = (Circle *) malloc(sizeof(Circle)); //c_x e c_y são as coordenadas do centro
 
     if(radius > 0.0)
         newCirc->radius = radius;
@@ -168,8 +173,8 @@ Circle *createCircle(float radius, float thickness) {
     else
         newCirc->thickness = 1.0;
 
-    newCirc->center[0] = 0.0;
-    newCirc->center[1] = 0.0;
+    newCirc->center[0] = c_x;
+    newCirc->center[1] = c_y;
 
     return newCirc;
 }

@@ -23,7 +23,7 @@ test:
 	run clean debug
 
 run:
-	clear && $(BINARY)
+	$(BINARY)
 
 debug:
 	valgrind --leak-check=full --show-reachable=yes --track-origins=yes $(BINARY)

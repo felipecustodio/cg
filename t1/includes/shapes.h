@@ -55,7 +55,7 @@ typedef struct Quadrilateral {
     float y[4];
 } Quadrilateral;
 
-Quadrilateral* createQuad(float width, float height, float thickness);
+Quadrilateral* createQuad(float c_x, float c_y, float width, float height, float thickness);
 void setQuadColor(Quadrilateral *quad, float r, float g, float b);
 void drawQuadHollow(Quadrilateral* quad);
 void drawQuadFilled(Quadrilateral* quad);
