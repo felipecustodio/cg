@@ -35,7 +35,6 @@ void draw(void)
 
 void on_mouseClick(int button, int click_state, int x_mouse_position, int y_mouse_position)
 {
-	GLfloat temp_x, temp_y;
 	if (click_state == GLUT_DOWN) {
 		if (button == GLUT_RIGHT_BUTTON) {
 
