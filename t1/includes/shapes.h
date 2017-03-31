@@ -36,6 +36,7 @@ typedef struct Triangle {
 } Triangle;
 
 Triangle *createTriangle(float width, float height);
+void setTriangleColor(Triangle *tri, float r, float g, float b);
 void drawTriangle(Triangle *tri);
 void freeTriangle(Triangle *tri);
 
@@ -44,7 +45,7 @@ void freeTriangle(Triangle *tri);
 /* ------------------------ QUADRILATERAL ------------------------ */
 typedef struct Quadrilateral {
     //Size
-    float width, height;
+    float width, height, thickness;
 
     //Color
     float color[3];
@@ -54,8 +55,10 @@ typedef struct Quadrilateral {
     float y[4];
 } Quadrilateral;
 
-Quadrilateral* createQuad(float width, float height);
-void drawQuad(Quadrilateral* quad);
+Quadrilateral* createQuad(float width, float height, float thickness);
+void setQuadColor(Quadrilateral *quad, float r, float g, float b);
+void drawQuadHollow(Quadrilateral* quad);
+void drawQuadFilled(Quadrilateral* quad);
 void freeQuad(Quadrilateral* quad);
 /* ------------------------ QUADRILATERAL ------------------------ */
 
@@ -72,6 +75,7 @@ typedef struct Circle {
 } Circle;
 
 Circle *createCircle(float radius, float thickness);
+void setCircleColor(Circle *circle, float r, float g, float b);
 void drawCircleHollow(Circle *circle);
 void drawCircleFilled(Circle *circle);
 void freeCircle(Circle *circle);

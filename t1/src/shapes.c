@@ -28,9 +28,10 @@ void drawText(Text *text) {
 
 void freeText(Text *text) {
     if(text) {
-        if(text->font)
+        if(text->font != NULL){
             free(text->font);
             text->font = NULL;
+        }
         free(text);
         text = NULL;
     }
@@ -58,6 +59,14 @@ Triangle *createTriangle(float width, float height) {
     return newTri;
 }
 
+void setTriangleColor(Triangle *tri, float r, float g, float b){
+    if (tri == NULL) return;
+
+    tri->color[0] = r;
+    tri->color[1] = g;
+    tri->color[2] = b;
+}
+
 void drawTriangle(Triangle *tri) {
     if(tri == NULL) return;
 
@@ -80,11 +89,12 @@ void freeTriangle(Triangle *tri){
 
 /* ----------------------------- QUADRILATERAL ------------------------------ */
 // TODO: mudar 0 para coordenada inicial
-Quadrilateral* createQuad(float width, float height) {
+Quadrilateral* createQuad(float width, float height, float thickness) {
     Quadrilateral* quad = (Quadrilateral *) malloc(sizeof(Quadrilateral));
 
     quad->width = width;
     quad->height = height;
+    quad->thickness = thickness;
 
     quad->x[0] = 0;
     quad->x[1] = 0;
@@ -99,8 +109,30 @@ Quadrilateral* createQuad(float width, float height) {
     return quad;
 }
 
-// TODO: draw quad filled and hollow
-void drawQuad(Quadrilateral* quad) {
+void setQuadColor(Quadrilateral *quad, float r, float g, float b){
+    if (quad == NULL) return;
+
+    quad->color[0] = r;
+    quad->color[1] = g;
+    quad->color[2] = b;
+}
+
+void drawQuadHollow(Quadrilateral* quad) {
+    if (quad == NULL) return;
+
+    glColor3f(quad->color[0], quad->color[1], quad->color[2]);
+
+    glLineWidth(quad->thickness);
+
+    glBegin(GL_LINE_LOOP);
+        glVertex2f(quad->x[0], quad->y[0]);
+        glVertex2f(quad->x[1], quad->y[1]);
+        glVertex2f(quad->x[2], quad->y[2]);
+        glVertex2f(quad->x[3], quad->y[3]);
+    glEnd();
+}
+
+void drawQuadFilled(Quadrilateral* quad) {
     if (quad == NULL) return;
 
     glColor3f(quad->color[0], quad->color[1], quad->color[2]);
@@ -112,6 +144,7 @@ void drawQuad(Quadrilateral* quad) {
         glVertex2f(quad->x[3], quad->y[3]);
     glEnd();
 }
+
 void freeQuad(Quadrilateral* quad) {
     if(quad){
             free(quad);
@@ -141,8 +174,18 @@ Circle *createCircle(float radius, float thickness) {
     return newCirc;
 }
 
+void setCircleColor(Circle *circle, float r, float g, float b){
+    if (circle == NULL) return;
+
+    circle->color[0] = r;
+    circle->color[1] = g;
+    circle->color[2] = b;
+}
+
 void drawCircleHollow(Circle *circle) {
     float x = 0.0, y = 0.0;
+
+    glColor3f(circle->color[0], circle->color[1], circle->color[2]);
 
     glLineWidth(circle->thickness);
     glBegin(GL_LINE_LOOP);
@@ -158,9 +201,11 @@ void drawCircleHollow(Circle *circle) {
 void drawCircleFilled(Circle *circle){
     float x = 0.0, y = 0.0;
 
+    glColor3f(circle->color[0], circle->color[1], circle->color[2]);
+
     glBegin(GL_TRIANGLE_FAN);
         int i = 0;
-        glVertex2f(circle->centerX, circle->centerY);
+        glVertex2f(circle->center[0], circle->center[1]);
         for(i = 0; i < 360; i++) {
             x = circle->center[0] + (circle->radius * sin(i));
             y = circle->center[1] + (circle->radius * cos(i));
