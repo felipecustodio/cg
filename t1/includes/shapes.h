@@ -35,7 +35,8 @@ typedef struct Triangle {
 
 } Triangle;
 
-Triangle *createTriangle(float width, float height);
+Triangle *createTriangle(float width, float height, int type);
+void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2, float y2, float x3, float y3);
 void setTriangleColor(Triangle *tri, float r, float g, float b);
 void drawTriangle(Triangle *tri);
 void freeTriangle(Triangle *tri);

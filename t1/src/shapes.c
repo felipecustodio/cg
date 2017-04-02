@@ -39,24 +39,52 @@ void freeText(Text *text) {
 /* ---------------------------------- TEXT ---------------------------------- */
 
 /* -------------------------------- TRIANGLE -------------------------------- */
-// TODO: passar como parâmetro tipo de triângulo
-// TODO: passar coordenada inicial
-Triangle *createTriangle(float width, float height) {
+
+Triangle *createTriangle(float width, float height, int type){
+
     Triangle *newTri = (Triangle *) malloc(sizeof(Triangle));
 
     newTri->width = width;
     newTri->height = height;
 
-    newTri->x[0] = 0.0;
-    newTri->y[0] = 0.0;
+    if (type == 0) {
 
-    newTri->x[1] = width;
-    newTri->y[1] = 0.0;
+      newTri->x[0] = 0.0;
+      newTri->y[0] = 0.0;
 
-    newTri->x[2] = width/2;
-    newTri->y[2] = height;
+      newTri->x[1] = width;
+      newTri->y[1] = 0.0;
+
+      newTri->x[2] = 0;
+      newTri->y[2] = height;
+
+    else {
+
+      newTri->x[0] = 0.0;
+      newTri->y[0] = 0.0;
+
+      newTri->x[1] = width;
+      newTri->y[1] = 0.0;
+
+      newTri->x[2] = width/2;
+      newTri->y[2] = height;
+    }
 
     return newTri;
+}
+
+void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2,
+                                           float y2, float x3, float y3) {
+  if (tri == NULL) return;
+
+  tri->x[0] = x1;
+  tri->y[0] = y1;
+
+  tri->x[1] = x2;
+  tri->y[1] = y2;
+
+  tri->x[2] = x3;
+  tri->y[2] = y3;
 }
 
 void setTriangleColor(Triangle *tri, float r, float g, float b){
