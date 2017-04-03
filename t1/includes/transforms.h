@@ -5,9 +5,14 @@
 #include <stdlib.h>
 #include <GL/glut.h>
 
-/* ------------------------ TRIANGLE ------------------------ */
+/* -------------------------------- TRIANGLE -------------------------------- */
 void rotateTriangleCenter(Triangle *tri, float angle);
 void rotateTriangleVertex(Triangle *tri, float angle, int vertex);
-/* ------------------------ TRIANGLE ------------------------ */
+/* -------------------------------- TRIANGLE -------------------------------- */
+
+/* ------------------------------ QUADRILATERAL ----------------------------- */
+void rotateQuadCenter(Quadrilateral *quad, float angle);
+void rotateQuadVertex(Quadrilateral *quad, float angle, int vertex);
+/* ------------------------------ QUADRILATERAL ----------------------------- */
 
 #endif

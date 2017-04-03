@@ -10,91 +10,33 @@
 
 #include <GL/glut.h>
 #include <math.h>
-#include "shapes.h"
-#include "transforms.h"
+#include "scene.h"
+#include "settings.h"
 
-#define ORTHO_X 300
-#define ORTHO_Y 300
+int main(int argc, char* argv[]){
+    if(CONSOLE == 1) printf("\n * W i n d m i l l * \n");
+    if(CONSOLE == 1 && DEBUG == 1) printf(">Initializing window...");
 
-/* Reshaping function */
-void reshape(int width, int height){
-    // Screen can't be smaller than 0
-    if(height == 0)
-        height = 1;
+    glutInit(&argc, argv); // Instanciate Glut
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB); // Defines the buffer display mode
+    glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
+    glutCreateWindow("Windmill"); // Defines the window title
 
-    float ratio = width * 1.0/height;
+    glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"
+    glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
+	glutIdleFunc(drawLoop); // Set draw to repeat while no events occur
 
-    // Changes matrix mode to projection
-    glMatrixMode(GL_PROJECTION);
+    glutMouseFunc(on_mouseClick); // Handles mouse clicks
 
-    // Reset Matrix
-	glLoadIdentity();
+    glMatrixMode(GL_PROJECTION); // Load matrix mode
+    glViewport(0, 0, VIEWPORT_X, VIEWPORT_Y); // Set viewport size
+    gluOrtho2D(-ORTHO_X, ORTHO_X, -ORTHO_Y, ORTHO_Y); // Defines the orthogonal plane to build the scene in
 
-    // Viewport correction
-    glViewport(0, 0, width, height);
+    if(CONSOLE == 1 && DEBUG == 1) printf(">Starting loop...");
 
-    // Perspective and projection correction
-    //gluPerspective(45, ratio, -1, 1);
-    gluOrtho2D(-ORTHO_X * ratio, ORTHO_X * ratio, -ORTHO_Y, ORTHO_Y);
+    glutMainLoop(); // Start operations according to the specifications above
 
-    // Switches matrix mode back to modelview
-    glMatrixMode(GL_MODELVIEW);
-}
+    if(CONSOLE == 1 && DEBUG == 1) printf(">Closing window...");
 
-
-/* Draw loop */
-void draw(void)
-{
-        // Background color
-        glClearColor(0.0f, 0.0f, 0.0f, 1);
-
-        // Repaint screen
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        // Set matrix mode to MODELVIEW
-        glMatrixMode(GL_MODELVIEW);
-
-        // Reset Matrix
-    	glLoadIdentity();
-
-        glBegin(GL_POINTS);
-                glColor3f(1.0f, 1.0f, 1.0f);
-                glVertex2f(0, 0);
-        glEnd();
-
-
-        glPointSize(10.0); // Define dot size
-
-        glutSwapBuffers();
-}
-
-void on_mouseClick(int button, int click_state, int x_mouse_position, int y_mouse_position)
-{
-	if (click_state == GLUT_DOWN) {
-		if (button == GLUT_RIGHT_BUTTON) {
-
-		} else if (button == GLUT_LEFT_BUTTON) {
-
-		}
-	}
-
-	glutPostRedisplay(); // Forces scene redraw
-}
-
-int main(int argc, char* argv[])
-{
-        glutInit(&argc, argv); // Instanciate Glut
-        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB); // Defines the buffer display mode
-        glutInitWindowSize(800, 600); // Defines the size in pixels of the window
-        glutCreateWindow("Windmill"); // Defines the window title
-
-        glutDisplayFunc(draw); // Set rendering function as "draw()"
-        glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
-        glutIdleFunc(draw); // Set draw to repeat while no events occur
-        glutMouseFunc(on_mouseClick); // Handles mouse clicks
-
-        glMatrixMode(GL_PROJECTION);
-        gluOrtho2D(-ORTHO_X, ORTHO_X, -ORTHO_Y, ORTHO_Y); // Defines the orthogonal plane to build the scene in
-
-        glutMainLoop(); // Start operations according to the specifications above
+    return 0;
 }

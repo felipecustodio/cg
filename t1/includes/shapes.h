@@ -6,7 +6,7 @@
 #include <math.h>
 #include <string.h>
 
-/* ------------------------ TEXT ------------------------ */
+/* ---------------------------------- TEXT ---------------------------------- */
 typedef struct Text{
     //Font, String
     void *font;
@@ -19,9 +19,9 @@ typedef struct Text{
 Text *createText(void *font, const char *string);
 void drawText(Text *text);
 void freeText(Text *text);
-/* ------------------------ TEXT ------------------------ */
+/* ---------------------------------- TEXT ---------------------------------- */
 
-/* ------------------------ TRIANGLE ------------------------ */
+/* -------------------------------- TRIANGLE -------------------------------- */
 typedef struct Triangle {
     //Size
     float thickness;
@@ -43,9 +43,9 @@ void drawTriangleHollow(Triangle *tri);
 void drawTriangleFilled(Triangle *tri);
 void freeTriangle(Triangle *tri);
 
-/* ------------------------ TRIANGLE ------------------------ */
+/* -------------------------------- TRIANGLE -------------------------------- */
 
-/* ------------------------ QUADRILATERAL ------------------------ */
+/* ------------------------------ QUADRILATERAL ----------------------------- */
 typedef struct Quadrilateral {
     //Size
     float width, height, thickness;
@@ -63,9 +63,9 @@ void setQuadColor(Quadrilateral *quad, float r, float g, float b);
 void drawQuadHollow(Quadrilateral* quad);
 void drawQuadFilled(Quadrilateral* quad);
 void freeQuad(Quadrilateral* quad);
-/* ------------------------ QUADRILATERAL ------------------------ */
+/* ------------------------------ QUADRILATERAL ----------------------------- */
 
-/* ------------------------ CIRCLE ------------------------ */
+/* --------------------------------- CIRCLE --------------------------------- */
 typedef struct Circle {
     //Size
     float thickness, radius;
@@ -78,10 +78,11 @@ typedef struct Circle {
 } Circle;
 
 Circle *createCircle(float radius, float thickness);
+void setCircleCoordinates(Circle *circle, float x, float y);
 void setCircleColor(Circle *circle, float r, float g, float b);
 void drawCircleHollow(Circle *circle);
 void drawCircleFilled(Circle *circle);
 void freeCircle(Circle *circle);
-/* ------------------------ CIRCLE ------------------------ */
+/* --------------------------------- CIRCLE --------------------------------- */
 
 #endif

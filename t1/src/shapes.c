@@ -64,16 +64,16 @@ Triangle *createTriangle(){
 
 void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2,
                                            float y2, float x3, float y3) {
-  if (tri == NULL) return;
+    if (tri == NULL) return;
 
-  tri->x[0] = x1;
-  tri->y[0] = y1;
+    tri->x[0] = x1;
+    tri->y[0] = y1;
 
-  tri->x[1] = x2;
-  tri->y[1] = y2;
+    tri->x[1] = x2;
+    tri->y[1] = y2;
 
-  tri->x[2] = x3;
-  tri->y[2] = y3;
+    tri->x[2] = x3;
+    tri->y[2] = y3;
 }
 
 void setTriangleThickness(Triangle *tri, float thickness){
@@ -143,10 +143,10 @@ Quadrilateral* createQuad(float c_x, float c_y, float width, float height, float
     quad->x[1] = c_x + width/2;
     quad->y[1] = c_y + height/2;
 
-    quad->x[2] = c_x - width/2;
+    quad->x[2] = c_x + width/2;
     quad->y[2] = c_y - height/2;
 
-    quad->x[3] = c_x + width/2;
+    quad->x[3] = c_x - width/2;
     quad->y[3] = c_y - height/2;
 
     return quad;
@@ -197,8 +197,8 @@ void freeQuad(Quadrilateral* quad) {
 /* ----------------------------- QUADRILATERAL ------------------------------ */
 
 /* --------------------------------- CIRCLE --------------------------------- */
-Circle *createCircle(float radius, float thickness, float c_x, float c_y) {
-    Circle *newCirc = (Circle *) malloc(sizeof(Circle)); //c_x e c_y são as coordenadas do centro
+Circle *createCircle(float radius, float thickness) {
+    Circle *newCirc = (Circle *) malloc(sizeof(Circle));
 
     if(radius > 0.0)
         newCirc->radius = radius;
@@ -210,10 +210,17 @@ Circle *createCircle(float radius, float thickness, float c_x, float c_y) {
     else
         newCirc->thickness = 1.0;
 
-    newCirc->center[0] = c_x;
-    newCirc->center[1] = c_y;
+    newCirc->center[0] = 0.0;
+    newCirc->center[1] = 0.0;
 
     return newCirc;
+}
+
+void setCircleCoordinates(Circle *circle, float x, float y){
+    if (circle == NULL) return;
+
+    circle->center[0] = x;
+    circle->center[1] = y;
 }
 
 void setCircleColor(Circle *circle, float r, float g, float b){
