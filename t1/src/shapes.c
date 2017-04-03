@@ -40,35 +40,22 @@ void freeText(Text *text) {
 
 /* -------------------------------- TRIANGLE -------------------------------- */
 
-Triangle *createTriangle(float width, float height, int type){
+Triangle *createTriangle(){
 
     Triangle *newTri = (Triangle *) malloc(sizeof(Triangle));
 
-    newTri->width = width;
-    newTri->height = height;
+    newTri->color[0] = 0.0;
+    newTri->color[1] = 0.0;
+    newTri->color[2] = 0.0;
 
-    if (type == 0) {
+    newTri->x[0] = 0.0;
+    newTri->y[0] = 0.0;
 
-      newTri->x[0] = 0.0;
-      newTri->y[0] = 0.0;
+    newTri->x[1] = 0.0;
+    newTri->y[1] = 0.0;
 
-      newTri->x[1] = width;
-      newTri->y[1] = 0.0;
-
-      newTri->x[2] = 0;
-      newTri->y[2] = height;
-
-    else {
-
-      newTri->x[0] = 0.0;
-      newTri->y[0] = 0.0;
-
-      newTri->x[1] = width;
-      newTri->y[1] = 0.0;
-
-      newTri->x[2] = width/2;
-      newTri->y[2] = height;
-    }
+    newTri->x[2] = 0.0;
+    newTri->y[2] = 0.0;
 
     return newTri;
 }
@@ -109,8 +96,8 @@ void drawTriangle(Triangle *tri) {
 
 void freeTriangle(Triangle *tri){
     if (tri) {
-            free(tri);
-            tri = NULL;
+      free(tri);
+      tri = NULL;
     }
 }
 /* -------------------------------- TRIANGLE -------------------------------- */
