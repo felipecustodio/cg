@@ -117,7 +117,7 @@ void freeTriangle(Triangle *tri){
 
 /* ----------------------------- QUADRILATERAL ------------------------------ */
 // 0-------1
-// |       |
+// |   .   |
 // |       |
 // 3-------2
 // Quad Coordinates
@@ -128,17 +128,17 @@ Quadrilateral* createQuad(float c_x, float c_y, float width, float height, float
     quad->height = height;
     quad->thickness = thickness;
 
-    quad->x[0] = c_x;
-    quad->y[0] = c_y;
+    quad->x[0] = c_x - width/2;
+    quad->y[0] = c_y + height/2;
 
-    quad->x[1] = c_x + width;
-    quad->y[1] = c_y;
+    quad->x[1] = c_x + width/2;
+    quad->y[1] = c_y + height/2;
 
-    quad->x[2] = c_x + width;
-    quad->y[2] = c_y - height;
+    quad->x[2] = c_x - width/2;
+    quad->y[2] = c_y - height/2;
 
-    quad->x[3] = c_x;
-    quad->y[3] = c_y - height;
+    quad->x[3] = c_x + width/2;
+    quad->y[3] = c_y - height/2;
 
     return quad;
 }
