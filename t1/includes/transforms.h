@@ -7,6 +7,7 @@
 
 /* ------------------------ TRIANGLE ------------------------ */
 void rotateTriangleCenter(Triangle *tri, float angle);
+void rotateTriangleVertex(Triangle *tri, float angle, int vertex);
 /* ------------------------ TRIANGLE ------------------------ */
 
 #endif
