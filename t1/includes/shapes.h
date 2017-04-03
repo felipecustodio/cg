@@ -23,6 +23,9 @@ void freeText(Text *text);
 
 /* ------------------------ TRIANGLE ------------------------ */
 typedef struct Triangle {
+    //Size
+    float thickness;
+
     //Color
     float color[3];
 
@@ -34,8 +37,10 @@ typedef struct Triangle {
 
 Triangle *createTriangle();
 void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2, float y2, float x3, float y3);
+void setTriangleThickness(Triangle *tri, float thickness);
 void setTriangleColor(Triangle *tri, float r, float g, float b);
-void drawTriangle(Triangle *tri);
+void drawTriangleHollow(Triangle *tri);
+void drawTriangleFilled(Triangle *tri);
 void freeTriangle(Triangle *tri);
 
 /* ------------------------ TRIANGLE ------------------------ */

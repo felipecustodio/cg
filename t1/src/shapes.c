@@ -44,6 +44,8 @@ Triangle *createTriangle(){
 
     Triangle *newTri = (Triangle *) malloc(sizeof(Triangle));
 
+    newTri->thickness = 1.0f;
+
     newTri->color[0] = 0.0;
     newTri->color[1] = 0.0;
     newTri->color[2] = 0.0;
@@ -74,6 +76,12 @@ void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2,
   tri->y[2] = y3;
 }
 
+void setTriangleThickness(Triangle *tri, float thickness){
+    if (tri == NULL) return;
+
+    tri->thickness = thickness;
+}
+
 void setTriangleColor(Triangle *tri, float r, float g, float b){
     if (tri == NULL) return;
 
@@ -82,7 +90,21 @@ void setTriangleColor(Triangle *tri, float r, float g, float b){
     tri->color[2] = b;
 }
 
-void drawTriangle(Triangle *tri) {
+void drawTriangleHollow(Triangle *tri) {
+    if(tri == NULL) return;
+
+    glColor3f(tri->color[0], tri->color[1], tri->color[2]);
+
+    glLineWidth(tri->thickness);
+
+    glBegin(GL_LINE_LOOP);
+        glVertex2f(tri->x[0], tri->y[0]);
+        glVertex2f(tri->x[1], tri->y[1]);
+        glVertex2f(tri->x[2], tri->y[2]);
+    glEnd();
+}
+
+void drawTriangleFilled(Triangle *tri) {
     if(tri == NULL) return;
 
     glColor3f(tri->color[0], tri->color[1], tri->color[2]);
