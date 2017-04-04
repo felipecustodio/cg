@@ -9,6 +9,7 @@ int rightMouseButtonDown = 0;
 void on_mouseClick(int button, int click_state,
         int x_mouse_position, int y_mouse_position)
 {
+
 	if (button == GLUT_RIGHT_BUTTON) {
                 if (CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Right Mouse Button");
                 rightMouseButtonDown = (click_state == GLUT_DOWN);
@@ -57,79 +58,90 @@ void reshape(int width, int height)
 }
 /* -------------------------------- WINDOW ---------------------------------- */
 
+/* ----------------------------- TEXTURES ------------------------------ */
+
+
+
+/* ----------------------------- TEXTURES ------------------------------ */
+
+
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 void drawScene()
 {
-    // Load matrix mode
-    glMatrixMode(GL_MODELVIEW);
 
-    // Refresh matrix for new object
-    glLoadIdentity();
+        // Load matrix mode
+        glMatrixMode(GL_MODELVIEW);
 
-    glBegin(GL_POINTS);
-        glColor3f(1.0f, 1.0f, 1.0f);
-        glVertex2f(0, 0);
-    glEnd();
+        // Refresh matrix for new object
+        glLoadIdentity();
 
-    glPointSize(10.0); // Define dot size
+        // Draw background
 
-    // Refresh matrix for new object
-    glLoadIdentity();
+        // Joint of windmill pole
+        glBegin(GL_POINTS);
+                glColor3f(1.0f, 1.0f, 1.0f);
+                glVertex2f(0, 0);
+        glEnd();
 
-    Quadrilateral *quad = createQuad(0.0f, 0.0f, 25.0f, 200.0f, 5.0f);
-        setQuadColor(quad, 0.6f, 0.4f, 0.0f);
-        glTranslatef(0.0, -100.0f, 0.0f);
-        //rotateQuadCenter(quad, -getCurAngle());
-        drawQuadHollow(quad);
-    freeQuad(quad);
+        glPointSize(10.0); // Define dot size
 
-    // Refresh matrix for new object
-    glLoadIdentity();
+        // Refresh matrix for new object
+        glLoadIdentity();
 
-    Triangle *tri = createTriangle(100.0f, 100.0f, 5.0f, 0);
-        setTriangleCoordinates(tri, 0.0f, 0.0f, 150.0f, 0.0f, 0.0f, 150.0f);
-        setTriangleColor(tri, 0.0f, 0.4f, 0.6f);
-        setTriangleThickness(tri, 5.0f);
-        rotateTriangleVertex(tri, getCurAngle(), 1);
-        drawTriangleHollow(tri);
-    freeTriangle(tri);
+        Quadrilateral *quad = createQuad(0.0f, 0.0f, 25.0f, 200.0f, 5.0f);
+                setQuadColor(quad, 0.6f, 0.4f, 0.0f);
+                glTranslatef(0.0, -100.0f, 0.0f);
+                //rotateQuadCenter(quad, -getCurAngle());
+                drawQuadHollow(quad);
+        freeQuad(quad);
 
-    Triangle *tri2 = createTriangle(100.0f, 100.0f, 5.0f, 0);
-        setTriangleCoordinates(tri2, 0.0f, 0.0f, -150.0f, 0.0f, 0.0f, -150.0f);
-        setTriangleColor(tri2, 0.6f, 0.4f, 0.6f);
-        setTriangleThickness(tri2, 5.0f);
-        drawTriangleHollow(tri2);
-    freeTriangle(tri2);
+        // Refresh matrix for new object
+        glLoadIdentity();
 
-    Circle *circle = createCircle(25.0f, 5.0f);
-        setCircleColor(circle, 0.75f, 0.75f, 0.75f);
-        drawCircleFilled(circle);
-    freeCircle(circle);
+        Triangle *tri = createTriangle();
+                setTriangleCoordinates(tri, 0.0f, 0.0f, 150.0f, 0.0f, 0.0f, 150.0f);
+                setTriangleColor(tri, 0.0f, 0.4f, 0.6f);
+                setTriangleThickness(tri, 5.0f);
+                rotateTriangleVertex(tri, getCurAngle(), 1);
+                drawTriangleHollow(tri);
+        freeTriangle(tri);
 
-    Circle *circle2 = createCircle(15.0f, 5.0f);
-        setCircleColor(circle2, 0.9f, 0.9f, 0.9f);
-        drawCircleFilled(circle2);
-    freeCircle(circle2);
+        Triangle *tri2 = createTriangle();
+                setTriangleCoordinates(tri2, 0.0f, 0.0f, -150.0f, 0.0f, 0.0f, -150.0f);
+                setTriangleColor(tri2, 0.6f, 0.4f, 0.6f);
+                setTriangleThickness(tri2, 5.0f);
+                drawTriangleHollow(tri2);
+        freeTriangle(tri2);
+
+        Circle *circle = createCircle(25.0f, 5.0f);
+                setCircleColor(circle, 0.75f, 0.75f, 0.75f);
+                drawCircleFilled(circle);
+        freeCircle(circle);
+
+        Circle *circle2 = createCircle(15.0f, 5.0f);
+                setCircleColor(circle2, 0.9f, 0.9f, 0.9f);
+                drawCircleFilled(circle2);
+        freeCircle(circle2);
 }
 
 void drawLoop()
 {
-    // Background color
-    glClearColor(0.0f, 0.0f, 0.0f, 1);
+        // Background color
+        glClearColor(0.0f, 0.0f, 0.0f, 1);
 
-    // Repaint screen
-    glClear(GL_COLOR_BUFFER_BIT);
+        // Repaint screen
+        glClear(GL_COLOR_BUFFER_BIT);
 
-    // Draw scene
-    drawScene();
+        // Draw scene
+        drawScene();
 
-    // Check mouse event
-    mouseHold();
+        // Check mouse event
+        mouseHold();
 
-    // Animator
-    physicsAnimator();
+        // Animator
+        physicsAnimator();
 
-    // Clear buffer
-    glutSwapBuffers();
+        // Clear buffer
+        glutSwapBuffers();
 }
 /* ----------------------------- SCENE DRAWING ------------------------------ */
