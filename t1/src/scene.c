@@ -44,7 +44,7 @@ void reshape(int width, int height)
     glMatrixMode(GL_PROJECTION);
 
     // Reset Matrix
-	glLoadIdentity();
+    glLoadIdentity();
 
     // Viewport correction
     glViewport(0, 0, width, height);

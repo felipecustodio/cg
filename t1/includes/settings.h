@@ -2,7 +2,7 @@
 #define SETTINGS_H
 
 /*------------------------------ DEBUG & INIT ------------------------------- */
-#define DEBUG 0
+#define DEBUG 1
 #define CONSOLE 1
 /*------------------------------ DEBUG & INIT ------------------------------- */
 

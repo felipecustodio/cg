@@ -4,10 +4,10 @@
 float curAngle = 0.0f; // Current Angle
 float curVeloc = 0.0f; // Current Velocity
 
-float rotAccel = 5.0f; // Rotation Acceleration
-float airResis = 0.5f; // Air Resistance
+float rotAccel = 1.0f; // Rotation Acceleration
+float airResis = 0.2f; // Air Resistance
 
-float velLimit = 15.0f; // Velocity Limit
+float velLimit = 5.0f; // Velocity Limit
 
 float getCurAngle() {
     return curAngle;
@@ -32,6 +32,13 @@ void physicsAnimator() {
         curVeloc = -velLimit;
 
     curAngle = curAngle + curVeloc;
+
+    // Avoid overflow
+    if (curAngle > 360) {
+            curAngle = 0;
+    } else if (curAngle < 0) {
+            curAngle = 360;
+    }
 
     if(CONSOLE == 1 && DEBUG == 1)
         printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);

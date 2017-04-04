@@ -13,7 +13,7 @@
 #include "scene.h"
 #include "settings.h"
 
-int main(int argc, char* argv[]){
+int main(int argc, char* argv[]) {
     if(CONSOLE == 1) printf("\n * W i n d m i l l * \n");
     if(CONSOLE == 1 && DEBUG == 1) printf(">Initializing window...");
 
