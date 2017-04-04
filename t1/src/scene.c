@@ -1,28 +1,38 @@
-#include "scene.h"
+#include "../includes/scene.h"
 
 /* -------------------------------- INPUT ----------------------------------- */
 
-// TODO: mouse hold = rotation
+/* ------ INPUT STATUS -----*/
+int leftMouseButtonDown = 0;
+int rightMouseButtonDown = 0;
 
 void on_mouseClick(int button, int click_state,
-        int x_mouse_position, int y_mouse_position){
-	GLfloat temp_x, temp_y;
-	if (click_state == GLUT_DOWN) {
-		if (button == GLUT_RIGHT_BUTTON) {
-            if(CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Right Mouse Button");
-            accelerateRight();
-		} else if (button == GLUT_LEFT_BUTTON) {
-            if(CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Left Mouse Button");
-            accelerateLeft();
-		}
-	}
+        int x_mouse_position, int y_mouse_position)
+{
+	if (button == GLUT_RIGHT_BUTTON) {
+                if (CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Right Mouse Button");
+                rightMouseButtonDown = (click_state == GLUT_DOWN);
 
+        } else if (button == GLUT_LEFT_BUTTON) {
+                        if (CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Left Mouse Button");
+                        leftMouseButtonDown = (click_state == GLUT_DOWN);
+	}
 	glutPostRedisplay(); // Forces scene redraw
 }
+
+void mouseHold() {
+        if (leftMouseButtonDown) {
+                accelerateLeft();
+        } else if (rightMouseButtonDown) {
+                accelerateRight();
+        }
+}
+
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
-void reshape(int width, int height){
+void reshape(int width, int height)
+{
     // Screen can't be smaller than 0
     if(height == 0)
         height = 1;
@@ -48,7 +58,8 @@ void reshape(int width, int height){
 /* -------------------------------- WINDOW ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
-void drawScene(){
+void drawScene()
+{
     // Load matrix mode
     glMatrixMode(GL_MODELVIEW);
 
@@ -101,7 +112,8 @@ void drawScene(){
     freeCircle(circle2);
 }
 
-void drawLoop(){
+void drawLoop()
+{
     // Background color
     glClearColor(0.0f, 0.0f, 0.0f, 1);
 
@@ -110,6 +122,9 @@ void drawLoop(){
 
     // Draw scene
     drawScene();
+
+    // Check mouse event
+    mouseHold();
 
     // Animator
     physicsAnimator();

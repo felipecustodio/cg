@@ -1,21 +1,21 @@
-#include "physics.h"
+#include "../includes/physics.h"
 
 /* -------------------------------- VARIABLES ------------------------------- */
 float curAngle = 0.0f; // Current Angle
 float curVeloc = 0.0f; // Current Velocity
 
 float rotAccel = 5.0f; // Rotation Acceleration
-float airResis = 0.1f; // Air Resistance
+float airResis = 0.5f; // Air Resistance
 
 float velLimit = 15.0f; // Velocity Limit
 
-float getCurAngle(){
+float getCurAngle() {
     return curAngle;
 }
 /* -------------------------------- VARIABLES ------------------------------- */
 
 /* -------------------------------- ANIMATIONS ------------------------------ */
-void physicsAnimator(){
+void physicsAnimator() {
     // Physics Animator //
     // Air resistance
     if(curVeloc >= airResis)
@@ -39,12 +39,12 @@ void physicsAnimator(){
 /* -------------------------------- ANIMATIONS ------------------------------ */
 
 /* --------------------------------- MOTIONS -------------------------------- */
-void accelerateLeft(){
+void accelerateLeft() {
     curVeloc = curVeloc + rotAccel;
     curAngle = curAngle + curVeloc;
 }
 
-void accelerateRight(){
+void accelerateRight() {
     curVeloc = curVeloc - rotAccel;
     curAngle = curAngle + curVeloc;
 }

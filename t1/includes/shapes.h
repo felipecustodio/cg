@@ -7,7 +7,7 @@
 #include <string.h>
 
 /* ---------------------------------- TEXT ---------------------------------- */
-typedef struct Text{
+typedef struct Text {
     //Font, String
     void *font;
     const char *string;
@@ -47,13 +47,13 @@ void freeTriangle(Triangle *tri);
 
 /* ------------------------------ QUADRILATERAL ----------------------------- */
 typedef struct Quadrilateral {
-    //Size
+    // Size
     float width, height, thickness;
 
-    //Color
+    // Color
     float color[3];
 
-    //Coordinates
+    // Coordinates
     float x[4];
     float y[4];
 } Quadrilateral;
@@ -67,13 +67,13 @@ void freeQuad(Quadrilateral* quad);
 
 /* --------------------------------- CIRCLE --------------------------------- */
 typedef struct Circle {
-    //Size
+    // Size
     float thickness, radius;
 
-    //Color
+    // Color
     float color[3];
 
-    //Coordinates
+    // Coordinates
     float center[2];
 } Circle;
 

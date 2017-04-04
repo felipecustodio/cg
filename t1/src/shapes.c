@@ -28,7 +28,7 @@ void drawText(Text *text) {
 
 void freeText(Text *text) {
     if(text) {
-        if(text->font != NULL){
+        if(text->font != NULL) {
             free(text->font);
             text->font = NULL;
         }
@@ -40,7 +40,7 @@ void freeText(Text *text) {
 
 /* -------------------------------- TRIANGLE -------------------------------- */
 
-Triangle *createTriangle(){
+Triangle *createTriangle() {
 
     Triangle *newTri = (Triangle *) malloc(sizeof(Triangle));
 
