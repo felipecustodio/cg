@@ -68,14 +68,84 @@ void reshape(int width, int height)
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 void drawScene()
 {
-
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
 
+
+        /*--------------------WINDMILL--------------------*/
+
         // Refresh matrix for new object
         glLoadIdentity();
+        Triangle *roof = createTriangle();
+                setTriangleCoordinates(roof, -70.0f, 50.0f, 70.0f,50.0f, 0.0f,100.0f);
+                setTriangleColor(roof, 1.0f, 1.0f, 1.0f);
+                drawTriangleFilled(roof);
+        freeTriangle(roof);
 
-        // Draw background
+        // Refresh matrix for new object
+        glLoadIdentity();
+        Quadrilateral *building = createQuad();
+                setQuadCoordinates(building, -50.0f, 50.0f, 50.0f, 50.0f, 100.0f, -250.0f, -100.0f, -250.0f);
+                setQuadColor(building, 1.0f, 1.0f, 1.0f);
+                drawQuadHollow(building);
+        freeQuad(building);
+
+        // Refresh matrix for new object
+        glLoadIdentity();
+        Quadrilateral *door = createQuad();
+                setQuadCoordinates(door, -25.0f, -180.0f, 25.0f, -180.0f, 25.0f, -250.0f, -25.0f, -250.0f);
+                setQuadColor(door, 1.0f, 1.0f, 1.0f);
+                drawQuadHollow(door);
+        freeQuad(door);
+
+        /*--------------------END--------------------*/
+
+        /*--------------------PADS--------------------*/
+
+        // Refresh matrix for new object
+        glLoadIdentity();
+        Triangle *pad1 = createTriangle();
+                setTriangleCoordinates(pad1, 0.0f, 0.0f, 100.0f, 200.0f, 0.0f, 100.0f);
+                setTriangleColor(pad1, 204.0f, 153.0f, 0.0f);
+                setTriangleThickness(pad1, 5.0f);
+                rotateTriangleVertex(pad1, getCurAngle(), 1);
+                drawTriangleFilled(pad1);
+        freeTriangle(pad1);
+
+        // Refresh matrix for new object
+        glLoadIdentity();
+        Triangle *pad2 = createTriangle();
+                setTriangleCoordinates(pad2, 0.0f, 0.0f, 200.0f, -100.0f, 100.0f, 0.0f);
+                setTriangleColor(pad2, 0.0f, 0.0f, 255.0f);
+                setTriangleThickness(pad2, 5.0f);
+                rotateTriangleVertex(pad2, getCurAngle(), 1);
+                drawTriangleFilled(pad2);
+        freeTriangle(pad2);
+
+        // Refresh matrix for new object
+        glLoadIdentity();
+        Triangle *pad3 = createTriangle();
+                setTriangleCoordinates(pad3, 0.0f, 0.0f, -100.0f, -200.0f, 0.0f, -100.0f);
+                setTriangleColor(pad3, 255.0f, 0.0f, 0.0f);
+                setTriangleThickness(pad3, 5.0f);
+                rotateTriangleVertex(pad3, getCurAngle(), 1);
+                drawTriangleFilled(pad3);
+        freeTriangle(pad3);
+
+        // Refresh matrix for new object
+        glLoadIdentity();
+        Triangle *pad4 = createTriangle();
+                setTriangleCoordinates(pad4, 0.0f, 0.0f, -200.0f, 100.0f, -100.0f, 0.0f);
+                setTriangleColor(pad4, 0.0f, 255.0f, 0.0f);
+                setTriangleThickness(pad4, 5.0f);
+                rotateTriangleVertex(pad4, getCurAngle(), 1);
+                drawTriangleFilled(pad4);
+        freeTriangle(pad4);
+
+        /*--------------------END--------------------*/
+
+        // Refresh matrix for new object
+        glLoadIdentity();
 
         // Joint of windmill pole
         glBegin(GL_POINTS);
@@ -84,44 +154,6 @@ void drawScene()
         glEnd();
 
         glPointSize(10.0); // Define dot size
-
-        // Refresh matrix for new object
-        glLoadIdentity();
-
-        Quadrilateral *quad = createQuad(0.0f, 0.0f, 25.0f, 200.0f, 5.0f);
-                setQuadColor(quad, 0.6f, 0.4f, 0.0f);
-                glTranslatef(0.0, -100.0f, 0.0f);
-                //rotateQuadCenter(quad, -getCurAngle());
-                drawQuadHollow(quad);
-        freeQuad(quad);
-
-        // Refresh matrix for new object
-        glLoadIdentity();
-
-        Triangle *tri = createTriangle();
-                setTriangleCoordinates(tri, 0.0f, 0.0f, 150.0f, 0.0f, 0.0f, 150.0f);
-                setTriangleColor(tri, 0.0f, 0.4f, 0.6f);
-                setTriangleThickness(tri, 5.0f);
-                rotateTriangleVertex(tri, getCurAngle(), 1);
-                drawTriangleHollow(tri);
-        freeTriangle(tri);
-
-        Triangle *tri2 = createTriangle();
-                setTriangleCoordinates(tri2, 0.0f, 0.0f, -150.0f, 0.0f, 0.0f, -150.0f);
-                setTriangleColor(tri2, 0.6f, 0.4f, 0.6f);
-                setTriangleThickness(tri2, 5.0f);
-                drawTriangleHollow(tri2);
-        freeTriangle(tri2);
-
-        Circle *circle = createCircle(25.0f, 5.0f);
-                setCircleColor(circle, 0.75f, 0.75f, 0.75f);
-                drawCircleFilled(circle);
-        freeCircle(circle);
-
-        Circle *circle2 = createCircle(15.0f, 5.0f);
-                setCircleColor(circle2, 0.9f, 0.9f, 0.9f);
-                drawCircleFilled(circle2);
-        freeCircle(circle2);
 }
 
 void drawLoop()
