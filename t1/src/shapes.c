@@ -1,4 +1,4 @@
-#include "shapes.h"
+#include "../includes/hapes.h"
 
 /* ---------------------------------- TEXT ---------------------------------- */
 Text *createText(void *font, const char *string) {
@@ -42,24 +42,24 @@ void freeText(Text *text) {
 
 Triangle *createTriangle() {
 
-    Triangle *newTri = (Triangle *) malloc(sizeof(Triangle));
+    Triangle *tri = (Triangle *) malloc(sizeof(Triangle));
 
-    newTri->thickness = 1.0f;
+    tri->thickness = 1.0f;
 
-    newTri->color[0] = 0.0;
-    newTri->color[1] = 0.0;
-    newTri->color[2] = 0.0;
+    tri->color[0] = 0.0;
+    tri->color[1] = 0.0;
+    tri->color[2] = 0.0;
 
-    newTri->x[0] = 0.0;
-    newTri->y[0] = 0.0;
+    tri->x[0] = 0.0;
+    tri->y[0] = 0.0;
 
-    newTri->x[1] = 0.0;
-    newTri->y[1] = 0.0;
+    tri->x[1] = 0.0;
+    tri->y[1] = 0.0;
 
-    newTri->x[2] = 0.0;
-    newTri->y[2] = 0.0;
+    tri->x[2] = 0.0;
+    tri->y[2] = 0.0;
 
-    return newTri;
+    return tri;
 }
 
 void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2,
@@ -130,26 +130,47 @@ void freeTriangle(Triangle *tri){
 // |       |
 // 3-------2
 // Quad Coordinates
-Quadrilateral* createQuad(float c_x, float c_y, float width, float height, float thickness) {
+Quadrilateral* createQuad() {
     Quadrilateral* quad = (Quadrilateral *) malloc(sizeof(Quadrilateral));
 
-    quad->width = width;
-    quad->height = height;
-    quad->thickness = thickness;
+    quad->thickness = 1.0f;
 
-    quad->x[0] = c_x - width/2;
-    quad->y[0] = c_y + height/2;
+    quad->x[0] = 0.0;
+    quad->y[0] = 0.0;
 
-    quad->x[1] = c_x + width/2;
-    quad->y[1] = c_y + height/2;
+    quad->x[1] = 0.0;
+    quad->y[1] = 0.0;
 
-    quad->x[2] = c_x + width/2;
-    quad->y[2] = c_y - height/2;
+    quad->x[2] = 0.0;
+    quad->y[2] = 0.0;
 
-    quad->x[3] = c_x - width/2;
-    quad->y[3] = c_y - height/2;
+    quad->x[3] = 0.0;
+    quad->y[3] = 0.0;
 
     return quad;
+}
+
+void setQuadCoordinates(Quadrilateral *quad, float x1, float y1, float x2, float y2,
+                                             float x3, float y3, float x4, float y4) {
+    if (quad == NULL) return;
+
+    quad->x[0] = x1;
+    quad->y[0] = y1;
+
+    quad->x[1] = x2;
+    quad->y[1] = y2;
+
+    quad->x[2] = x3;
+    quad->y[2] = y3;
+
+    quad->x[3] = x4;
+    quad->y[3] = y4;
+}
+
+void setQuadThickness(Quadrilateral *quad, float thickness){
+    if (quad == NULL) return;
+
+    quad->thickness = thickness;
 }
 
 void setQuadColor(Quadrilateral *quad, float r, float g, float b){
@@ -198,22 +219,22 @@ void freeQuad(Quadrilateral* quad) {
 
 /* --------------------------------- CIRCLE --------------------------------- */
 Circle *createCircle(float radius, float thickness) {
-    Circle *newCirc = (Circle *) malloc(sizeof(Circle));
+    Circle *circle = (Circle *) malloc(sizeof(Circle));
 
     if(radius > 0.0)
-        newCirc->radius = radius;
+        circle->radius = radius;
     else
-        newCirc->radius = 1.0;
+        circle->radius = 1.0;
 
     if(thickness > 0.0)
-        newCirc->thickness = thickness;
+        circle->thickness = thickness;
     else
-        newCirc->thickness = 1.0;
+        circle->thickness = 1.0;
 
-    newCirc->center[0] = 0.0;
-    newCirc->center[1] = 0.0;
+    circle->center[0] = 0.0;
+    circle->center[1] = 0.0;
 
-    return newCirc;
+    return circle;
 }
 
 void setCircleCoordinates(Circle *circle, float x, float y){

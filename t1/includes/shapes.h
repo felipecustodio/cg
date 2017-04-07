@@ -48,7 +48,7 @@ void freeTriangle(Triangle *tri);
 /* ------------------------------ QUADRILATERAL ----------------------------- */
 typedef struct Quadrilateral {
     // Size
-    float width, height, thickness;
+    float thickness;
 
     // Color
     float color[3];
@@ -58,8 +58,10 @@ typedef struct Quadrilateral {
     float y[4];
 } Quadrilateral;
 
-Quadrilateral* createQuad(float c_x, float c_y, float width, float height, float thickness);
+Quadrilateral* createQuad();
 void setQuadColor(Quadrilateral *quad, float r, float g, float b);
+void setQuadCoordinates(Quadrilateral *quad, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
+void setQuadThickness(Quadrilateral *quad, float thickness);
 void drawQuadHollow(Quadrilateral* quad);
 void drawQuadFilled(Quadrilateral* quad);
 void freeQuad(Quadrilateral* quad);
