@@ -18,7 +18,7 @@ void drawText(Text *text, int x, int y) {
 
     text->x = x;
     text->y = y;
-    
+
     int strsize = strlen(text->string);
 
     glRasterPos2f(text->x, text->y);
@@ -31,10 +31,6 @@ void drawText(Text *text, int x, int y) {
 
 void freeText(Text *text) {
     if(text) {
-        if(text->font != NULL) {
-            free(text->font);
-            text->font = NULL;
-        }
         free(text);
         text = NULL;
     }

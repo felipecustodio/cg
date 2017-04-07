@@ -157,8 +157,9 @@ void drawScene()
 
         /*--------------------TEXT--------------------*/
 
-        Text* UI = createText(GLUT_BITMAP_TIMES_ROMAN_10 ,"Hello");
-        drawText(UI);
+        char* text = "Trabalho 01 - Windmill";
+        Text* UI = createText(GLUT_BITMAP_9_BY_15, text);
+        drawText(UI, -450, 200);
         freeText(UI);
 
 }
