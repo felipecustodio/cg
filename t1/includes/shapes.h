@@ -17,7 +17,7 @@ typedef struct Text {
 } Text;
 
 Text *createText(void *font, const char *string);
-void drawText(Text *text);
+void drawText(Text *text, int x, int y);
 void freeText(Text *text);
 /* ---------------------------------- TEXT ---------------------------------- */
 

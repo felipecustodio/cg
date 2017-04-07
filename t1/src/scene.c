@@ -154,6 +154,13 @@ void drawScene()
         glEnd();
 
         glPointSize(10.0); // Define dot size
+
+        /*--------------------TEXT--------------------*/
+
+        Text* UI = createText(GLUT_BITMAP_TIMES_ROMAN_10 ,"Hello");
+        drawText(UI);
+        freeText(UI);
+
 }
 
 void drawLoop()

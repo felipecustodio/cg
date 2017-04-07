@@ -13,9 +13,12 @@ Text *createText(void *font, const char *string) {
     return newTxt;
 }
 
-void drawText(Text *text) {
+void drawText(Text *text, int x, int y) {
     if(text == NULL || text->font == NULL || text->string == NULL) return;
 
+    text->x = x;
+    text->y = y;
+    
     int strsize = strlen(text->string);
 
     glRasterPos2f(text->x, text->y);
