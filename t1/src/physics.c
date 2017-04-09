@@ -8,6 +8,7 @@ float rotAccel = 1.0f; // Rotation Acceleration
 float airResis = 0.2f; // Air Resistance
 
 float velLimit = 5.0f; // Velocity Limit
+float airResisLimit = 0.5f; // Air Resistance increase limit
 
 float getCurAngle() {
     return curAngle;
@@ -40,19 +41,29 @@ void physicsAnimator() {
             curAngle = 360;
     }
 
-    if(CONSOLE == 1 && DEBUG == 1)
-        printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
+    //if(CONSOLE == 1 && DEBUG == 1)
+        //printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
 }
 /* -------------------------------- ANIMATIONS ------------------------------ */
 
 /* --------------------------------- MOTIONS -------------------------------- */
 void accelerateLeft() {
-    curVeloc = curVeloc + rotAccel;
-    curAngle = curAngle + curVeloc;
+        curVeloc = curVeloc + rotAccel;
+        curAngle = curAngle + curVeloc;
 }
 
 void accelerateRight() {
-    curVeloc = curVeloc - rotAccel;
-    curAngle = curAngle + curVeloc;
+        curVeloc = curVeloc - rotAccel;
+        curAngle = curAngle + curVeloc;
 }
+
+void airResistance(char key) {
+        if(CONSOLE == 1 && DEBUG == 1) printf("Change air resistance\n");
+        if (key) {
+                if (airResis + 0.1 < airResisLimit) airResis += 0.1;
+        } else {
+                if (airResis - 0.1 >= 0) airResis -= 0.1;
+        }
+}
+
 /* --------------------------------- MOTIONS -------------------------------- */

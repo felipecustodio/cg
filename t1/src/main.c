@@ -25,9 +25,10 @@ int main(int argc, char* argv[]) {
 
     glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"
     glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
-	glutIdleFunc(drawLoop); // Set draw to repeat while no events occur
+    glutIdleFunc(drawLoop); // Set draw to repeat while no events occur
 
     glutMouseFunc(on_mouseClick); // Handles mouse clicks
+    glutKeyboardFunc(keyPress); // Handles keyboard presses
 
     glMatrixMode(GL_PROJECTION); // Load matrix mode
     glViewport(0, 0, VIEWPORT_X, VIEWPORT_Y); // Set viewport size
