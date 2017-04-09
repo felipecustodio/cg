@@ -45,6 +45,14 @@ int main(int argc, char* argv[]) {
 
     if(CONSOLE == 1 && DEBUG == 1) printf("> Starting loop\n");
 
+    // LOAD TEXTURES
+    printf("LOADING TEXTURES\n");
+    background_texture = loadTexture("./assets/background.jpg");
+    if (!background_texture)  {
+            printf("ERROR LOADING TEXTURE\n");
+    }
+
+    // START RENDERING
     glutMainLoop(); // Start operations according to the specifications above
 
     if(CONSOLE == 1 && DEBUG == 1) printf("> Closing window\n");

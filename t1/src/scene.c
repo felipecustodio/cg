@@ -29,7 +29,7 @@ void mouseHold() {
         }
 }
 
-void keyPress(char key, int x, int y) {
+void keyPress(unsigned char key, int x, int y) {
         if (key == '+') {
                 airResistance(1);
         } else if (key == '-') {
@@ -67,13 +67,13 @@ void reshape(int width, int height)
 /* -------------------------------- WINDOW ---------------------------------- */
 
 /* ----------------------------- TEXTURES ------------------------------ */
-static GLuint background_texture;
-static GLuint loadTexture(const char *filename)
+GLuint loadTexture(const char *filename)
 {
 	GLuint tex = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-	if (!tex)
-		return 0;
-
+	if (!tex) {
+                printf("ERROR ON TEXTURE LOADING\n");
+                return 0;
+        }
 	glBindTexture(GL_TEXTURE_2D, tex);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -94,9 +94,9 @@ void drawScene()
 
         // Refresh matrix for new object
         glLoadIdentity();
-        background_texture = loadTexture("./assets/background.bmp");
         glBindTexture(GL_TEXTURE_2D, background_texture);
         glBegin(GL_QUADS);
+        glColor3f(0.0f, 0.0f, 0.0f);
 	glTexCoord2f(-400, 300);
 	glVertex2f(-400, -300);
 	glTexCoord2f(400, -300);
