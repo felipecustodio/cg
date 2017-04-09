@@ -18,7 +18,8 @@ int main(int argc, char* argv[]) {
     if(CONSOLE == 1 && DEBUG == 1) printf(">Initializing window...");
 
     glutInit(&argc, argv); // Instanciate Glut
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB); // Defines the buffer display mode
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE); // Defines the buffer display mode
+    glEnable(GL_MULTISAMPLE); // Enables antialiasing
     glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
     glutCreateWindow("Windmill"); // Defines the window title
 
