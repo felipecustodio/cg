@@ -67,9 +67,20 @@ void reshape(int width, int height)
 /* -------------------------------- WINDOW ---------------------------------- */
 
 /* ----------------------------- TEXTURES ------------------------------ */
+static GLuint background_texture;
+static GLuint loadTexture(const char *filename)
+{
+	GLuint tex = SOIL_load_OGL_texture(filename, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+	if (!tex)
+		return 0;
 
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glBindTexture(GL_TEXTURE_2D, 0);
 
-
+	return tex;
+}
 /* ----------------------------- TEXTURES ------------------------------ */
 
 
@@ -79,6 +90,24 @@ void drawScene()
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
 
+        /*--------------------BACKGROUND--------------------*/
+
+        // Refresh matrix for new object
+        glLoadIdentity();
+        background_texture = loadTexture("./assets/background.bmp");
+        glBindTexture(GL_TEXTURE_2D, background_texture);
+        glBegin(GL_QUADS);
+	glTexCoord2f(-400, 300);
+	glVertex2f(-400, -300);
+	glTexCoord2f(400, -300);
+	glVertex2f(400, -300);
+	glTexCoord2f(400, 300);
+	glVertex2f(400, 300);
+	glTexCoord2f(-400, 300);
+	glVertex2f(-400, 300);
+	glEnd();
+
+        /*--------------------END--------------------*/
 
         /*--------------------WINDMILL--------------------*/
 
@@ -152,6 +181,9 @@ void drawScene()
 
         /*--------------------END--------------------*/
 
+        /*--------------------POLE--------------------*/
+
+
         // Refresh matrix for new object
         glLoadIdentity();
 
@@ -163,14 +195,16 @@ void drawScene()
 
         glPointSize(10.0); // Define dot size
 
+        /*--------------------END--------------------*/
+
         /*--------------------TEXT--------------------*/
 
-        char* text = "- Diminui resistência do ar";
+        char* text = "- Diminui resistencia do ar";
         Text* UI = createText(GLUT_BITMAP_9_BY_15, text);
         drawText(UI, -450, 200);
         freeText(UI);
 
-        char* text2 = "+ Aumenta resistência do ar";
+        char* text2 = "+ Aumenta resistencia do ar";
         Text* UI2 = createText(GLUT_BITMAP_9_BY_15, text2);
         drawText(UI2, -450, 220);
         freeText(UI2);
@@ -179,6 +213,8 @@ void drawScene()
         Text* UI3 = createText(GLUT_BITMAP_9_BY_15, text3);
         drawText(UI3, -450, 240);
         freeText(UI3);
+
+        /*--------------------END--------------------*/
 
 }
 
