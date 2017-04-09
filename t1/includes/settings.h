@@ -4,7 +4,8 @@
 /*------------------------------ DEBUG & INIT ------------------------------- */
 #define DEBUG 1
 #define CONSOLE 1
-#define IF_DEBUG if(CONSOLE == 1 && DEBUG == 1)
+// Macro for checking if debug is on
+#define IF_DEBUG if(CONSOLE && DEBUG)
 /*------------------------------ DEBUG & INIT ------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
