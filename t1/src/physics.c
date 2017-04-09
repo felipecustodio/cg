@@ -8,7 +8,7 @@ float rotAccel = 1.0f; // Rotation Acceleration
 float airResis = 0.2f; // Air Resistance
 
 float velLimit = 5.0f; // Velocity Limit
-float airResisLimit = 0.5f; // Air Resistance increase limit
+float airResisLimit = 2.0f; // Air Resistance increase limit
 
 float getCurAngle() {
     return curAngle;
