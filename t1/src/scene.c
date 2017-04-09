@@ -157,10 +157,20 @@ void drawScene()
 
         /*--------------------TEXT--------------------*/
 
-        char* text = "Trabalho 01 - Windmill";
+        char* text = "- Diminui resistência do ar";
         Text* UI = createText(GLUT_BITMAP_9_BY_15, text);
         drawText(UI, -450, 200);
         freeText(UI);
+
+        char* text2 = "+ Aumenta resistência do ar";
+        Text* UI2 = createText(GLUT_BITMAP_9_BY_15, text2);
+        drawText(UI2, -450, 220);
+        freeText(UI2);
+
+        char* text3 = "Trabalho 01 - Windmill";
+        Text* UI3 = createText(GLUT_BITMAP_9_BY_15, text3);
+        drawText(UI3, -450, 240);
+        freeText(UI3);
 
 }
 
