@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <GL/glut.h>
+#include "../includes/SOIL/SOIL.h"
 #include "shapes.h"
 #include "transforms.h"
 #include "physics.h"
@@ -14,6 +15,9 @@ void mouseHold();
 void keyPress(char key, int x, int y);
 /* -------------------------------- INPUT ----------------------------------- */
 
+/* -------------------------------- TEXTURES ---------------------------------- */
+
+/* -------------------------------- TEXTURES ---------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
 void reshape(int width, int height);
