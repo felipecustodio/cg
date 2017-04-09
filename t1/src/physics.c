@@ -41,7 +41,7 @@ void physicsAnimator() {
             curAngle = 360;
     }
 
-    //if(CONSOLE == 1 && DEBUG == 1)
+    //IF_DEBUG
         //printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
 }
 /* -------------------------------- ANIMATIONS ------------------------------ */
@@ -58,13 +58,13 @@ void accelerateRight() {
 }
 
 void airResistance(char key) {
-        if(CONSOLE == 1 && DEBUG == 1) printf("Change air resistance\n");
+        IF_DEBUG printf("Change air resistance\n");
         if (key) {
                 if (airResis + 0.1 < airResisLimit) airResis += 0.1;
         } else {
                 if (airResis - 0.1 >= 0) airResis -= 0.1;
         }
-        if(CONSOLE == 1 && DEBUG == 1) printf("AIR RESISTANCE = %lf\n", airResis);
+        IF_DEBUG printf("AIR RESISTANCE = %lf\n", airResis);
 }
 
 /* --------------------------------- MOTIONS -------------------------------- */

@@ -15,7 +15,7 @@
 
 int main(int argc, char* argv[]) {
     if(CONSOLE == 1) printf("\n * W i n d m i l l * \n");
-    if(CONSOLE == 1 && DEBUG == 1) printf("◆ Initializing\n");
+    IF_DEBUG printf("◆ Initializing\n");
 
     glutInit(&argc, argv); // Instanciate Glut
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE); // Defines the buffer display mode
@@ -43,21 +43,19 @@ int main(int argc, char* argv[]) {
     glViewport(0, 0, VIEWPORT_X, VIEWPORT_Y); // Set viewport size
     gluOrtho2D(-ORTHO_X, ORTHO_X, -ORTHO_Y, ORTHO_Y); // Defines the orthogonal plane to build the scene in
 
-    if(CONSOLE == 1 && DEBUG == 1)
-
     // LOAD TEXTURES
-    if(CONSOLE == 1 && DEBUG == 1) printf("◆ LOADING TEXTURES\n");
+    IF_DEBUG printf("◆ LOADING TEXTURES\n");
     background_texture = loadTexture("./assets/background.jpg");
     if (!background_texture)  {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;
     }
-    if(CONSOLE == 1 && DEBUG == 1) printf("◆ SUCCESS LOADING TEXTURES\n");
+    IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
 
     // START RENDERING
     glutMainLoop(); // Start operations according to the specifications above
 
-    if(CONSOLE == 1 && DEBUG == 1) printf("◆ Closing window\n");
+    IF_DEBUG printf("◆ Closing window\n");
 
     return 0;
 }
