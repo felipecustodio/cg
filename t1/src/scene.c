@@ -96,17 +96,18 @@ void drawScene()
 
         // Refresh matrix for new object
         glLoadIdentity();
+        // Bind texture to quad
         glBindTexture(GL_TEXTURE_2D, background_texture);
         glBegin(GL_QUADS);
-        glColor3f(0.0f, 0.0f, 0.0f);
-	glTexCoord2f(-400, 300);
-	glVertex2f(-400, -300);
-	glTexCoord2f(400, -300);
-	glVertex2f(400, -300);
-	glTexCoord2f(400, 300);
-	glVertex2f(400, 300);
-	glTexCoord2f(-400, 300);
-	glVertex2f(-400, 300);
+                //glColor3f(1.0f, 0.0f, 0.0f);
+        	glTexCoord2f(0, 0);
+        	glVertex2f(-400, 225);
+                glTexCoord2f(1, 0);
+        	glVertex2f(400, 225);
+                glTexCoord2f(1, 1);
+        	glVertex2f(400, -225);
+                glTexCoord2f(0, 1);
+        	glVertex2f(-400, -225);
 	glEnd();
 
         /*--------------------END--------------------*/
@@ -185,7 +186,6 @@ void drawScene()
 
         /*--------------------POLE--------------------*/
 
-
         // Refresh matrix for new object
         glLoadIdentity();
 
@@ -226,7 +226,7 @@ void drawLoop()
         glClearColor(0.0f, 0.0f, 0.0f, 1);
 
         // Repaint screen
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Draw scene
         drawScene();

@@ -15,7 +15,7 @@
 
 int main(int argc, char* argv[]) {
     if(CONSOLE == 1) printf("\n * W i n d m i l l * \n");
-    if(CONSOLE == 1 && DEBUG == 1) printf("> Initializing\n");
+    if(CONSOLE == 1 && DEBUG == 1) printf("◆ Initializing\n");
 
     glutInit(&argc, argv); // Instanciate Glut
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE); // Defines the buffer display mode
@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
     // START RENDERING
     glutMainLoop(); // Start operations according to the specifications above
 
-    if(CONSOLE == 1 && DEBUG == 1) printf("> Closing window\n");
+    if(CONSOLE == 1 && DEBUG == 1) printf("◆ Closing window\n");
 
     return 0;
 }
