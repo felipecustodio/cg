@@ -64,6 +64,7 @@ void airResistance(char key) {
         } else {
                 if (airResis - 0.1 >= 0) airResis -= 0.1;
         }
+        if(CONSOLE == 1 && DEBUG == 1) printf("AIR RESISTANCE = %lf\n", airResis);
 }
 
 /* --------------------------------- MOTIONS -------------------------------- */

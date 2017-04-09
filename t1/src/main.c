@@ -43,14 +43,16 @@ int main(int argc, char* argv[]) {
     glViewport(0, 0, VIEWPORT_X, VIEWPORT_Y); // Set viewport size
     gluOrtho2D(-ORTHO_X, ORTHO_X, -ORTHO_Y, ORTHO_Y); // Defines the orthogonal plane to build the scene in
 
-    if(CONSOLE == 1 && DEBUG == 1) printf("> Starting loop\n");
+    if(CONSOLE == 1 && DEBUG == 1)
 
     // LOAD TEXTURES
-    printf("LOADING TEXTURES\n");
+    if(CONSOLE == 1 && DEBUG == 1) printf("◆ LOADING TEXTURES\n");
     background_texture = loadTexture("./assets/background.jpg");
     if (!background_texture)  {
-            printf("ERROR LOADING TEXTURE\n");
+            printf("✗✗✗ ERROR LOADING TEXTURE\n");
+            return EXIT_FAILURE;
     }
+    if(CONSOLE == 1 && DEBUG == 1) printf("◆ SUCCESS LOADING TEXTURES\n");
 
     // START RENDERING
     glutMainLoop(); // Start operations according to the specifications above
