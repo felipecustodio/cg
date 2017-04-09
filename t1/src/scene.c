@@ -29,6 +29,14 @@ void mouseHold() {
         }
 }
 
+void keyPress(char key, int x, int y) {
+        if (key == '+') {
+                airResistance(1);
+        } else if (key == '-') {
+                airResistance(0);
+        }
+}
+
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */

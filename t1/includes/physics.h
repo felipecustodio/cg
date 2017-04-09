@@ -15,6 +15,7 @@ void physicsAnimator();
 /* --------------------------------- MOTIONS -------------------------------- */
 void accelerateLeft();
 void accelerateRight();
+void airResistance(char key);
 /* --------------------------------- MOTIONS -------------------------------- */
 
 #endif

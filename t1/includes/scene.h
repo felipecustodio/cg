@@ -11,6 +11,7 @@
 void on_mouseClick(int button, int click_state,
     int x_mouse_position, int y_mouse_position);
 void mouseHold();
+void keyPress(char key, int x, int y);
 /* -------------------------------- INPUT ----------------------------------- */
 
 
