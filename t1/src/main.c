@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 
     // LOAD TEXTURES
     IF_DEBUG printf("◆ LOADING TEXTURES\n");
-    background_texture = loadTexture("./assets/background.jpg");
+    background_texture = loadTexture("./assets/bgmaterial.png");
     if (!background_texture)  {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;

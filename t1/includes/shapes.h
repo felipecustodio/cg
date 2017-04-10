@@ -79,7 +79,9 @@ typedef struct Circle {
     float center[2];
 } Circle;
 
-Circle *createCircle(float radius, float thickness);
+Circle *createCircle();
+void setCircleRadius(Circle *circle, float radius);
+void setCircleThickness(Circle *circle, float thickness);
 void setCircleCoordinates(Circle *circle, float x, float y);
 void setCircleColor(Circle *circle, float r, float g, float b);
 void drawCircleHollow(Circle *circle);

@@ -134,6 +134,10 @@ Quadrilateral* createQuad() {
 
     quad->thickness = 1.0f;
 
+    quad->color[0] = 0.0;
+    quad->color[1] = 0.0;
+    quad->color[2] = 0.0;
+
     quad->x[0] = 0.0;
     quad->y[0] = 0.0;
 
@@ -217,23 +221,38 @@ void freeQuad(Quadrilateral* quad) {
 /* ----------------------------- QUADRILATERAL ------------------------------ */
 
 /* --------------------------------- CIRCLE --------------------------------- */
-Circle *createCircle(float radius, float thickness) {
+Circle *createCircle() {
     Circle *circle = (Circle *) malloc(sizeof(Circle));
 
-    if(radius > 0.0)
-        circle->radius = radius;
-    else
-        circle->radius = 1.0;
+    circle->radius = 1.0;
+    circle->thickness = 1.0;
 
-    if(thickness > 0.0)
-        circle->thickness = thickness;
-    else
-        circle->thickness = 1.0;
+    circle->color[0] = 0.0;
+    circle->color[1] = 0.0;
+    circle->color[2] = 0.0;
 
     circle->center[0] = 0.0;
     circle->center[1] = 0.0;
 
     return circle;
+}
+
+void setCircleRadius(Circle *circle, float radius){
+    if (circle == NULL) return;
+
+    if(radius > 0.0)
+        circle->radius = radius;
+    else
+        circle->radius = 1.0;
+}
+
+void setCircleThickness(Circle *circle, float thickness){
+    if (circle == NULL) return;
+
+    if(thickness > 0.0)
+        circle->thickness = thickness;
+    else
+        circle->thickness = 1.0;
 }
 
 void setCircleCoordinates(Circle *circle, float x, float y){

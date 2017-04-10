@@ -16,6 +16,13 @@ float getCurAngle() {
 /* -------------------------------- VARIABLES ------------------------------- */
 
 /* -------------------------------- ANIMATIONS ------------------------------ */
+void checkMaxVelocity() {
+    // Max velocity
+    if(curVeloc > velLimit)
+        curVeloc = velLimit;
+    else if(curVeloc < -velLimit)
+        curVeloc = -velLimit;
+}
 void physicsAnimator() {
     // Physics Animator //
     // Air resistance
@@ -26,11 +33,7 @@ void physicsAnimator() {
     else if(curVeloc > -airResis && curVeloc < airResis)
         curVeloc = 0; //curVeloc = -curVeloc;
 
-    // Max velocity
-    if(curVeloc > velLimit)
-        curVeloc = velLimit;
-    else if(curVeloc < -velLimit)
-        curVeloc = -velLimit;
+    checkMaxVelocity();
 
     curAngle = curAngle + curVeloc;
 
@@ -49,11 +52,13 @@ void physicsAnimator() {
 /* --------------------------------- MOTIONS -------------------------------- */
 void accelerateLeft() {
         curVeloc = curVeloc + rotAccel;
+        checkMaxVelocity();
         curAngle = curAngle + curVeloc;
 }
 
 void accelerateRight() {
         curVeloc = curVeloc - rotAccel;
+        checkMaxVelocity();
         curAngle = curAngle + curVeloc;
 }
 
