@@ -49,9 +49,6 @@ int main(int argc, char* argv[]) {
         // open audio device
         SDL_OpenAudio(&wav_spec, NULL);
 
-        // TODO: play audio during rotation
-        SDL_PauseAudio(0);
-
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
         glutCreateWindow("Windmill"); // Defines the window title

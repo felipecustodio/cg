@@ -26,6 +26,7 @@ GLuint loadTexture(const char *filename);
 // https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, int len);
 // variable declarations
+// char audioOn = 0; // bool to check if audio is playing
 Uint8 *audio_pos; // global pointer to the audio buffer to be played
 Uint32 audio_len; // remaining length of the sample we have to play
 /* -------------------------------- MUSIC ---------------------------------- */
