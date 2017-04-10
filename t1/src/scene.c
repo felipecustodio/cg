@@ -10,16 +10,16 @@ void on_mouseClick(int button, int click_state,
         int x_mouse_position, int y_mouse_position)
 {
 	if (button == GLUT_RIGHT_BUTTON) {
-        if (CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Right Mouse Button\n");
+        IF_DEBUG printf(">[INPUT]: Right Mouse Button\n");
             rightMouseButtonDown = (click_state == GLUT_DOWN);
+            IF_DEBUG printf("△ Play Audio\n");
             SDL_PauseAudio(0);
-            // audioOn = 1;
 
     } else if (button == GLUT_LEFT_BUTTON) {
-        if (CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Left Mouse Button\n");
+        IF_DEBUG printf(">[INPUT]: Left Mouse Button\n");
             leftMouseButtonDown = (click_state == GLUT_DOWN);
+            IF_DEBUG printf("△ Play Audio\n");
             SDL_PauseAudio(0);
-            // audioOn = 1;
 	}
 	glutPostRedisplay(); // Forces scene redraw
 }
@@ -40,7 +40,7 @@ void keyPress(unsigned char key, int x, int y) {
         } else if (key == '-') {
                 airResistance(0);
         } else {
-                printf("RECEIVED %c INPUT\n", key);
+                IF_DEBUG printf("RECEIVED %c INPUT\n", key);
         }
 }
 
@@ -99,18 +99,22 @@ GLuint loadTexture(const char *filename)
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, int len) {
-
+        printf("AUDIO CALLBACK\n");
 	if (audio_len == 0) {
+                printf("loop\n");
+                audio_pos = wav_buffer; // copy sound buffer
+                audio_len = wav_length; // copy file length
                 return;
         }
 
 	len = ( len > audio_len ? audio_len : len );
 	// SDL_memcpy (stream, audio_pos, len);
 	// simply copy from one buffer into the other
-	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);// mix from one buffer into another
+	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME); // mix from one buffer into another
 
 	audio_pos += len;
 	audio_len -= len;
+        printf("audio_len = %d\n", audio_len);
 }
 /* -------------------------------- MUSIC ---------------------------------- */
 

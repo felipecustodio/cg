@@ -31,11 +31,8 @@ int main(int argc, char* argv[]) {
 
         // AUDIO
         SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
-        static Uint32 wav_length; // length of our sample
-        static Uint8 *wav_buffer; // buffer containing our audio file
-        static SDL_AudioSpec wav_spec; // the specs of our piece of music
         IF_DEBUG printf("◆ LOADING AUDIO\n");
-        if(!(SDL_LoadWAV("./assets/stars.wav", &wav_spec, &wav_buffer, &wav_length))) {
+        if(!(SDL_LoadWAV("./assets/yourepostedinthewrongwindmill.wav", &wav_spec, &wav_buffer, &wav_length))) {
             IF_DEBUG printf("✗✗✗ ERROR LOADING AUDIO\n");
             return EXIT_FAILURE;
         }
