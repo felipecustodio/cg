@@ -9,7 +9,6 @@ int rightMouseButtonDown = 0;
 void on_mouseClick(int button, int click_state,
         int x_mouse_position, int y_mouse_position)
 {
-
 	if (button == GLUT_RIGHT_BUTTON) {
         if (CONSOLE == 1 && DEBUG == 1) printf(">[INPUT]: Right Mouse Button\n");
             rightMouseButtonDown = (click_state == GLUT_DOWN);
@@ -71,25 +70,43 @@ void reshape(int width, int height)
 /* ----------------------------- TEXTURES ------------------------------ */
 GLuint loadTexture(const char *filename)
 {
-	GLuint tex = SOIL_load_OGL_texture(filename,
+        GLuint tex = SOIL_load_OGL_texture(filename,
         SOIL_LOAD_AUTO,
         SOIL_CREATE_NEW_ID,
         SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-	if (!tex) {
-        printf("ERROR ON TEXTURE LOADING\n");
+        if (!tex) {
+                printf("ERROR ON TEXTURE LOADING\n");
         return 0;
-    }
-	//glBindTexture(GL_TEXTURE_2D, tex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //glBindTexture(GL_TEXTURE_2D, 0);
+        }
+        //glBindTexture(GL_TEXTURE_2D, tex);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //glBindTexture(GL_TEXTURE_2D, 0);
 
 	return tex;
 }
 /* ----------------------------- TEXTURES ------------------------------ */
 
+/* -------------------------------- MUSIC ---------------------------------- */
+// CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
+// https://gist.github.com/armornick/3447121
+void audioCallback(void *userdata, Uint8 *stream, int len) {
+
+	if (audio_len == 0) {
+                return;
+        }
+
+	len = ( len > audio_len ? audio_len : len );
+	// SDL_memcpy (stream, audio_pos, len);
+	// simply copy from one buffer into the other
+	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);// mix from one buffer into another
+
+	audio_pos += len;
+	audio_len -= len;
+}
+/* -------------------------------- MUSIC ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 void drawScene()
