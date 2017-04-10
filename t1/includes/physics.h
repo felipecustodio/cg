@@ -2,6 +2,7 @@
 #define PHYSICS_H
 
 #include <stdio.h>
+#include "scene.h"
 #include "settings.h"
 
 /* -------------------------------- VARIABLES ------------------------------- */

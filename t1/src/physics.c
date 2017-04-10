@@ -31,7 +31,7 @@ void physicsAnimator() {
     else if(curVeloc <= -airResis)
         curVeloc = curVeloc + airResis;
     else if(curVeloc > -airResis && curVeloc < airResis)
-        curVeloc = 0; //curVeloc = -curVeloc;
+        curVeloc = 0; // curVeloc = -curVeloc;
 
     checkMaxVelocity();
 
@@ -44,8 +44,13 @@ void physicsAnimator() {
             curAngle = 360;
     }
 
-    //IF_DEBUG
-        //printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
+    if (curVeloc == 0) {
+            SDL_PauseAudio(1);
+    } else {
+            SDL_PauseAudio(0);
+    }
+
+    IF_DEBUG printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
 }
 /* -------------------------------- ANIMATIONS ------------------------------ */
 

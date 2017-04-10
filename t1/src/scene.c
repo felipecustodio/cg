@@ -13,13 +13,13 @@ void on_mouseClick(int button, int click_state,
         IF_DEBUG printf(">[INPUT]: Right Mouse Button\n");
             rightMouseButtonDown = (click_state == GLUT_DOWN);
             IF_DEBUG printf("△ Play Audio\n");
-            SDL_PauseAudio(0);
+            // SDL_PauseAudio(0);
 
     } else if (button == GLUT_LEFT_BUTTON) {
         IF_DEBUG printf(">[INPUT]: Left Mouse Button\n");
             leftMouseButtonDown = (click_state == GLUT_DOWN);
             IF_DEBUG printf("△ Play Audio\n");
-            SDL_PauseAudio(0);
+            // SDL_PauseAudio(0);
 	}
 	glutPostRedisplay(); // Forces scene redraw
 }
@@ -30,7 +30,7 @@ void mouseHold() {
         } else if (rightMouseButtonDown) {
                 accelerateRight();
         } else {
-                SDL_PauseAudio(1);
+                // SDL_PauseAudio(1);
         }
 }
 
