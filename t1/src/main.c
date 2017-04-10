@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
         if (!(SDL_OpenAudio(&wav_spec, NULL))) {
                 IF_DEBUG printf("\t✗✗✗ ERROR LOADING AUDIO DEVICE\n");
                 printf("Couldn't open audio: %s\n", SDL_GetError());
-                return EXIT_FAILURE;
+                //return EXIT_FAILURE;
         }
         IF_DEBUG printf("◆ AUDIO DEVICE OPENED\n");
 
