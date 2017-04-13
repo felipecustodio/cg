@@ -94,9 +94,8 @@ GLuint loadTexture(const char *filename)
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, int len) {
-        IF_DEBUG printf("AUDIO CALLBACK\n");
 	if (audio_len == 0) {
-                IF_DEBUG printf("LOOP\n");
+                IF_DEBUG printf("LOOPING AUDIO\n");
                 audio_pos = wav_buffer; // copy sound buffer
                 audio_len = wav_length; // copy file length
                 return;
@@ -109,7 +108,6 @@ void audioCallback(void *userdata, Uint8 *stream, int len) {
 
 	audio_pos += len;
 	audio_len -= len;
-        IF_DEBUG printf("audio_len = %d\n", audio_len);
 }
 /* -------------------------------- MUSIC ---------------------------------- */
 

@@ -17,7 +17,7 @@ void keyPress(unsigned char key, int x, int y);
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- TEXTURES ---------------------------------- */
-GLuint background_texture;
+GLuint background_texture, cloud_texture, goku_texture;
 GLuint loadTexture(const char *filename);
 /* -------------------------------- TEXTURES ---------------------------------- */
 
