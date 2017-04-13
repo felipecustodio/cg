@@ -12,14 +12,9 @@ void on_mouseClick(int button, int click_state,
 	if (button == GLUT_RIGHT_BUTTON) {
         IF_DEBUG printf(">[INPUT]: Right Mouse Button\n");
             rightMouseButtonDown = (click_state == GLUT_DOWN);
-            IF_DEBUG printf("△ Play Audio\n");
-            // SDL_PauseAudio(0);
-
     } else if (button == GLUT_LEFT_BUTTON) {
         IF_DEBUG printf(">[INPUT]: Left Mouse Button\n");
             leftMouseButtonDown = (click_state == GLUT_DOWN);
-            IF_DEBUG printf("△ Play Audio\n");
-            // SDL_PauseAudio(0);
 	}
 	glutPostRedisplay(); // Forces scene redraw
 }
@@ -29,8 +24,6 @@ void mouseHold() {
                 accelerateLeft();
         } else if (rightMouseButtonDown) {
                 accelerateRight();
-        } else {
-                // SDL_PauseAudio(1);
         }
 }
 
@@ -39,6 +32,8 @@ void keyPress(unsigned char key, int x, int y) {
                 airResistance(1);
         } else if (key == '-') {
                 airResistance(0);
+        } else if (key == ' ') {
+                printf("RENDER GOKU\n");
         } else {
                 IF_DEBUG printf("RECEIVED %c INPUT\n", key);
         }
@@ -99,9 +94,9 @@ GLuint loadTexture(const char *filename)
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, int len) {
-        printf("AUDIO CALLBACK\n");
+        IF_DEBUG printf("AUDIO CALLBACK\n");
 	if (audio_len == 0) {
-                printf("loop\n");
+                IF_DEBUG printf("LOOP\n");
                 audio_pos = wav_buffer; // copy sound buffer
                 audio_len = wav_length; // copy file length
                 return;
@@ -114,7 +109,7 @@ void audioCallback(void *userdata, Uint8 *stream, int len) {
 
 	audio_pos += len;
 	audio_len -= len;
-        printf("audio_len = %d\n", audio_len);
+        IF_DEBUG printf("audio_len = %d\n", audio_len);
 }
 /* -------------------------------- MUSIC ---------------------------------- */
 

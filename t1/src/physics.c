@@ -50,7 +50,6 @@ void physicsAnimator() {
             SDL_PauseAudio(0);
     }
 
-    IF_DEBUG printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
 }
 /* -------------------------------- ANIMATIONS ------------------------------ */
 
@@ -59,12 +58,14 @@ void accelerateLeft() {
         curVeloc = curVeloc + rotAccel;
         checkMaxVelocity();
         curAngle = curAngle + curVeloc;
+        IF_DEBUG printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
 }
 
 void accelerateRight() {
         curVeloc = curVeloc - rotAccel;
         checkMaxVelocity();
         curAngle = curAngle + curVeloc;
+        IF_DEBUG printf("\n>[ANIM]: Angle: %f, Velocity: %f\n", curAngle, curVeloc);
 }
 
 void airResistance(char key) {
