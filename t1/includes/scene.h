@@ -1,6 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+/*
+* Handles scene drawing and animations
+*/
+
 #include <GL/glut.h>
 #include "../includes/SOIL/SOIL.h"
 #include <SDL2/SDL.h>

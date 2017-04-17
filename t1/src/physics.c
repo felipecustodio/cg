@@ -1,13 +1,13 @@
 #include "../includes/physics.h"
 
 /* -------------------------------- VARIABLES ------------------------------- */
-float curAngle = 0.0f; // Current Angle
-float curVeloc = 0.0f; // Current Velocity
+float curAngle      = 0.0f; // Current Angle
+float curVeloc      = 0.0f; // Current Velocity
 
-float rotAccel = 1.0f; // Rotation Acceleration
-float airResis = 0.2f; // Air Resistance
+float rotAccel      = 1.0f; // Rotation Acceleration
+float airResis      = 0.2f; // Air Resistance
 
-float velLimit = 5.0f; // Velocity Limit
+float velLimit      = 5.0f; // Velocity Limit
 float airResisLimit = 2.0f; // Air Resistance increase limit
 
 float getCurAngle() {
@@ -17,38 +17,41 @@ float getCurAngle() {
 
 /* -------------------------------- ANIMATIONS ------------------------------ */
 void checkMaxVelocity() {
-    // Max velocity
+    // Keep velocity within treshold
     if(curVeloc > velLimit)
         curVeloc = velLimit;
     else if(curVeloc < -velLimit)
         curVeloc = -velLimit;
 }
 void physicsAnimator() {
-    // Physics Animator //
-    // Air resistance
-    if(curVeloc >= airResis)
-        curVeloc = curVeloc - airResis;
-    else if(curVeloc <= -airResis)
-        curVeloc = curVeloc + airResis;
-    else if(curVeloc > -airResis && curVeloc < airResis)
-        curVeloc = 0; // curVeloc = -curVeloc;
+        // Physics Animator //
+        // Speed down pads simulating air resistance
+        if(curVeloc >= airResis)
+                curVeloc = curVeloc - airResis;
+        else if(curVeloc <= -airResis)
+                curVeloc = curVeloc + airResis;
+        else if(curVeloc > -airResis && curVeloc < airResis)
+                curVeloc = 0; // curVeloc = -curVeloc;
 
-    checkMaxVelocity();
+        // Keep velocity within treshold
+        checkMaxVelocity();
 
-    curAngle = curAngle + curVeloc;
+        // Increase rotation
+        curAngle = curAngle + curVeloc;
 
-    // Avoid overflow
-    if (curAngle > 360) {
+        // Avoid overflow
+        if (curAngle > 360) {
             curAngle = 0;
-    } else if (curAngle < 0) {
+        } else if (curAngle < 0) {
             curAngle = 360;
-    }
+        }
 
-    if (curVeloc == 0) {
+        // Play music while pads are rotating
+        if (curVeloc == 0) {
             SDL_PauseAudio(1);
-    } else {
+        } else {
             SDL_PauseAudio(0);
-    }
+        }
 
 }
 /* -------------------------------- ANIMATIONS ------------------------------ */

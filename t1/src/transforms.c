@@ -1,6 +1,8 @@
 #include "transforms.h"
 
 /* -------------------------------- TRIANGLE -------------------------------- */
+
+// Rotate triangle around its center
 void rotateTriangleCenter(Triangle *tri, float angle) {
     if(tri == NULL) return;
     float midX = (tri->x[0] + tri->x[1] + tri->x[2]) / 3;
@@ -11,6 +13,7 @@ void rotateTriangleCenter(Triangle *tri, float angle) {
     glTranslatef(-midX, -midY, 0.0f);
 }
 
+// Rotate triangle around fixed vertex
 void rotateTriangleVertex(Triangle *tri, float angle, int vertex){
     if(tri == NULL) return;
 
@@ -37,6 +40,8 @@ void rotateTriangleVertex(Triangle *tri, float angle, int vertex){
 /* -------------------------------- TRIANGLE -------------------------------- */
 
 /* ------------------------------ QUADRILATERAL ----------------------------- */
+
+// Rotate quad around its center
 void rotateQuadCenter(Quadrilateral *quad, float angle) {
     if(quad == NULL) return;
     float midX = (quad->x[0] + quad->x[1] + quad->x[2] + quad->x[3]) / 4;
@@ -47,6 +52,7 @@ void rotateQuadCenter(Quadrilateral *quad, float angle) {
     glTranslatef(-midX, -midY, 0.0f);
 }
 
+// Rotate quad around fixed vertex
 void rotateQuadVertex(Quadrilateral *quad, float angle, int vertex){
     if(quad == NULL) return;
 

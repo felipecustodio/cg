@@ -1,6 +1,11 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 
+/*
+* Handles rotation and velocity calculations
+* for animations
+*/
+
 #include <stdio.h>
 #include "scene.h"
 #include "settings.h"
