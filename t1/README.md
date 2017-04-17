@@ -4,6 +4,14 @@
 
 Draw a windmill that rotates according to mouse clicks.
 
+## Compiling and running
+
+Simply run *make* on root directory
+
+## Debugging
+
+For debugging with Valgrind, run *make debug*
+
 ## Credits
 
 ### SOIL (Simple OpenGL Image Library)
