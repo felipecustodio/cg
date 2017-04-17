@@ -3,8 +3,8 @@
  * Trabalho 1 - Windmill
  * Alunos:
  *      Felipe Scrochio Custódio - 9442688
- *      Henrique Loschiavo -
- *      Lucas Antognoni -
+ *      Henrique Loschiavo - 8936972
+ *      Lucas Antognoni - 8936951
  *      Gustavo Santiago - 8937416
  **/
 
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
         if(CONSOLE == 1) printf("\n * W i n d m i l l * \n");
         IF_DEBUG printf("◆ Initializing\n");
 
-        // INIT GLUT
+        // INITIALIZE GLUT
         glutInit(&argc, argv); // Instanciate Glut
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE); // Defines the buffer display mode
         glEnable(GL_MULTISAMPLE); // Enables antialiasing
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;
         }
-        
+
         IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
 
         // START RENDERING

@@ -6,9 +6,11 @@
 int leftMouseButtonDown = 0;
 int rightMouseButtonDown = 0;
 
+// MOUSE EVENT HANDLING
 void on_mouseClick(int button, int click_state,
         int x_mouse_position, int y_mouse_position)
 {
+        // Get current mouse status
 	if (button == GLUT_RIGHT_BUTTON) {
         IF_DEBUG printf(">[INPUT]: Right Mouse Button\n");
             rightMouseButtonDown = (click_state == GLUT_DOWN);
@@ -19,7 +21,9 @@ void on_mouseClick(int button, int click_state,
 	glutPostRedisplay(); // Forces scene redraw
 }
 
+// MOUSE STATUS
 void mouseHold() {
+        // Apply acceleration while mouse is hold down
         if (leftMouseButtonDown) {
                 accelerateLeft();
         } else if (rightMouseButtonDown) {
@@ -27,12 +31,16 @@ void mouseHold() {
         }
 }
 
+// KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
         if (key == '+') {
+                // Increases air resistance
                 airResistance(1);
         } else if (key == '-') {
+                // Decreases air resistance
                 airResistance(0);
         } else if (key == ' ') {
+                // NOTE: We were planning to add a little easter egg :)
                 printf("RENDER GOKU\n");
         } else {
                 IF_DEBUG printf("RECEIVED %c INPUT\n", key);
@@ -106,6 +114,7 @@ void audioCallback(void *userdata, Uint8 *stream, int len) {
 	// simply copy from one buffer into the other
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME); // mix from one buffer into another
 
+        // Move audio
 	audio_pos += len;
 	audio_len -= len;
 }
@@ -125,6 +134,7 @@ void drawScene()
         glBindTexture(GL_TEXTURE_2D, background_texture);
         int bgX = VIEWPORT_X;
         int bgY = VIEWPORT_Y;
+        // Start texturing
         glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
             glTexCoord2f(0, 0);
@@ -229,7 +239,6 @@ void drawScene()
         // Refresh matrix for new object
         glLoadIdentity();
 
-        glColor3f(1.0f, 1.0f, 1.0f);
         char const* text = "- Diminui resistencia do ar";
         Text* UI = createText(GLUT_BITMAP_9_BY_15, text);
         drawText(UI, -450, 200);
