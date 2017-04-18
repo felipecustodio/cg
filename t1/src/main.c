@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
 
         // Shutdown SDL
         SDL_CloseAudio();
-	SDL_FreeWAV(wav_buffer);
+        SDL_FreeWAV(wav_buffer);
 
         return 0;
 }

@@ -261,6 +261,7 @@ void drawLoop()
 {
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
+        glColor3f(1.0f, 1.0f, 1.0f);
 
         // Repaint screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
