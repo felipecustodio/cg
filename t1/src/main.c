@@ -70,11 +70,6 @@ int main(int argc, char* argv[]) {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;
         }
-        cloud_texture = loadTexture("./assets/cloud.png");
-        if (!cloud_texture)  {
-            printf("✗✗✗ ERROR LOADING TEXTURE\n");
-            return EXIT_FAILURE;
-        }
 
         IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
 
