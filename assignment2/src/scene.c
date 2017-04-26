@@ -12,10 +12,8 @@ void on_mouseClick(int button, int click_state,
 {
         // Get current mouse status
 	if (button == GLUT_RIGHT_BUTTON) {
-        IF_DEBUG printf(">[INPUT]: Right Mouse Button\n");
             rightMouseButtonDown = (click_state == GLUT_DOWN);
     } else if (button == GLUT_LEFT_BUTTON) {
-        IF_DEBUG printf(">[INPUT]: Left Mouse Button\n");
             leftMouseButtonDown = (click_state == GLUT_DOWN);
 	}
 	glutPostRedisplay(); // Forces scene redraw
@@ -23,27 +21,23 @@ void on_mouseClick(int button, int click_state,
 
 // MOUSE STATUS
 void mouseHold() {
-        // Apply acceleration while mouse is hold down
         if (leftMouseButtonDown) {
-                accelerateLeft();
+
         } else if (rightMouseButtonDown) {
-                accelerateRight();
+
         }
 }
 
 // KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
-        if (key == '+') {
-                // Increases air resistance
-                airResistance(1);
-        } else if (key == '-') {
-                // Decreases air resistance
-                airResistance(0);
-        } else if (key == ' ') {
-                // NOTE: We were planning to add a little easter egg :)
-                printf("RENDER GOKU\n");
-        } else {
-                IF_DEBUG printf("RECEIVED %c INPUT\n", key);
+        if (key == 'W') {
+
+        } else if (key == 'A') {
+
+        } else if (key == 'S') {
+
+        } else if (key == 'D') {
+
         }
 }
 
@@ -87,12 +81,11 @@ GLuint loadTexture(const char *filename)
                 printf("ERROR ON TEXTURE LOADING\n");
         return 0;
         }
-        //glBindTexture(GL_TEXTURE_2D, tex);
+
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        //glBindTexture(GL_TEXTURE_2D, 0);
 
 	return tex;
 }

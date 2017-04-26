@@ -30,9 +30,11 @@ int main(int argc, char* argv[]) {
         glEnable(GL_TEXTURE_2D); // Enables 2D texturing
 
         // AUDIO
+        // TODO - USAR SDL_MIXER.H (SEPARADO) PARA USAR VARIOS AUDIOS
+        // https://gist.github.com/armornick/3497064
         SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
         IF_DEBUG printf("◆ LOADING AUDIO\n");
-        if(!(SDL_LoadWAV("./assets/yourepostedinthewrongwindmill.wav", &wav_spec, &wav_buffer, &wav_length))) {
+        if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
             IF_DEBUG printf("✗✗✗ ERROR LOADING AUDIO\n");
             return EXIT_FAILURE;
         }
@@ -45,6 +47,9 @@ int main(int argc, char* argv[]) {
         audio_len = wav_length; // copy file length
         // open audio device
         SDL_OpenAudio(&wav_spec, NULL);
+
+        // STAR BG MUSIC
+        SDL_PauseAudio(0);
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
