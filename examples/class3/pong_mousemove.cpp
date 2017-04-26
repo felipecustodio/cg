@@ -8,7 +8,7 @@
 #include <GL/glut.h>
 #include <stdio.h>
 #include <time.h>
-#include <cmath>
+#include <math.h>
 
 #define DIREITA 1
 #define ESQUERDA 0
@@ -54,7 +54,7 @@ void display(void) {
 	glVertex2f(100.0f, raqueteIAPy + 25);
 	glEnd();
 
-	// Raquete do usuário
+	// Raquete do usuï¿½rio
 	glBegin(GL_LINES);
 	glVertex2f(500.0f, raquetePy - 25);
 	glVertex2f(500.0f, raquetePy + 25);
@@ -75,19 +75,19 @@ void bola(int passo)
 	//Se estiver se movendo para a direita...
 	if (direcaox == DIREITA) {
 		movebolax += passo;
-		// Se alcancou a raquete do usuário e este defendeu, muda de direcao, senão acabou o jogo.
+		// Se alcancou a raquete do usuï¿½rio e este defendeu, muda de direcao, senï¿½o acabou o jogo.
 		if (movebolax == 290) {
 			float dist = abs(raquetePy - (movebolay + 210));
 			if (dist <= 25)
 				direcaox = ESQUERDA;
 			else {
-				// Desliga este timer, não deixando a bolinha andar mais.
+				// Desliga este timer, nï¿½o deixando a bolinha andar mais.
 				passo = 0;
 				// Telona vermelha = PERDEU!!!
 				glClearColor(1.0, 0.0, 0.0, 0.0);
 				glClear(GL_COLOR_BUFFER_BIT);
 
-				// Não deixe mais o usuário movimentar a raquete.
+				// Nï¿½o deixe mais o usuï¿½rio movimentar a raquete.
 				glutPassiveMotionFunc(NULL);
 			}
 		}
@@ -99,13 +99,13 @@ void bola(int passo)
 			if (dist <= 25)
 				direcaox = DIREITA;
 			else {
-				// Desliga este timer, não deixando a bolinha andar mais.
+				// Desliga este timer, nï¿½o deixando a bolinha andar mais.
 				passo = 0;
 				// Telona azul = GANHOU!!!
 				glClearColor(0.0, 0.0, 1.0, 0.0);
 				glClear(GL_COLOR_BUFFER_BIT);
 
-				// Não deixe mais o usuário movimentar a raquete.
+				// Nï¿½o deixe mais o usuï¿½rio movimentar a raquete.
 				glutPassiveMotionFunc(NULL);
 			}
 		}
@@ -119,7 +119,7 @@ void bola(int passo)
 	}
 	else { // Bolinha Descendo
 		movebolay -= passo;
-		// Se alcançou a borda de baixo, pode começar a subir
+		// Se alcanï¿½ou a borda de baixo, pode comeï¿½ar a subir
 		if (movebolay == -200) direcaoy = CIMA;
 	}
 
@@ -158,7 +158,7 @@ void raqueteIA(int passo)
 	glutTimerFunc(10, raqueteIA, passo);
 }
 
-// Função callback para eventos de movimento do mouse
+// Funï¿½ï¿½o callback para eventos de movimento do mouse
 void on_MouseMove(int mouse_x, int mouse_y)
 {
 	float Py = orthotop - (mouse_y * (orthotop - orthobot)) / altura + (orthotop / altura);

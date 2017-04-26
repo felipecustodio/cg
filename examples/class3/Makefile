@@ -2,13 +2,10 @@
 CC = gcc
 
 # output path and filename
-BINARY = ./build/output
+BINARY = ./output
 
 # sources directory
-# SRC = ./examples/sandbox.cpp
-# SRC = ./examples/stars.c
-# SRC = ./examples/02-02-ExemploTransformacoes2D.c
-# SRC = ./examples/exemplo_mouse.cpp
+SRC = ./pong_mousemove.cpp
 
 # includes directory
 INCLUDES = ./includes
