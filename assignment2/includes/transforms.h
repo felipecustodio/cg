@@ -2,7 +2,7 @@
 #define TRANSFORMS_H
 
 /*
-* Handles movements of the shapes in shapes.h 
+* Handles movements of the shapes in shapes.h
 */
 
 #include "shapes.h"

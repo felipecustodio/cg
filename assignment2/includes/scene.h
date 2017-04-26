@@ -25,7 +25,7 @@ GLuint background_texture, cloud_texture, goku_texture;
 GLuint loadTexture(const char *filename);
 /* -------------------------------- TEXTURES ---------------------------------- */
 
-/* -------------------------------- MUSIC ---------------------------------- */
+/* -------------------------------- AUDIO ---------------------------------- */
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, int len);
@@ -35,7 +35,7 @@ Uint8 *wav_buffer; // buffer containing our audio file
 SDL_AudioSpec wav_spec; // the specs of our piece of music
 Uint8 *audio_pos; // global pointer to the audio buffer to be played
 Uint32 audio_len; // remaining length of the sample we have to play
-/* -------------------------------- MUSIC ---------------------------------- */
+/* -------------------------------- AUDIO ---------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
 void reshape(int width, int height);
