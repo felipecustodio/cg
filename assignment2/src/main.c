@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
         // AUDIO
         // TODO - USAR SDL_MIXER.H (SEPARADO) PARA USAR VARIOS AUDIOS
         // https://gist.github.com/armornick/3497064
+        // http://lazyfoo.net/SDL_tutorials/lesson11/
+        
         SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
         IF_DEBUG printf("◆ LOADING AUDIO\n");
         if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
