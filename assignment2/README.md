@@ -1,8 +1,6 @@
-# College Assignment 1 - Windmill
+# College Assignment 2 - Space Invaders
 
 ## Description
-
-Draw a windmill that rotates according to mouse clicks.
 
 ## Compiling and running
 
@@ -14,11 +12,11 @@ For debugging with Valgrind, run *make debug*
 
 ## Credits
 
-### SOIL (Simple OpenGL Image Library)
+#### SOIL (Simple OpenGL Image Library)
 
 http://www.lonesock.net/soil.html
 
-### SDL (Simple DirectMedia Layer)
+#### SDL (Simple DirectMedia Layer)
 
 https://www.libsdl.org/
 
