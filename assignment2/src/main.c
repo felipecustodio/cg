@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
         // TODO - USAR SDL_MIXER.H (SEPARADO) PARA USAR VARIOS AUDIOS
         // https://gist.github.com/armornick/3497064
         // http://lazyfoo.net/SDL_tutorials/lesson11/
-        
+
         SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
         IF_DEBUG printf("◆ LOADING AUDIO\n");
         if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
@@ -49,9 +49,6 @@ int main(int argc, char* argv[]) {
         audio_len = wav_length; // copy file length
         // open audio device
         SDL_OpenAudio(&wav_spec, NULL);
-
-        // STAR BG MUSIC
-        SDL_PauseAudio(0);
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
@@ -79,6 +76,9 @@ int main(int argc, char* argv[]) {
         }
 
         IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
+
+        // START BG MUSIC
+        SDL_PauseAudio(0);
 
         // START RENDERING
         glutMainLoop(); // Start operations according to the specifications above
