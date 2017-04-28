@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./output
 
 # sources directory
-SRC = ./pong_mousemove.cpp
+SRC = ./jet.cpp
 
 # includes directory
 INCLUDES = ./includes
