@@ -7,7 +7,7 @@
 
 #include <GL/glut.h>
 #include "../includes/SOIL/SOIL.h"
-#include <SDL2/SDL.h>
+#include <SDL/SDL.h>
 #include "shapes.h"
 #include "transforms.h"
 #include "physics.h"

@@ -9,7 +9,7 @@
  **/
 
 #include <GL/glut.h>
-#include <SDL2/SDL.h>
+#include <SDL/SDL.h>
 #include <math.h>
 
 #include "scene.h"
