@@ -27,7 +27,6 @@ int main(int argc, char* argv[]) {
         // TEXTURES
         glEnable(GL_BLEND); // Enables color blending
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_TEXTURE_2D); // Enables 2D texturing
 
         // AUDIO
         // TODO - USAR SDL_MIXER.H (SEPARADO) PARA USAR VARIOS AUDIOS

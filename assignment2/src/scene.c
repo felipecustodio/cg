@@ -73,13 +73,19 @@ void reshape(int width, int height)
 /* ----------------------------- TEXTURES ------------------------------ */
 GLuint loadTexture(const char *filename)
 {
+        //GLuint tex = SOIL_load_OGL_texture(filename,
+        //SOIL_LOAD_AUTO,
+        //SOIL_CREATE_NEW_ID,
+        //SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+
         GLuint tex = SOIL_load_OGL_texture(filename,
         SOIL_LOAD_AUTO,
         SOIL_CREATE_NEW_ID,
         SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+
         if (!tex) {
                 printf("ERROR ON TEXTURE LOADING\n");
-        return 0;
+                return EXIT_FAILURE;
         }
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -146,16 +152,20 @@ void drawScene()
         /*--------------------PLAYER--------------------*/
         PLAYER* player = createPlayer();
 
-
         // Transparency tests
-
+        glBindTexture(GL_TEXTURE_2D, player_texture);
+        glEnable(GL_TEXTURE_2D);
         glBegin(GL_QUADS);
-                glColor3f(1.0f, 1.0f, 1.0f);
+                glTexCoord2f(0, 0);
                 glVertex2f(-100, -100);
+                glTexCoord2f(0, 1);
                 glVertex2f(-100, 100);
+                glTexCoord2f(1, 1);
                 glVertex2f(100, 100);
+                glTexCoord2f(1, 0);
                 glVertex2f(100, -100);
     	glEnd();
+        glDisable(GL_TEXTURE_2D);
         /*--------------------END--------------------*/
 
 
