@@ -71,11 +71,16 @@ char checkBorders(GLfloat x) {
 }
 
 // Move player left/right
-void movePlayer(char direction) {
+void movePlayer(PLAYER* p, char direction) {
+        GLfloat current_pos = p->pos_x;
         if (direction) {
                 // MOVE RIGHT
         } else {
                 // MOVE LEFT
+        }
+
+        if (!checkBorders(p->pos_x)) {
+                p->pos_x = current_pos;
         }
 }
 

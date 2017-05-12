@@ -40,7 +40,7 @@ void destroyPlayer(PLAYER* player);
 
 // Movement
 char checkBorders(GLfloat x);
-void movePlayer(char direction);
+void movePlayer(PLAYER* p, char direction);
 
 /* -------------------------------- PLAYER ----------------------------------- */
 
