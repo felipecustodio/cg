@@ -12,6 +12,7 @@
 #include "transforms.h"
 #include "physics.h"
 #include "settings.h"
+#include "invaders.h"
 
 /* -------------------------------- INPUT ----------------------------------- */
 void on_mouseClick(int button, int click_state,
@@ -21,14 +22,16 @@ void keyPress(unsigned char key, int x, int y);
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- TEXTURES ---------------------------------- */
-GLuint background_texture, cloud_texture, goku_texture;
+// Textures
+GLuint background_texture, player_texture, enemy_texture;
+// Functions
 GLuint loadTexture(const char *filename);
 /* -------------------------------- TEXTURES ---------------------------------- */
 
 /* -------------------------------- AUDIO ---------------------------------- */
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
-void audioCallback(void *userdata, Uint8 *stream, int len);
+void audioCallback(void *userdata, Uint8 *stream, unsigned int len);
 // variable declarations
 Uint32 wav_length; // length of our sample
 Uint8 *wav_buffer; // buffer containing our audio file

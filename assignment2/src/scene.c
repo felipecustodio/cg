@@ -22,22 +22,22 @@ void on_mouseClick(int button, int click_state,
 // MOUSE STATUS
 void mouseHold() {
         if (leftMouseButtonDown) {
-
+                // left mouse event
         } else if (rightMouseButtonDown) {
-
+                // right mouse event
         }
 }
 
 // KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
-        if (key == 'W') {
-
-        } else if (key == 'A') {
-
-        } else if (key == 'S') {
-
+        if (key == 'A') {
+                movePlayer(0);
         } else if (key == 'D') {
-
+                movePlayer(1);
+        } else if (key == ' ') {
+                // shoot missile
+        } else if (key == 'R') {
+                // reset game
         }
 }
 
@@ -94,7 +94,7 @@ GLuint loadTexture(const char *filename)
 /* -------------------------------- AUDIO ---------------------------------- */
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
-void audioCallback(void *userdata, Uint8 *stream, int len) {
+void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
 	if (audio_len == 0) {
                 IF_DEBUG printf("LOOPING AUDIO\n");
                 audio_pos = wav_buffer; // copy sound buffer
@@ -143,6 +143,22 @@ void drawScene()
 
         /*--------------------END--------------------*/
 
+        /*--------------------PLAYER--------------------*/
+        PLAYER* player = createPlayer();
+
+
+        // Transparency tests
+
+        glBegin(GL_QUADS);
+                glColor3f(1.0f, 1.0f, 1.0f);
+                glVertex2f(-100, -100);
+                glVertex2f(-100, 100);
+                glVertex2f(100, 100);
+                glVertex2f(100, -100);
+    	glEnd();
+        /*--------------------END--------------------*/
+
+
 }
 
 void drawLoop()
@@ -156,9 +172,6 @@ void drawLoop()
 
         // Draw scene
         drawScene();
-
-        // Check mouse event
-        mouseHold();
 
         // Clear buffer
         glutSwapBuffers();

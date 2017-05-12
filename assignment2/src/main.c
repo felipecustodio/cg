@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
-        glutCreateWindow("SpaceInvaders"); // Defines the window title
+        glutCreateWindow("Space Invaders"); // Defines the window title
 
         // RENDERING
         glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"
@@ -75,6 +75,11 @@ int main(int argc, char* argv[]) {
             return EXIT_FAILURE;
         }
 
+        player_texture = loadTexture("./assets/xwing.png");
+        if (!player_texture)  {
+            printf("✗✗✗ ERROR LOADING TEXTURE\n");
+            return EXIT_FAILURE;
+        }
         IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
 
         // START BG MUSIC
