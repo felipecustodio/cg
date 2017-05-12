@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-SRC = ./src/shapes.c ./src/transforms.c ./src/physics.c ./src/scene.c ./src/main.c
+SRC = ./src/shapes.c ./src/transforms.c ./src/physics.c ./src/scene.c ./src/invaders.c ./src/main.c
 # SOIL sources
 SOIL = ./src/SOIL/image_DXT.c ./src/SOIL/image_helper.c ./src/SOIL/stb_image_aug.c ./src/SOIL/SOIL.c
 
@@ -20,7 +20,7 @@ SDL = $(shell sdl-config --cflags --libs)
 LIBS = -lglut -lGL -lGLU -lm
 FLAGS = -O0 -g -pthread -lSDLmain -lSDL
 
-all: compile run clean
+all: compile clear run clean
 
 compile:
 	$(CC) -o $(BINARY) $(SDL) -I$(SOIL_IN) $(SOIL) -I$(INCLUDES) $(SRC) $(LIBS) $(FLAGS)
@@ -33,6 +33,9 @@ run:
 
 debug:
 	valgrind --leak-check=full --show-reachable=yes --track-origins=yes $(BINARY)
+
+clear:
+	clear
 
 clean:
 	rm *.o
