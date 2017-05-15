@@ -17,6 +17,12 @@ PLAYER* createPlayer() {
         player->health = 3;
         player->cooldown = 0;
 
+        Quadrilateral *playerSprite = createQuad();
+            setQuadCoordinates(playerSprite, -100, -100, -100, 100, 100, 100, 100, -100);
+            setQuadTexture(playerSprite, player_texture);
+            drawQuadTextured(playerSprite);
+        freeQuad(playerSprite);
+
         return player;
 }
 void destroyPlayer(PLAYER* player) {
@@ -85,6 +91,9 @@ void movePlayer(PLAYER* p, char direction) {
         }
 }
 
+void shootLaser() {
+
+}
 
 /* -------------------------------- MOVEMENT -------------------------------- */
 

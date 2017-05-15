@@ -3,8 +3,10 @@
 
 /* -------------------------------- GLOBALS ----------------------------------- */
 
+// You, the player!
 PLAYER* player;
 
+// User Interface
 char* UI_reset = "Press R to reset game";
 char* UI_shoot = "Press spacebar to shoot";
 char* UI_move = "Press A/D to move left/right";
@@ -133,11 +135,6 @@ void drawScene(){
         /*--------------------PLAYER--------------------*/
         player = createPlayer();
 
-        Quadrilateral *playerSprite = createQuad();
-            setQuadCoordinates(playerSprite, -100, -100, -100, 100, 100, 100, 100, -100);
-            setQuadTexture(playerSprite, player_texture);
-            drawQuadTextured(playerSprite);
-        freeQuad(playerSprite);
         /*--------------------END--------------------*/
 }
 

@@ -18,7 +18,7 @@ SDL = $(shell sdl-config --cflags --libs)
 
 # libraries and flags
 LIBS = -lglut -lGL -lGLU -lm
-FLAGS = -Wall -O0 -g -pthread -lSDLmain -lSDL
+FLAGS = -O0 -g -pthread -lSDLmain -lSDL
 
 all: compile clear run clean
 
