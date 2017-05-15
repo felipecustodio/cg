@@ -1,15 +1,5 @@
 #include "../includes/invaders.h"
 
-/* -------------------------------- GLOBALS ----------------------------------- */
-
-PLAYER* player;
-
-char* UI_reset = "Press R to reset game";
-char* UI_shoot = "Press spacebar to shoot";
-char* UI_move = "Press A/D to move left/right";
-
-/* -------------------------------- GLOBALS ----------------------------------- */
-
 /* -------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
@@ -94,6 +84,7 @@ void movePlayer(PLAYER* p, char direction) {
                 p->pos_x = current_pos;
         }
 }
+
 
 /* -------------------------------- MOVEMENT -------------------------------- */
 

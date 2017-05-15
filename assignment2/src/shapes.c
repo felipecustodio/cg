@@ -2,11 +2,9 @@
 
 /* ----------------------------- TEXTURES ------------------------------ */
 GLuint loadTexture(const char *filename){
-        //GLuint tex = SOIL_load_OGL_texture(filename,
-        //SOIL_LOAD_AUTO,
-        //SOIL_CREATE_NEW_ID,
-        //SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
 
+        // Load texture with RGBA
+        // Transparency enabled
         GLuint tex = SOIL_load_OGL_texture(filename,
         SOIL_LOAD_RGBA,
         SOIL_CREATE_NEW_ID,
@@ -16,6 +14,7 @@ GLuint loadTexture(const char *filename){
                 return EXIT_FAILURE;
         }
 
+        // Texture parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

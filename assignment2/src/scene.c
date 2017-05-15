@@ -1,10 +1,23 @@
+#include "../includes/invaders.h"
 #include "../includes/scene.h"
+
+/* -------------------------------- GLOBALS ----------------------------------- */
+
+PLAYER* player;
+
+char* UI_reset = "Press R to reset game";
+char* UI_shoot = "Press spacebar to shoot";
+char* UI_move = "Press A/D to move left/right";
+
+/* -------------------------------- GLOBALS ----------------------------------- */
 
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* ------ INPUT STATUS -----*/
-int leftMouseButtonDown = 0;
-int rightMouseButtonDown = 0;
+char leftMouseButtonDown = 0;
+char rightMouseButtonDown = 0;
+char Adown = 0;
+char Ddown = 0;
 
 // MOUSE EVENT HANDLING
 void on_mouseClick(int button, int click_state,
@@ -31,16 +44,23 @@ void mouseHold() {
 // KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
         if (key == 'A') {
-                //movePlayer(0);
+                Adown = 1;
         } else if (key == 'D') {
-                //movePlayer(1);
+                Ddown = 1;
         } else if (key == ' ') {
-                // shoot missile
+                shootLaser();
         } else if (key == 'R') {
                 // reset game
         }
 }
 
+void keyHold() {
+        if (Adown) {
+                // move/accelerate player left
+        } else if (Ddown) {
+                // move/accelerate player right
+        }
+}
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
@@ -111,7 +131,7 @@ void drawScene(){
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER--------------------*/
-        PLAYER* player = createPlayer();
+        player = createPlayer();
 
         Quadrilateral *playerSprite = createQuad();
             setQuadCoordinates(playerSprite, -100, -100, -100, 100, 100, 100, 100, -100);
