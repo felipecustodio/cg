@@ -42,6 +42,9 @@ void destroyPlayer(PLAYER* player);
 char checkBorders(GLfloat x);
 void movePlayer(PLAYER* p, char direction);
 
+// Action
+void shootLaser();
+
 /* -------------------------------- PLAYER ----------------------------------- */
 
 /* -------------------------------- ENEMY ----------------------------------- */
@@ -67,8 +70,8 @@ ENEMY* createEnemy(int design);
 void destroyEnemy(ENEMY* enemy);
 /* -------------------------------- ENEMY ----------------------------------- */
 
-/* -------------------------------- MISSILE ----------------------------------- */
-typedef struct missile {
+/* -------------------------------- LASER ----------------------------------- */
+typedef struct laser {
 
         // Coordinates
         GLfloat x[3];
@@ -77,11 +80,11 @@ typedef struct missile {
         // Has it exploded yet?
         int explosion;
 
-} MISSILE;
+} LASER;
 
-MISSILE* createMissile();
-void destroyMissile();
-/* -------------------------------- MISSILE ----------------------------------- */
+LASER* createLaser();
+void destroyLaser();
+/* -------------------------------- LASER ----------------------------------- */
 
 /* -------------------------------- GAME ----------------------------------- */
 

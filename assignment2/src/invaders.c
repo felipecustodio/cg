@@ -4,6 +4,9 @@
 
 PLAYER* player;
 
+char* UI_reset = "Press R to reset game";
+char* UI_shoot = "Press spacebar to shoot";
+char* UI_move = "Press A/D to move left/right";
 
 /* -------------------------------- GLOBALS ----------------------------------- */
 
@@ -93,3 +96,22 @@ void movePlayer(PLAYER* p, char direction) {
 }
 
 /* -------------------------------- MOVEMENT -------------------------------- */
+
+/* -------------------------------- LASER ----------------------------------- */
+LASER* createLaser() {
+        LASER* laser = malloc(sizeof(*laser));
+
+        laser->x[0] = 0;
+        laser->x[1] = 0;
+        laser->x[2] = 0;
+        laser->y[0] = 0;
+        laser->y[1] = 0;
+        laser->y[2] = 0;
+
+        laser->explosion = 0;
+}
+
+void destroyLaser(LASER* laser) {
+        free(laser);
+}
+/* -------------------------------- LASER ----------------------------------- */

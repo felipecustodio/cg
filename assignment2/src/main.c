@@ -14,6 +14,7 @@
 
 #include "scene.h"
 #include "settings.h"
+#include "invaders.h"
 
 int main(int argc, char* argv[]) {
 
