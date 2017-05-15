@@ -31,9 +31,9 @@ void mouseHold() {
 // KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
         if (key == 'A') {
-                movePlayer(0);
+                //movePlayer(0);
         } else if (key == 'D') {
-                movePlayer(1);
+                //movePlayer(1);
         } else if (key == ' ') {
                 // shoot missile
         } else if (key == 'R') {
@@ -44,8 +44,7 @@ void keyPress(unsigned char key, int x, int y) {
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
-void reshape(int width, int height)
-{
+void reshape(int width, int height){
     // Screen can't be smaller than 0
     if(height == 0)
         height = 1;
@@ -70,33 +69,6 @@ void reshape(int width, int height)
 }
 /* -------------------------------- WINDOW ---------------------------------- */
 
-/* ----------------------------- TEXTURES ------------------------------ */
-GLuint loadTexture(const char *filename)
-{
-        //GLuint tex = SOIL_load_OGL_texture(filename,
-        //SOIL_LOAD_AUTO,
-        //SOIL_CREATE_NEW_ID,
-        //SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-
-        GLuint tex = SOIL_load_OGL_texture(filename,
-        SOIL_LOAD_AUTO,
-        SOIL_CREATE_NEW_ID,
-        SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
-
-        if (!tex) {
-                printf("ERROR ON TEXTURE LOADING\n");
-                return EXIT_FAILURE;
-        }
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	return tex;
-}
-/* ----------------------------- TEXTURES ------------------------------ */
-
 /* -------------------------------- AUDIO ---------------------------------- */
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
@@ -120,8 +92,7 @@ void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
 /* -------------------------------- AUDIO ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
-void drawScene()
-{
+void drawScene(){
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
 
@@ -129,46 +100,25 @@ void drawScene()
         // Refresh matrix for new object
         glLoadIdentity();
 
-        // Bind texture to quad
-        glBindTexture(GL_TEXTURE_2D, background_texture);
-        int bgX = VIEWPORT_X;
-        int bgY = VIEWPORT_Y;
-        // Start texturing
-        glEnable(GL_TEXTURE_2D);
-        glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-                glVertex2f(-bgX, -bgY);
-            glTexCoord2f(0, 1);
-                glVertex2f(-bgX, bgY);
-            glTexCoord2f(1, 1);
-                glVertex2f(bgX, bgY);
-            glTexCoord2f(1, 0);
-                glVertex2f(bgX, -bgY);
-    	glEnd();
-        glDisable(GL_TEXTURE_2D);
-
+        Quadrilateral *bgSprite = createQuad();
+            setQuadCoordinates(bgSprite, -VIEWPORT_X, -VIEWPORT_Y,
+                                -VIEWPORT_X, VIEWPORT_Y,
+                                VIEWPORT_X, VIEWPORT_Y,
+                                VIEWPORT_X, -VIEWPORT_Y);
+            setQuadTexture(bgSprite, background_texture);
+            drawQuadTextured(bgSprite);
+        freeQuad(bgSprite);
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER--------------------*/
         PLAYER* player = createPlayer();
 
-        // Transparency tests
-        glBindTexture(GL_TEXTURE_2D, player_texture);
-        glEnable(GL_TEXTURE_2D);
-        glBegin(GL_QUADS);
-                glTexCoord2f(0, 0);
-                glVertex2f(-100, -100);
-                glTexCoord2f(0, 1);
-                glVertex2f(-100, 100);
-                glTexCoord2f(1, 1);
-                glVertex2f(100, 100);
-                glTexCoord2f(1, 0);
-                glVertex2f(100, -100);
-    	glEnd();
-        glDisable(GL_TEXTURE_2D);
+        Quadrilateral *playerSprite = createQuad();
+            setQuadCoordinates(playerSprite, -100, -100, -100, 100, 100, 100, 100, -100);
+            setQuadTexture(playerSprite, player_texture);
+            drawQuadTextured(playerSprite);
+        freeQuad(playerSprite);
         /*--------------------END--------------------*/
-
-
 }
 
 void drawLoop()

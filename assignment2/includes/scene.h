@@ -6,7 +6,6 @@
 */
 
 #include <GL/glut.h>
-#include "../includes/SOIL/SOIL.h"
 #include <SDL/SDL.h>
 #include "shapes.h"
 #include "transforms.h"
@@ -21,12 +20,10 @@ void mouseHold();
 void keyPress(unsigned char key, int x, int y);
 /* -------------------------------- INPUT ----------------------------------- */
 
-/* -------------------------------- TEXTURES ---------------------------------- */
+/* ------------------------------- TEXTURES --------------------------------- */
 // Textures
 GLuint background_texture, player_texture, enemy_texture;
-// Functions
-GLuint loadTexture(const char *filename);
-/* -------------------------------- TEXTURES ---------------------------------- */
+/* ------------------------------- TEXTURES --------------------------------- */
 
 /* -------------------------------- AUDIO ---------------------------------- */
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST

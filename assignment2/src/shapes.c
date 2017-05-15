@@ -1,5 +1,31 @@
 #include "../includes/shapes.h"
 
+/* ----------------------------- TEXTURES ------------------------------ */
+GLuint loadTexture(const char *filename){
+        //GLuint tex = SOIL_load_OGL_texture(filename,
+        //SOIL_LOAD_AUTO,
+        //SOIL_CREATE_NEW_ID,
+        //SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+
+        GLuint tex = SOIL_load_OGL_texture(filename,
+        SOIL_LOAD_AUTO,
+        SOIL_CREATE_NEW_ID,
+        SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
+
+        if (!tex) {
+                printf("ERROR ON TEXTURE LOADING\n");
+                return EXIT_FAILURE;
+        }
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return tex;
+}
+/* ----------------------------- TEXTURES ------------------------------ */
+
 /* ---------------------------------- TEXT ---------------------------------- */
 Text *createText(void *font, const char *string) {
     Text *newTxt = (Text *) malloc(sizeof(Text));
@@ -138,6 +164,8 @@ Quadrilateral* createQuad() {
     quad->color[1] = 0.0;
     quad->color[2] = 0.0;
 
+    quad->texture = 0;
+
     quad->x[0] = 0.0;
     quad->y[0] = 0.0;
 
@@ -184,6 +212,12 @@ void setQuadColor(Quadrilateral *quad, float r, float g, float b){
     quad->color[2] = b;
 }
 
+void setQuadTexture(Quadrilateral *quad, GLuint texture){
+    if (quad == NULL) return;
+
+    quad->texture = texture;
+}
+
 void drawQuadHollow(Quadrilateral* quad) {
     if (quad == NULL) return;
 
@@ -210,6 +244,24 @@ void drawQuadFilled(Quadrilateral* quad) {
         glVertex2f(quad->x[2], quad->y[2]);
         glVertex2f(quad->x[3], quad->y[3]);
     glEnd();
+}
+
+void drawQuadTextured(Quadrilateral *quad){
+    if (quad == NULL) return;
+
+    glBindTexture(GL_TEXTURE_2D, quad->texture);
+    glEnable(GL_TEXTURE_2D);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 0);
+        glVertex2f(quad->x[0], quad->y[0]);
+        glTexCoord2f(0, 1);
+        glVertex2f(quad->x[1], quad->y[1]);
+        glTexCoord2f(1, 1);
+        glVertex2f(quad->x[2], quad->y[2]);
+        glTexCoord2f(1, 0);
+        glVertex2f(quad->x[3], quad->y[3]);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
 }
 
 void freeQuad(Quadrilateral* quad) {

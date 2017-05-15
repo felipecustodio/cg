@@ -3,8 +3,13 @@
 
 #include <stdlib.h>
 #include <GL/glut.h>
+#include "../includes/SOIL/SOIL.h"
 #include <math.h>
 #include <string.h>
+
+/* -------------------------------- TEXTURES -------------------------------- */
+GLuint loadTexture(const char *filename);
+/* -------------------------------- TEXTURES -------------------------------- */
 
 /* ---------------------------------- TEXT ---------------------------------- */
 typedef struct Text {
@@ -53,6 +58,9 @@ typedef struct Quadrilateral {
         // Color
         float color[3];
 
+        // Texture
+        GLuint texture;
+
         // Coordinates
         float x[4];
         float y[4];
@@ -62,8 +70,10 @@ Quadrilateral* createQuad();
 void setQuadColor(Quadrilateral *quad, float r, float g, float b);
 void setQuadCoordinates(Quadrilateral *quad, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
 void setQuadThickness(Quadrilateral *quad, float thickness);
+void setQuadTexture(Quadrilateral *quad, GLuint texture);
 void drawQuadHollow(Quadrilateral* quad);
 void drawQuadFilled(Quadrilateral* quad);
+void drawQuadTextured(Quadrilateral *quad);
 void freeQuad(Quadrilateral* quad);
 /* ------------------------------ QUADRILATERAL ----------------------------- */
 
