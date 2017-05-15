@@ -8,12 +8,11 @@ GLuint loadTexture(const char *filename){
         //SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
 
         GLuint tex = SOIL_load_OGL_texture(filename,
-        SOIL_LOAD_AUTO,
+        SOIL_LOAD_RGBA,
         SOIL_CREATE_NEW_ID,
         SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
 
         if (!tex) {
-                printf("ERROR ON TEXTURE LOADING\n");
                 return EXIT_FAILURE;
         }
 
@@ -251,6 +250,8 @@ void drawQuadTextured(Quadrilateral *quad){
 
     glBindTexture(GL_TEXTURE_2D, quad->texture);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
         glVertex2f(quad->x[0], quad->y[0]);
@@ -262,6 +263,7 @@ void drawQuadTextured(Quadrilateral *quad){
         glVertex2f(quad->x[3], quad->y[3]);
     glEnd();
     glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
 }
 
 void freeQuad(Quadrilateral* quad) {
