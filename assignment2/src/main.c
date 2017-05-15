@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         // AUDIO
         SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
         IF_DEBUG printf("◆ LOADING AUDIO\n");
-        if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
+        if(!(SDL_LoadWAV("./assets/omen.wav", &wav_spec, &wav_buffer, &wav_length))) {
             IF_DEBUG printf("✗✗✗ ERROR LOADING AUDIO\n");
             return EXIT_FAILURE;
         }
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
-        glutCreateWindow("Space Invaders"); // Defines the window title
+        glutCreateWindow("Invaders Must Die XL"); // Defines the window title
 
         // RENDERING
         glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"
@@ -64,13 +64,13 @@ int main(int argc, char* argv[]) {
 
         // LOAD TEXTURES
         IF_DEBUG printf("◆ LOADING TEXTURES\n");
-        background_texture = loadTexture("./assets/bgmaterial.png");
+        background_texture = loadTexture("./assets/bg.png");
         if (!background_texture)  {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;
         }
 
-        player_texture = loadTexture("./assets/xwing.png");
+        player_texture = loadTexture("./assets/ship.png");
         if (!player_texture)  {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;
