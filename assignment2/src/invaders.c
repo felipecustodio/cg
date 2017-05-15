@@ -1,5 +1,12 @@
 #include "../includes/invaders.h"
 
+/* -------------------------------- GLOBALS ----------------------------------- */
+
+PLAYER* player;
+
+
+/* -------------------------------- GLOBALS ----------------------------------- */
+
 /* -------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
@@ -59,8 +66,9 @@ void destroyEnemy(ENEMY* enemy) {
 
 }
 
-// Movement
+/* -------------------------------- ENEMY ----------------------------------- */
 
+/* -------------------------------- MOVEMENT -------------------------------- */
 // Avoids player moving out of window
 char checkBorders(GLfloat x) {
         if (x <= 0 || x >= VIEWPORT_X) {
@@ -84,4 +92,4 @@ void movePlayer(PLAYER* p, char direction) {
         }
 }
 
-/* -------------------------------- ENEMY ----------------------------------- */
+/* -------------------------------- MOVEMENT -------------------------------- */
