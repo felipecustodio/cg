@@ -1,7 +1,7 @@
 #include "../includes/invaders.h"
 
 /* -------------------------------- GLOBALS ----------------------------------- */
-GLfloat playerSpeed = 3.5f; // player movement speed
+GLfloat playerSpeed = 3.5f; // player movement speed TODO change to 0
 GLfloat enemySpeed = 0; // enemy horizontal speed
 GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
 
