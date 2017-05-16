@@ -15,9 +15,7 @@
 
 /* -------------------------------- PLAYER ----------------------------------- */
 typedef struct player {
-
-        // Shape
-
+        
         // Coordinates
         GLfloat x[3];
         GLfloat y[3];

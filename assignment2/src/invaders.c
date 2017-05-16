@@ -17,16 +17,19 @@ PLAYER* createPlayer() {
         player->health = 3;
         player->cooldown = 0;
 
+        return player;
+}
+
+void drawPlayer(PLAYER* player) {
         Quadrilateral *playerSprite = createQuad();
             setQuadCoordinates(playerSprite, -100, -100, -100, 100, 100, 100, 100, -100);
             setQuadTexture(playerSprite, player_texture);
             drawQuadTextured(playerSprite);
         freeQuad(playerSprite);
-
-        return player;
 }
-void destroyPlayer(PLAYER* player) {
 
+void destroyPlayer(PLAYER* player) {
+        free(player);
 }
 /* -------------------------------- PLAYER ----------------------------------- */
 
@@ -55,6 +58,7 @@ ENEMY* createEnemy(int design) {
                         break;
         }
 
+        // Reset variables
         enemy->pos_x = 0;
         enemy->pos_y = 0;
         enemy->health = 1;

@@ -134,6 +134,7 @@ void drawScene(){
 
         /*--------------------PLAYER--------------------*/
         player = createPlayer();
+        drawPlayer(player);
 
         /*--------------------END--------------------*/
 }
