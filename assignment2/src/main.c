@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
         }
         IF_DEBUG printf("◆ AUDIO LOADED\n");
         // set the callback function
-        wav_spec.callback = audioCallback;
+        //wav_spec.callback = audioCallback;
         wav_spec.userdata = NULL;
         // set our global static variables
         audio_pos = wav_buffer; // copy sound buffer
