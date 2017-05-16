@@ -1,18 +1,20 @@
 #include "../includes/invaders.h"
 
+int moveSpeed = 60;
+
 /* -------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
 
         // Set coordinates
-        player->x[0] = -100;
-        player->x[1] = -100;
-        player->x[2] = 100;
-        player->x[3] = 100;
-        player->y[0] = -100;
-        player->y[1] = 100;
-        player->y[2] = 100;
-        player->y[3] = -100;
+        player->x[0] = -28;
+        player->x[1] = -28;
+        player->x[2] = 28;
+        player->x[3] = 28;
+        player->y[0] = -28;
+        player->y[1] = 28;
+        player->y[2] = 28;
+        player->y[3] = -28;
 
         player->pos_x = 0;
         player->pos_y = 0;
@@ -25,7 +27,7 @@ PLAYER* createPlayer() {
 
 void drawPlayer(PLAYER* player) {
         Quadrilateral *playerSprite = createQuad();
-            setQuadCoordinates(playerSprite, 
+            setQuadCoordinates(playerSprite,
             player->x[0], player->y[0],
             player->x[1], player->y[1],
             player->x[2], player->y[2],
@@ -93,25 +95,25 @@ char checkBorders(GLfloat x) {
 
 // Move player left/right
 void movePlayer(PLAYER* p, char direction) {
-    printf("D\n");
-        GLfloat current_pos = p->pos_x;
-        if (direction) {
-                // MOVE RIGHT
-            p->x[0] += 10;
-            p->x[1] += 10;
-            p->x[2] += 10;
-            p->x[3] += 10;
-        } else {
-                // MOVE LEFT
-            p->x[0] -= 10;
-            p->x[1] -= 10;
-            p->x[2] -= 10;
-            p->x[3] -= 10;
-        }
+    IF_DEBUG printf("D\n");
+    GLfloat current_pos = p->pos_x;
+    if (direction) {
+            // MOVE RIGHT
+        p->x[0] += moveSpeed;
+        p->x[1] += moveSpeed;
+        p->x[2] += moveSpeed;
+        p->x[3] += moveSpeed;
+    } else {
+        // MOVE LEFT
+        p->x[0] -= moveSpeed;
+        p->x[1] -= moveSpeed;
+        p->x[2] -= moveSpeed;
+        p->x[3] -= moveSpeed;
+    }
 
-        if (!checkBorders(p->pos_x)) {
-                p->pos_x = current_pos;
-        }
+    if (!checkBorders(p->pos_x)) {
+        p->pos_x = current_pos;
+    }
 }
 
 void shootLaser(LASER** shots, int ammount) {
@@ -125,7 +127,7 @@ void shootLaser(LASER** shots, int ammount) {
 
 /* -------------------------------- LASER ----------------------------------- */
 LASER* createLaser() {
-        LASER* laser = malloc(sizeof(*laser));
+        LASER* laser = (LASER *) malloc(sizeof(*laser));
 
         laser->x[0] = 0;
         laser->x[1] = 0;
@@ -138,6 +140,8 @@ LASER* createLaser() {
         laser->y[3] = 0;
 
         laser->explosion = 0;
+
+        return laser;
 }
 
 void destroyLaser(LASER* laser) {

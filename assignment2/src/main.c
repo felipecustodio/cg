@@ -90,7 +90,7 @@ int main(int argc, char* argv[]) {
             return EXIT_FAILURE;
         }
 
-        player_texture = loadTexture("./assets/xwing.png");
+        player_texture = loadTexture("./assets/ship.png");
         if (!player_texture)  {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;

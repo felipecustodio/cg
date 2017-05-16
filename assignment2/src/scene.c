@@ -49,41 +49,37 @@ void mouseHold() {
 
 // KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
-    printf("E\n");
-        if (key == 'a' || key == 'A') {
-            printf("pressdA\n");
-                Adown = 1;
-        } else if (key == 'd' || key == 'D') {
-            printf("pressdD\n");
-
-                Ddown = 1;
-        } else if (key == ' ') {
-                // SHOOT LASER WHEN SPACEBAR PRESSED
-                shootLaser(shots, ammount);
-        } else if (key == 'R') {
-                // reset game
-        }
-        printf("ADOWN: %d\n", Adown);
-        printf("DDOWN: %d\n", Ddown);
-        keyHold();
-        Adown = 0;
-        Ddown = 0;
-
+    IF_DEBUG printf("E\n");
+    if (key == 'a' || key == 'A') {
+        IF_DEBUG printf("pressdA\n");
+        Adown = 1;
+    } else if (key == 'd' || key == 'D') {
+        IF_DEBUG printf("pressdD\n");
+        Ddown = 1;
+    } else if (key == ' ') {
+        // SHOOT LASER WHEN SPACEBAR PRESSED
+        shootLaser(shots, ammount);
+    } else if (key == 'R') {
+        // reset game
+    }
+    IF_DEBUG printf("ADOWN: %d\n", Adown);
+    IF_DEBUG printf("DDOWN: %d\n", Ddown);
+    keyHold();
+    Adown = 0;
+    Ddown = 0;
 }
 
 void keyHold() {
-            printf("A\n");
-        if (Adown) {
-                // move/accelerate player left
-            printf("B\n");
-
-            movePlayer(player, 0);
-        } else if (Ddown) {
-                // move/accelerate player right
-            printf("C\n");
-
-            movePlayer(player, 1);
-        }
+    IF_DEBUG printf("A\n");
+    if (Adown) {
+        // move/accelerate player left
+        IF_DEBUG printf("B\n");
+        movePlayer(player, 0);
+    } else if (Ddown) {
+        // move/accelerate player right
+        IF_DEBUG printf("C\n");
+        movePlayer(player, 1);
+    }
 }
 /* -------------------------------- INPUT ----------------------------------- */
 
@@ -158,6 +154,7 @@ void drawScene() {
         {
             player = createPlayer();
         }
+        glTranslatef(0.0f, -228, 0.0f);
         drawPlayer(player);
 
         /*--------------------END--------------------*/
