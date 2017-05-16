@@ -6,6 +6,10 @@
 // You, the player!
 PLAYER* player;
 
+// Shots fired
+LASER** shots;
+int ammount = 0;
+
 // User Interface
 char* UI_reset = "Press R to reset game";
 char* UI_shoot = "Press spacebar to shoot";
@@ -54,7 +58,8 @@ void keyPress(unsigned char key, int x, int y) {
 
                 Ddown = 1;
         } else if (key == ' ') {
-                shootLaser();
+                // SHOOT LASER WHEN SPACEBAR PRESSED
+                shootLaser(shots, ammount);
         } else if (key == 'R') {
                 // reset game
         }
@@ -83,7 +88,7 @@ void keyHold() {
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
-void reshape(int width, int height){
+void reshape(int width, int height) {
     // Screen can't be smaller than 0
     if(height == 0)
         height = 1;
@@ -100,7 +105,6 @@ void reshape(int width, int height){
     glViewport(0, 0, width, height);
 
     // Perspective and projection correction
-    //gluPerspective(45, ratio, -1, 1);
     gluOrtho2D(-ORTHO_X * ratio, ORTHO_X * ratio, -ORTHO_Y, ORTHO_Y);
 
     // Switches matrix mode back to modelview
@@ -131,7 +135,7 @@ void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
 /* -------------------------------- AUDIO ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
-void drawScene(){
+void drawScene() {
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
 
@@ -152,7 +156,6 @@ void drawScene(){
         /*--------------------PLAYER--------------------*/
         if (player == NULL)
         {
-            printf("CU\n");
             player = createPlayer();
         }
         drawPlayer(player);
@@ -160,7 +163,39 @@ void drawScene(){
         /*--------------------END--------------------*/
 }
 
-void drawLoop(){
+void drawHUD(){
+    // Refresh matrix for new object
+    glLoadIdentity();
+    glTranslatef(-(VIEWPORT_X/2) - 112, VIEWPORT_Y/2, 0.0f);
+
+    Quadrilateral *hudL_sprite = createQuad();
+        setQuadCoordinates(hudL_sprite, 0, 0, 0, 64, 288, 64, 288, 0);
+        setQuadTexture(hudL_sprite , hudL);
+        drawQuadTextured(hudL_sprite);
+    freeQuad(hudL_sprite);
+
+    // Refresh matrix for new object
+    glLoadIdentity();
+    glTranslatef(-88, VIEWPORT_Y/2, 0.0f);
+
+    Quadrilateral *hudM_sprite = createQuad();
+        setQuadCoordinates(hudM_sprite, 0, 0, 0, 64, 188, 64, 188, 0);
+        setQuadTexture(hudM_sprite , hudM);
+        drawQuadTextured(hudM_sprite);
+    freeQuad(hudM_sprite);
+
+    // Refresh matrix for new object
+    glLoadIdentity();
+    glTranslatef(VIEWPORT_X/2 - 178, VIEWPORT_Y/2, 0.0f);
+
+    Quadrilateral *hudR_sprite = createQuad();
+        setQuadCoordinates(hudR_sprite, 0, 0, 0, 64, 288, 64, 288, 0);
+        setQuadTexture(hudR_sprite , hudR);
+        drawQuadTextured(hudR_sprite);
+    freeQuad(hudR_sprite);
+}
+
+void drawLoop() {
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
         glColor3f(1.0f, 1.0f, 1.0f);
@@ -170,6 +205,9 @@ void drawLoop(){
 
         // Draw scene
         drawScene();
+
+        // Draw HUD
+        drawHUD();
 
         // Clear buffer
         glutSwapBuffers();

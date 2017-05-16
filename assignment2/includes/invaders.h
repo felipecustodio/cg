@@ -15,7 +15,7 @@
 
 /* -------------------------------- PLAYER ----------------------------------- */
 typedef struct player {
-        
+
         // Coordinates
         GLfloat x[4];
         GLfloat y[4];
@@ -34,14 +34,12 @@ typedef struct player {
 
 // Create/Destroy
 PLAYER* createPlayer();
+void drawPlayer(PLAYER* player);
 void destroyPlayer(PLAYER* player);
 
 // Movement
 char checkBorders(GLfloat x);
 void movePlayer(PLAYER* p, char direction);
-
-// Action
-void shootLaser();
 
 /* -------------------------------- PLAYER ----------------------------------- */
 
@@ -82,6 +80,9 @@ typedef struct laser {
 
 LASER* createLaser();
 void destroyLaser();
+
+// Action
+void shootLaser(LASER** shots, int ammount);
 /* -------------------------------- LASER ----------------------------------- */
 
 /* -------------------------------- GAME ----------------------------------- */

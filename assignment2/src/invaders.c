@@ -3,6 +3,7 @@
 /* -------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
+
         // Set coordinates
         player->x[0] = -100;
         player->x[1] = -100;
@@ -47,9 +48,12 @@ ENEMY* createEnemy(int design) {
         enemy->x[0] = 0;
         enemy->x[1] = 0;
         enemy->x[2] = 0;
+        enemy->x[3] = 0;
+
         enemy->y[0] = 0;
         enemy->y[1] = 0;
         enemy->y[2] = 0;
+        enemy->y[3] = 0;
 
         // set enemy shape
         switch(design) {
@@ -110,7 +114,10 @@ void movePlayer(PLAYER* p, char direction) {
         }
 }
 
-void shootLaser() {
+void shootLaser(LASER** shots, int ammount) {
+        shots = (LASER**)realloc(shots, sizeof(shots) * ammount + 1);
+
+
 
 }
 
@@ -123,9 +130,12 @@ LASER* createLaser() {
         laser->x[0] = 0;
         laser->x[1] = 0;
         laser->x[2] = 0;
+        laser->x[3] = 0;
+
         laser->y[0] = 0;
         laser->y[1] = 0;
         laser->y[2] = 0;
+        laser->y[3] = 0;
 
         laser->explosion = 0;
 }
