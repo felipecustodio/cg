@@ -17,8 +17,8 @@
 typedef struct player {
         
         // Coordinates
-        GLfloat x[3];
-        GLfloat y[3];
+        GLfloat x[4];
+        GLfloat y[4];
 
         // Movement
         GLfloat pos_x;

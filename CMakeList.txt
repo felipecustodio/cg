@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.6)
+project(t1)
+
+set(CMAKE_CXX_STANDARD 11)
+
+set(SOURCE_FILES main.cpp)
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -lGL -lGLU -lglut")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lGL -lGLU -lglut")
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+add_executable(t1 ${SOURCE_FILES})
+target_link_libraries(t1 ${OPENGL_LIBRARIES} ${GLUT_LIBRARY})

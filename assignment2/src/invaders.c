@@ -4,12 +4,14 @@
 PLAYER* createPlayer() {
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
         // Set coordinates
-        player->x[0] = 0;
-        player->x[1] = 0;
-        player->x[2] = 0;
-        player->y[0] = 0;
-        player->y[1] = 0;
-        player->y[2] = 0;
+        player->x[0] = -100;
+        player->x[1] = -100;
+        player->x[2] = 100;
+        player->x[3] = 100;
+        player->y[0] = -100;
+        player->y[1] = 100;
+        player->y[2] = 100;
+        player->y[3] = -100;
 
         player->pos_x = 0;
         player->pos_y = 0;
@@ -22,7 +24,11 @@ PLAYER* createPlayer() {
 
 void drawPlayer(PLAYER* player) {
         Quadrilateral *playerSprite = createQuad();
-            setQuadCoordinates(playerSprite, -100, -100, -100, 100, 100, 100, 100, -100);
+            setQuadCoordinates(playerSprite, 
+            player->x[0], player->y[0],
+            player->x[1], player->y[1],
+            player->x[2], player->y[2],
+            player->x[3], player->y[3]);
             setQuadTexture(playerSprite, player_texture);
             drawQuadTextured(playerSprite);
         freeQuad(playerSprite);
@@ -83,11 +89,20 @@ char checkBorders(GLfloat x) {
 
 // Move player left/right
 void movePlayer(PLAYER* p, char direction) {
+    printf("D\n");
         GLfloat current_pos = p->pos_x;
         if (direction) {
                 // MOVE RIGHT
+            p->x[0] += 10;
+            p->x[1] += 10;
+            p->x[2] += 10;
+            p->x[3] += 10;
         } else {
                 // MOVE LEFT
+            p->x[0] -= 10;
+            p->x[1] -= 10;
+            p->x[2] -= 10;
+            p->x[3] -= 10;
         }
 
         if (!checkBorders(p->pos_x)) {

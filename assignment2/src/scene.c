@@ -45,22 +45,39 @@ void mouseHold() {
 
 // KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
-        if (key == 'A') {
+    printf("E\n");
+        if (key == 'a' || key == 'A') {
+            printf("pressdA\n");
                 Adown = 1;
-        } else if (key == 'D') {
+        } else if (key == 'd' || key == 'D') {
+            printf("pressdD\n");
+
                 Ddown = 1;
         } else if (key == ' ') {
                 shootLaser();
         } else if (key == 'R') {
                 // reset game
         }
+        printf("ADOWN: %d\n", Adown);
+        printf("DDOWN: %d\n", Ddown);
+        keyHold();
+        Adown = 0;
+        Ddown = 0;
+
 }
 
 void keyHold() {
+            printf("A\n");
         if (Adown) {
                 // move/accelerate player left
+            printf("B\n");
+
+            movePlayer(player, 0);
         } else if (Ddown) {
                 // move/accelerate player right
+            printf("C\n");
+
+            movePlayer(player, 1);
         }
 }
 /* -------------------------------- INPUT ----------------------------------- */
@@ -133,7 +150,11 @@ void drawScene(){
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER--------------------*/
-        player = createPlayer();
+        if (player == NULL)
+        {
+            printf("CU\n");
+            player = createPlayer();
+        }
         drawPlayer(player);
 
         /*--------------------END--------------------*/
