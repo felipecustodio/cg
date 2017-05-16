@@ -1,14 +1,16 @@
 #include "../includes/invaders.h"
 
 /* -------------------------------- GLOBALS ----------------------------------- */
-GLfloat playerSpeed = 3.5f; // player movement speed TODO change to 0
+// Initialize external globals
+GLfloat playerPosition = 0; // player horizontal speed
 GLfloat enemySpeed = 0; // enemy horizontal speed
 GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
-
 /* -------------------------------- GLOBALS ----------------------------------- */
 
 /* -------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
+
+        // Allocate memory
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
 
         // Set coordinates
@@ -21,9 +23,14 @@ PLAYER* createPlayer() {
         player->y[2] = 28;
         player->y[3] = -28;
 
-        player->pos_x = 0;
+        // Set boundaries
+        player->boundary_left = -28;
+        player->boundary_right = 28;
+
         // Player can take 3 hits
         player->health = 3;
+
+        // Timer before shooting again
         player->cooldown = 0;
 
         return player;
@@ -35,9 +42,10 @@ void drawPlayer(PLAYER* player) {
             player->x[0], player->y[0],
             player->x[1], player->y[1],
             player->x[2], player->y[2],
-            player->x[3], player->y[3]);
-            setQuadTexture(playerSprite, player_texture);
-            drawQuadTextured(playerSprite);
+            player->x[3], player->y[3]); // initial coordinates
+            setQuadTexture(playerSprite, player_texture); // choose texture
+            glTranslatef(playerPosition, 0.0f, 0.0f); // update/move coordinates if has speed
+            drawQuadTextured(playerSprite); // draw player on screen
         freeQuad(playerSprite);
 }
 
@@ -90,38 +98,15 @@ void destroyEnemy(ENEMY* enemy) {
 /* -------------------------------- MOVEMENT -------------------------------- */
 // Avoids player moving out of window
 char checkBorders(GLfloat x) {
-        if (x <= 0 || x >= VIEWPORT_X) {
+        printf("CHECKING %f\n", x);
+        if (x <= -535|| x >= 535) {
                 return 0;
         } else {
                 return 1;
         }
 }
 
-// Move player left/right
-void movePlayer(PLAYER* p, char direction) {
-        //
-        // TODO Felupio: translate when drawing the player (the matrix will be loaded there).
-        // Use this function to increase velocity (checking for treshold).
-        // Repeat for enemies and lasers
-        //
-    if (direction) {
-        // MOVE RIGHT
-        glTranslatef(playerSpeed, 0, 0);
-        // p->x[0] += playerSpeed;
-        // p->x[1] += playerSpeed;
-        // p->x[2] += playerSpeed;
-        // p->x[3] += playerSpeed;
-    } else {
-        // MOVE LEFT
-        glTranslatef(-playerSpeed, 0, 0);
-        // p->x[0] -= playerSpeed;
-        // p->x[1] -= playerSpeed;
-        // p->x[2] -= playerSpeed;
-        // p->x[3] -= playerSpeed;
-    }
-
-}
-
+// Action
 void shootLaser(LASER** shots, int amount) {
         // Add laser to scene
         shots = (LASER**)realloc(shots, sizeof(shots) * amount + 1);

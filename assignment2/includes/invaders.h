@@ -13,6 +13,15 @@
 #include "physics.h"
 #include "settings.h"
 
+/* -------------------------------- GLOBALS ----------------------------------- */
+
+// Movement
+extern GLfloat playerPosition; // player horizontal speed
+extern GLfloat enemySpeed; // enemy horizontal speed
+extern GLfloat enemyApproach; // enemy vertical speed (approaching player base)
+
+/* -------------------------------- GLOBALS ----------------------------------- */
+
 /* -------------------------------- PLAYER ----------------------------------- */
 typedef struct player {
 
@@ -21,7 +30,8 @@ typedef struct player {
         GLfloat y[4];
 
         // Movement
-        GLfloat pos_x;
+        GLfloat boundary_left;
+        GLfloat boundary_right;
 
         // Health
         int health;
@@ -38,7 +48,6 @@ void destroyPlayer(PLAYER* player);
 
 // Movement
 char checkBorders(GLfloat x);
-void movePlayer(PLAYER* p, char direction);
 
 /* -------------------------------- PLAYER ----------------------------------- */
 

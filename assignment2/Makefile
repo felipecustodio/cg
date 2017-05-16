@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-SRC = ./src/shapes.c ./src/transforms.c ./src/physics.c ./src/scene.c ./src/invaders.c ./src/main.c
+SRC = ./src/shapes.c ./src/transforms.c ./src/physics.c ./src/invaders.c ./src/scene.c ./src/main.c
 # SOIL sources
 SOIL = ./src/SOIL/image_DXT.c ./src/SOIL/image_helper.c ./src/SOIL/stb_image_aug.c ./src/SOIL/SOIL.c
 

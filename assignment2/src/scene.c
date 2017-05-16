@@ -6,12 +6,15 @@
 
 /* ------ THE PLAYER -----*/
 PLAYER* player;
-int direction = 0;
+int playerSpeed = 3.5f;
 
 /* ------ ENEMIES -----*/
+ENEMY** enemies;
 
 /* ------ LASERS -----*/
-LASER** shots;
+LASER** shots_player;
+LASER** shots_enemy;
+
 int amount = 0;
 
 /* ------ UI -----*/
@@ -62,6 +65,8 @@ int loadTextures() {
 
 /* -------------------------------- INPUT ----------------------------------- */
 // MOUSE EVENT HANDLING
+
+// Mouse clicks
 void on_mouseClick(int button, int click_state,
         int x_mouse_position, int y_mouse_position)
 {
@@ -74,7 +79,7 @@ void on_mouseClick(int button, int click_state,
 	glutPostRedisplay(); // Forces scene redraw
 }
 
-// MOUSE STATUS
+// Mouse status
 void mouseHold() {
         if (leftMouseButtonDown) {
                 // left mouse event
@@ -85,7 +90,7 @@ void mouseHold() {
 
 // KEYBOARD EVENT HANDLING
 
-// Key is pressed
+// Key presses
 void keyPress(unsigned char key, int x, int y) {
         IF_DEBUG printf("E\n");
         if (key == 'a' || key == 'A') {
@@ -94,7 +99,7 @@ void keyPress(unsigned char key, int x, int y) {
                 Ddown = 1;
         } else if (key == ' ') {
                 // PEW! PEW!
-                shootLaser(shots, amount);
+                shootLaser(shots_player, amount);
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
@@ -102,7 +107,7 @@ void keyPress(unsigned char key, int x, int y) {
         }
 }
 
-// Key is released
+// Key releases
 void keyUp(unsigned char key, int x, int y) {
         if (key == 'a' || key == 'A') {
                 Adown = 0;
@@ -111,15 +116,29 @@ void keyUp(unsigned char key, int x, int y) {
         }
 }
 
-// While key not released, move player
+// Key holding
 void keyHold() {
-    if (Adown) {
-        // move/accelerate player left
-        movePlayer(player, 0);
-    } else if (Ddown) {
-        // move/accelerate player right
-        movePlayer(player, 1);
-    }
+        // A - Move left
+        // D - Move right
+        if (Adown) {
+                // check for collision with window
+                if((checkBorders(player->boundary_left - playerSpeed))) {
+                        // move left
+                        player->boundary_left -= playerSpeed;
+                        player->boundary_right -= playerSpeed;
+                        playerPosition -= playerSpeed;
+                        printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
+                }
+        } else if (Ddown) {
+                // check for collision with window
+                if((checkBorders(player->boundary_right + playerSpeed))) {
+                        // move right
+                        player->boundary_right += playerSpeed;
+                        player->boundary_left += playerSpeed;
+                        playerPosition += playerSpeed;
+                        printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
+                }
+        }
 }
 /* -------------------------------- INPUT ----------------------------------- */
 
