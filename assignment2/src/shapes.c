@@ -1,7 +1,7 @@
 #include "../includes/shapes.h"
 
 /* ----------------------------- TEXTURES ------------------------------ */
-GLuint loadTexture(const char *filename){
+GLuint loadTexture(const char *filename) {
 
         // Load texture with RGBA
         // Transparency enabled

@@ -18,6 +18,7 @@ void on_mouseClick(int button, int click_state,
     int x_mouse_position, int y_mouse_position);
 void mouseHold();
 void keyPress(unsigned char key, int x, int y);
+void keyUp(unsigned char key, int x, int y);
 void keyHold();
 /* -------------------------------- INPUT ----------------------------------- */
 
@@ -26,7 +27,13 @@ void keyHold();
 GLuint hudL, hudM, hudR;
 
 // Textures
-GLuint background_texture, player_texture, enemy_texture;
+GLuint background_texture, player_texture,
+enemy_texture_1_1, enemy_texture_1_2, enemy_texture_2_1, enemy_texture_2_2,
+enemy_texture_3_1, enemy_texture_3_2;
+
+// Load all textures to program
+int loadTextures();
+
 /* ------------------------------- TEXTURES --------------------------------- */
 
 /* -------------------------------- AUDIO ---------------------------------- */

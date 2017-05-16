@@ -29,10 +29,11 @@ int main(int argc, char* argv[]) {
         glEnable(GL_BLEND); // Enables color blending
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+        // TODO: unify audio
         // AUDIO
         SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
         IF_DEBUG printf("◆ LOADING AUDIO\n");
-        if(!(SDL_LoadWAV("./assets/omen.wav", &wav_spec, &wav_buffer, &wav_length))) {
+        if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
             IF_DEBUG printf("✗✗✗ ERROR LOADING AUDIO\n");
             return EXIT_FAILURE;
         }
@@ -48,57 +49,30 @@ int main(int argc, char* argv[]) {
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
-        glutCreateWindow("Invaders Must Die XL"); // Defines the window title
+        glutCreateWindow("Invaders"); // Defines the window title
 
         // RENDERING
         glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"
         glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
-        glutIdleFunc(drawLoop); // Set draw to repeat while no events occur
+        glutIdleFunc(drawLoop); // Set drawLoop to repeat while no events occur
 
         // EVENTS
         glutMouseFunc(on_mouseClick); // Handles mouse clicks
         glutKeyboardFunc(keyPress); // Handles keyboard presses
+        glutKeyboardUpFunc(keyUp); // Handles keyboard releases
 
-        glMatrixMode(GL_PROJECTION); // Load matrix mode
+        glMatrixMode(GL_PROJECTION); // Load matrix projection mode
         glViewport(0, 0, VIEWPORT_X, VIEWPORT_Y); // Set viewport size
-        gluOrtho2D(-ORTHO_X, ORTHO_X, -ORTHO_Y, ORTHO_Y); // Defines the orthogonal plane to build the scene in
+        gluOrtho2D(-ORTHO_X, ORTHO_X, -ORTHO_Y, ORTHO_Y); // Defines the orthogonal plane
 
-        // LOAD TEXTURES
-        IF_DEBUG printf("◆ LOADING TEXTURES\n");
-
-        hudL = loadTexture("./assets/hudL.png");
-        if (!hudL)  {
-            printf("✗✗✗ ERROR LOADING TEXTURE\n");
-            return EXIT_FAILURE;
-        }
-
-        hudM = loadTexture("./assets/hudM.png");
-        if (!hudM)  {
-            printf("✗✗✗ ERROR LOADING TEXTURE\n");
-            return EXIT_FAILURE;
-        }
-
-        hudR = loadTexture("./assets/hudR.png");
-        if (!hudR)  {
-            printf("✗✗✗ ERROR LOADING TEXTURE\n");
-            return EXIT_FAILURE;
-        }
-
-        background_texture = loadTexture("./assets/bg.png");
-        if (!background_texture)  {
-            printf("✗✗✗ ERROR LOADING TEXTURE\n");
-            return EXIT_FAILURE;
-        }
-
-        player_texture = loadTexture("./assets/ship.png");
-        if (!player_texture)  {
-            printf("✗✗✗ ERROR LOADING TEXTURE\n");
-            return EXIT_FAILURE;
-        }
-        IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
+        // LOAD ALL TEXTURES
+        loadTextures();
 
         // START BG MUSIC
         SDL_PauseAudio(0);
+
+        // SET KEY PRESSES TO NON-REPEAT MODE
+        glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
         // START RENDERING
         glutMainLoop(); // Start operations according to the specifications above

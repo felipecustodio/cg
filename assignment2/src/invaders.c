@@ -1,6 +1,11 @@
 #include "../includes/invaders.h"
 
-int moveSpeed = 60;
+/* -------------------------------- GLOBALS ----------------------------------- */
+GLfloat playerSpeed = 3.5f; // player movement speed
+GLfloat enemySpeed = 0; // enemy horizontal speed
+GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
+
+/* -------------------------------- GLOBALS ----------------------------------- */
 
 /* -------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
@@ -17,7 +22,6 @@ PLAYER* createPlayer() {
         player->y[3] = -28;
 
         player->pos_x = 0;
-        player->pos_y = 0;
         // Player can take 3 hits
         player->health = 3;
         player->cooldown = 0;
@@ -95,29 +99,34 @@ char checkBorders(GLfloat x) {
 
 // Move player left/right
 void movePlayer(PLAYER* p, char direction) {
-    IF_DEBUG printf("D\n");
-    GLfloat current_pos = p->pos_x;
+        //
+        // TODO Felupio: translate when drawing the player (the matrix will be loaded there).
+        // Use this function to increase velocity (checking for treshold).
+        // Repeat for enemies and lasers
+        //
     if (direction) {
-            // MOVE RIGHT
-        p->x[0] += moveSpeed;
-        p->x[1] += moveSpeed;
-        p->x[2] += moveSpeed;
-        p->x[3] += moveSpeed;
+        // MOVE RIGHT
+        glTranslatef(playerSpeed, 0, 0);
+        // p->x[0] += playerSpeed;
+        // p->x[1] += playerSpeed;
+        // p->x[2] += playerSpeed;
+        // p->x[3] += playerSpeed;
     } else {
         // MOVE LEFT
-        p->x[0] -= moveSpeed;
-        p->x[1] -= moveSpeed;
-        p->x[2] -= moveSpeed;
-        p->x[3] -= moveSpeed;
+        glTranslatef(-playerSpeed, 0, 0);
+        // p->x[0] -= playerSpeed;
+        // p->x[1] -= playerSpeed;
+        // p->x[2] -= playerSpeed;
+        // p->x[3] -= playerSpeed;
     }
 
-    if (!checkBorders(p->pos_x)) {
-        p->pos_x = current_pos;
-    }
 }
 
-void shootLaser(LASER** shots, int ammount) {
-        shots = (LASER**)realloc(shots, sizeof(shots) * ammount + 1);
+void shootLaser(LASER** shots, int amount) {
+        // Add laser to scene
+        shots = (LASER**)realloc(shots, sizeof(shots) * amount + 1);
+        shots[amount] = createLaser();
+
 
 
 

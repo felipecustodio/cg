@@ -1,23 +1,24 @@
+#include <stdlib.h>
 #include "../includes/invaders.h"
 #include "../includes/scene.h"
 
 /* -------------------------------- GLOBALS ----------------------------------- */
 
-// You, the player!
+/* ------ THE PLAYER -----*/
 PLAYER* player;
+int direction = 0;
 
-// Shots fired
+/* ------ ENEMIES -----*/
+
+/* ------ LASERS -----*/
 LASER** shots;
-int ammount = 0;
+int amount = 0;
 
-// User Interface
+/* ------ UI -----*/
 char* UI_reset = "Press R to reset game";
 char* UI_shoot = "Press spacebar to shoot";
 char* UI_move = "Press A/D to move left/right";
-
-/* -------------------------------- GLOBALS ----------------------------------- */
-
-/* -------------------------------- INPUT ----------------------------------- */
+char* UI_exit = "Press E to exit";
 
 /* ------ INPUT STATUS -----*/
 char leftMouseButtonDown = 0;
@@ -25,6 +26,41 @@ char rightMouseButtonDown = 0;
 char Adown = 0;
 char Ddown = 0;
 
+/* -------------------------------- GLOBALS ----------------------------------- */
+int loadTextures() {
+        // HUD
+        hudL = loadTexture("./assets/hudL.png");
+        hudM = loadTexture("./assets/hudM.png");
+        hudR = loadTexture("./assets/hudR.png");
+
+        // Background
+        background_texture = loadTexture("./assets/bg.png");
+
+        // Player sprite
+        player_texture = loadTexture("./assets/ship.png");
+
+        // Enemy sprites
+        enemy_texture_1_1 = loadTexture("./assets/alien_1_1.png");
+        enemy_texture_1_2 = loadTexture("./assets/alien_1_2.png");
+        enemy_texture_2_1 = loadTexture("./assets/alien_2_1.png");
+        enemy_texture_2_2 = loadTexture("./assets/alien_2_2.png");
+        enemy_texture_3_1 = loadTexture("./assets/alien_3_1.png");
+        enemy_texture_3_2 = loadTexture("./assets/alien_3_2.png");
+
+        if (!(hudL || hudM || hudR || background_texture
+                || player_texture ||enemy_texture_1_1 ||
+                enemy_texture_1_2 || enemy_texture_2_1 ||
+                enemy_texture_2_2 || enemy_texture_3_1 ||
+                enemy_texture_3_2)) {
+                printf("✗✗✗ ERROR LOADING TEXTURE\n");
+                return EXIT_FAILURE;
+        }
+
+        IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
+        return 1;
+}
+
+/* -------------------------------- INPUT ----------------------------------- */
 // MOUSE EVENT HANDLING
 void on_mouseClick(int button, int click_state,
         int x_mouse_position, int y_mouse_position)
@@ -48,36 +84,40 @@ void mouseHold() {
 }
 
 // KEYBOARD EVENT HANDLING
+
+// Key is pressed
 void keyPress(unsigned char key, int x, int y) {
-    IF_DEBUG printf("E\n");
-    if (key == 'a' || key == 'A') {
-        IF_DEBUG printf("pressdA\n");
-        Adown = 1;
-    } else if (key == 'd' || key == 'D') {
-        IF_DEBUG printf("pressdD\n");
-        Ddown = 1;
-    } else if (key == ' ') {
-        // SHOOT LASER WHEN SPACEBAR PRESSED
-        shootLaser(shots, ammount);
-    } else if (key == 'R') {
-        // reset game
-    }
-    IF_DEBUG printf("ADOWN: %d\n", Adown);
-    IF_DEBUG printf("DDOWN: %d\n", Ddown);
-    keyHold();
-    Adown = 0;
-    Ddown = 0;
+        IF_DEBUG printf("E\n");
+        if (key == 'a' || key == 'A') {
+                Adown = 1;
+        } else if (key == 'd' || key == 'D') {
+                Ddown = 1;
+        } else if (key == ' ') {
+                // PEW! PEW!
+                shootLaser(shots, amount);
+        } else if (key == 'r' || key == 'R') {
+                // reset game
+        } else if (key == 'e' || key == 'E') {
+                exit(0);
+        }
 }
 
+// Key is released
+void keyUp(unsigned char key, int x, int y) {
+        if (key == 'a' || key == 'A') {
+                Adown = 0;
+        } else if (key == 'd' || key == 'D') {
+                Ddown = 0;
+        }
+}
+
+// While key not released, move player
 void keyHold() {
-    IF_DEBUG printf("A\n");
     if (Adown) {
         // move/accelerate player left
-        IF_DEBUG printf("B\n");
         movePlayer(player, 0);
     } else if (Ddown) {
         // move/accelerate player right
-        IF_DEBUG printf("C\n");
         movePlayer(player, 1);
     }
 }
@@ -150,8 +190,7 @@ void drawScene() {
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER--------------------*/
-        if (player == NULL)
-        {
+        if (player == NULL) {
             player = createPlayer();
         }
         glTranslatef(0.0f, -228, 0.0f);
@@ -160,7 +199,8 @@ void drawScene() {
         /*--------------------END--------------------*/
 }
 
-void drawHUD(){
+void drawHUD() {
+
     // Refresh matrix for new object
     glLoadIdentity();
     glTranslatef(-(VIEWPORT_X/2) - 112, VIEWPORT_Y/2, 0.0f);
@@ -205,6 +245,9 @@ void drawLoop() {
 
         // Draw HUD
         drawHUD();
+
+        // Check for key presses
+        keyHold();
 
         // Clear buffer
         glutSwapBuffers();

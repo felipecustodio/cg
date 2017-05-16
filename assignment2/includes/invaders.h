@@ -6,7 +6,7 @@
 */
 
 #include <GL/glut.h>
-#include "../includes/SOIL/SOIL.h"
+#include "./SOIL/SOIL.h"
 #include <SDL/SDL.h>
 #include "shapes.h"
 #include "transforms.h"
@@ -22,7 +22,6 @@ typedef struct player {
 
         // Movement
         GLfloat pos_x;
-        GLfloat pos_y;
 
         // Health
         int health;
@@ -47,8 +46,8 @@ void movePlayer(PLAYER* p, char direction);
 typedef struct enemy {
 
         // Coordinates
-        GLfloat x[3];
-        GLfloat y[3];
+        GLfloat x[4];
+        GLfloat y[4];
 
         // Health
         int health;
@@ -70,8 +69,8 @@ void destroyEnemy(ENEMY* enemy);
 typedef struct laser {
 
         // Coordinates
-        GLfloat x[3];
-        GLfloat y[3];
+        GLfloat x[4];
+        GLfloat y[4];
 
         // Has it exploded yet?
         int explosion;
@@ -82,7 +81,7 @@ LASER* createLaser();
 void destroyLaser();
 
 // Action
-void shootLaser(LASER** shots, int ammount);
+void shootLaser(LASER** shots, int amount);
 /* -------------------------------- LASER ----------------------------------- */
 
 /* -------------------------------- GAME ----------------------------------- */
