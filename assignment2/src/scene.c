@@ -158,6 +158,38 @@ void drawScene() {
         /*--------------------END--------------------*/
 }
 
+void drawHUD(){
+    // Refresh matrix for new object
+    glLoadIdentity();
+    glTranslatef(-(VIEWPORT_X/2) - 112, VIEWPORT_Y/2, 0.0f);
+
+    Quadrilateral *hudL_sprite = createQuad();
+        setQuadCoordinates(hudL_sprite, 0, 0, 0, 64, 288, 64, 288, 0);
+        setQuadTexture(hudL_sprite , hudL);
+        drawQuadTextured(hudL_sprite);
+    freeQuad(hudL_sprite);
+
+    // Refresh matrix for new object
+    glLoadIdentity();
+    glTranslatef(-88, VIEWPORT_Y/2, 0.0f);
+
+    Quadrilateral *hudM_sprite = createQuad();
+        setQuadCoordinates(hudM_sprite, 0, 0, 0, 64, 188, 64, 188, 0);
+        setQuadTexture(hudM_sprite , hudM);
+        drawQuadTextured(hudM_sprite);
+    freeQuad(hudM_sprite);
+
+    // Refresh matrix for new object
+    glLoadIdentity();
+    glTranslatef(VIEWPORT_X/2 - 178, VIEWPORT_Y/2, 0.0f);
+
+    Quadrilateral *hudR_sprite = createQuad();
+        setQuadCoordinates(hudR_sprite, 0, 0, 0, 64, 288, 64, 288, 0);
+        setQuadTexture(hudR_sprite , hudR);
+        drawQuadTextured(hudR_sprite);
+    freeQuad(hudR_sprite);
+}
+
 void drawLoop() {
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
@@ -168,6 +200,9 @@ void drawLoop() {
 
         // Draw scene
         drawScene();
+
+        // Draw HUD
+        drawHUD();
 
         // Clear buffer
         glutSwapBuffers();

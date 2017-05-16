@@ -65,6 +65,25 @@ int main(int argc, char* argv[]) {
 
         // LOAD TEXTURES
         IF_DEBUG printf("◆ LOADING TEXTURES\n");
+
+        hudL = loadTexture("./assets/hudL.png");
+        if (!hudL)  {
+            printf("✗✗✗ ERROR LOADING TEXTURE\n");
+            return EXIT_FAILURE;
+        }
+
+        hudM = loadTexture("./assets/hudM.png");
+        if (!hudM)  {
+            printf("✗✗✗ ERROR LOADING TEXTURE\n");
+            return EXIT_FAILURE;
+        }
+
+        hudR = loadTexture("./assets/hudR.png");
+        if (!hudR)  {
+            printf("✗✗✗ ERROR LOADING TEXTURE\n");
+            return EXIT_FAILURE;
+        }
+
         background_texture = loadTexture("./assets/bg.png");
         if (!background_texture)  {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");

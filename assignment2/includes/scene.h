@@ -22,6 +22,9 @@ void keyHold();
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* ------------------------------- TEXTURES --------------------------------- */
+// HUD
+GLuint hudL, hudM, hudR;
+
 // Textures
 GLuint background_texture, player_texture, enemy_texture;
 /* ------------------------------- TEXTURES --------------------------------- */
