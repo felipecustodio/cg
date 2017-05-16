@@ -1,22 +1,19 @@
 #include "../includes/invaders.h"
 
-/* -------------------------------- GLOBALS ----------------------------------- */
-
-PLAYER* player;
-
-
-/* -------------------------------- GLOBALS ----------------------------------- */
-
 /* -------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
+
         // Set coordinates
         player->x[0] = 0;
         player->x[1] = 0;
         player->x[2] = 0;
+        player->x[3] = 0;
+
         player->y[0] = 0;
         player->y[1] = 0;
         player->y[2] = 0;
+        player->y[3] = 0;
 
         player->pos_x = 0;
         player->pos_y = 0;
@@ -26,8 +23,21 @@ PLAYER* createPlayer() {
 
         return player;
 }
-void destroyPlayer(PLAYER* player) {
 
+void drawPlayer(PLAYER* player) {
+        Quadrilateral *playerSprite = createQuad();
+            setQuadCoordinates(playerSprite,
+                    player->x[0], player->y[0],
+                    player->x[1], player->y[1],
+                    player->x[2], player->y[2],
+                    player->x[3], player->y[3]);
+            setQuadTexture(playerSprite, player_texture);
+            drawQuadTextured(playerSprite);
+        freeQuad(playerSprite);
+}
+
+void destroyPlayer(PLAYER* player) {
+        free(player);
 }
 /* -------------------------------- PLAYER ----------------------------------- */
 
@@ -39,9 +49,12 @@ ENEMY* createEnemy(int design) {
         enemy->x[0] = 0;
         enemy->x[1] = 0;
         enemy->x[2] = 0;
+        enemy->x[3] = 0;
+
         enemy->y[0] = 0;
         enemy->y[1] = 0;
         enemy->y[2] = 0;
+        enemy->y[3] = 0;
 
         // set enemy shape
         switch(design) {
@@ -56,6 +69,7 @@ ENEMY* createEnemy(int design) {
                         break;
         }
 
+        // Reset variables
         enemy->pos_x = 0;
         enemy->pos_y = 0;
         enemy->health = 1;
@@ -92,4 +106,33 @@ void movePlayer(PLAYER* p, char direction) {
         }
 }
 
+void shootLaser(LASER** shots, int ammount) {
+        shots = (LASER**)realloc(shots, sizeof(shots) * ammount + 1);
+
+
+
+}
+
 /* -------------------------------- MOVEMENT -------------------------------- */
+
+/* -------------------------------- LASER ----------------------------------- */
+LASER* createLaser() {
+        LASER* laser = malloc(sizeof(*laser));
+
+        laser->x[0] = 0;
+        laser->x[1] = 0;
+        laser->x[2] = 0;
+        laser->x[3] = 0;
+
+        laser->y[0] = 0;
+        laser->y[1] = 0;
+        laser->y[2] = 0;
+        laser->y[3] = 0;
+
+        laser->explosion = 0;
+}
+
+void destroyLaser(LASER* laser) {
+        free(laser);
+}
+/* -------------------------------- LASER ----------------------------------- */

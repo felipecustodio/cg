@@ -14,6 +14,7 @@
 
 #include "scene.h"
 #include "settings.h"
+#include "invaders.h"
 
 int main(int argc, char* argv[]) {
 
@@ -37,7 +38,7 @@ int main(int argc, char* argv[]) {
         }
         IF_DEBUG printf("◆ AUDIO LOADED\n");
         // set the callback function
-        //wav_spec.callback = audioCallback;
+        wav_spec.callback = audioCallback;
         wav_spec.userdata = NULL;
         // set our global static variables
         audio_pos = wav_buffer; // copy sound buffer
@@ -70,7 +71,7 @@ int main(int argc, char* argv[]) {
             return EXIT_FAILURE;
         }
 
-        player_texture = loadTexture("./assets/ship.png");
+        player_texture = loadTexture("./assets/xwing.png");
         if (!player_texture)  {
             printf("✗✗✗ ERROR LOADING TEXTURE\n");
             return EXIT_FAILURE;

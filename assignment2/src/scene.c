@@ -1,10 +1,29 @@
+#include "../includes/invaders.h"
 #include "../includes/scene.h"
+
+/* -------------------------------- GLOBALS ----------------------------------- */
+
+// You, the player!
+PLAYER* player;
+
+// Shots fired
+LASER** shots;
+int ammount = 0;
+
+// User Interface
+char* UI_reset = "Press R to reset game";
+char* UI_shoot = "Press spacebar to shoot";
+char* UI_move = "Press A/D to move left/right";
+
+/* -------------------------------- GLOBALS ----------------------------------- */
 
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* ------ INPUT STATUS -----*/
-int leftMouseButtonDown = 0;
-int rightMouseButtonDown = 0;
+char leftMouseButtonDown = 0;
+char rightMouseButtonDown = 0;
+char Adown = 0;
+char Ddown = 0;
 
 // MOUSE EVENT HANDLING
 void on_mouseClick(int button, int click_state,
@@ -31,20 +50,28 @@ void mouseHold() {
 // KEYBOARD EVENT HANDLING
 void keyPress(unsigned char key, int x, int y) {
         if (key == 'A') {
-                //movePlayer(0);
+                Adown = 1;
         } else if (key == 'D') {
-                //movePlayer(1);
+                Ddown = 1;
         } else if (key == ' ') {
-                // shoot missile
+                // SHOOT LASER WHEN SPACEBAR PRESSED
+                shootLaser(shots, ammount);
         } else if (key == 'R') {
                 // reset game
         }
 }
 
+void keyHold() {
+        if (Adown) {
+                // move/accelerate player left
+        } else if (Ddown) {
+                // move/accelerate player right
+        }
+}
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
-void reshape(int width, int height){
+void reshape(int width, int height) {
     // Screen can't be smaller than 0
     if(height == 0)
         height = 1;
@@ -61,7 +88,6 @@ void reshape(int width, int height){
     glViewport(0, 0, width, height);
 
     // Perspective and projection correction
-    //gluPerspective(45, ratio, -1, 1);
     gluOrtho2D(-ORTHO_X * ratio, ORTHO_X * ratio, -ORTHO_Y, ORTHO_Y);
 
     // Switches matrix mode back to modelview
@@ -92,7 +118,7 @@ void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
 /* -------------------------------- AUDIO ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
-void drawScene(){
+void drawScene() {
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
 
@@ -111,17 +137,28 @@ void drawScene(){
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER--------------------*/
-        PLAYER* player = createPlayer();
 
-        Quadrilateral *playerSprite = createQuad();
-            setQuadCoordinates(playerSprite, -100, -100, -100, 100, 100, 100, 100, -100);
-            setQuadTexture(playerSprite, player_texture);
-            drawQuadTextured(playerSprite);
-        freeQuad(playerSprite);
+        // Allocate memory
+        player = createPlayer();
+
+        // Set player coordinates
+        player->x[0] = 0;
+        player->x[1] = 0;
+        player->x[2] = 0;
+        player->x[3] = 0;
+
+        player->y[0] = 0;
+        player->y[1] = 0;
+        player->y[2] = 0;
+        player->y[3] = 0;
+
+        // Render player
+        drawPlayer(player);
+
         /*--------------------END--------------------*/
 }
 
-void drawLoop(){
+void drawLoop() {
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
         glColor3f(1.0f, 1.0f, 1.0f);

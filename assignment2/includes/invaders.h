@@ -16,8 +16,6 @@
 /* -------------------------------- PLAYER ----------------------------------- */
 typedef struct player {
 
-        // Shape
-
         // Coordinates
         GLfloat x[3];
         GLfloat y[3];
@@ -36,6 +34,7 @@ typedef struct player {
 
 // Create/Destroy
 PLAYER* createPlayer();
+void drawPlayer(PLAYER* player);
 void destroyPlayer(PLAYER* player);
 
 // Movement
@@ -67,8 +66,8 @@ ENEMY* createEnemy(int design);
 void destroyEnemy(ENEMY* enemy);
 /* -------------------------------- ENEMY ----------------------------------- */
 
-/* -------------------------------- MISSILE ----------------------------------- */
-typedef struct missile {
+/* -------------------------------- LASER ----------------------------------- */
+typedef struct laser {
 
         // Coordinates
         GLfloat x[3];
@@ -77,11 +76,14 @@ typedef struct missile {
         // Has it exploded yet?
         int explosion;
 
-} MISSILE;
+} LASER;
 
-MISSILE* createMissile();
-void destroyMissile();
-/* -------------------------------- MISSILE ----------------------------------- */
+LASER* createLaser();
+void destroyLaser();
+
+// Action
+void shootLaser(LASER** shots, int ammount);
+/* -------------------------------- LASER ----------------------------------- */
 
 /* -------------------------------- GAME ----------------------------------- */
 
