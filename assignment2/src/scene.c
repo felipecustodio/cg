@@ -6,6 +6,10 @@
 // You, the player!
 PLAYER* player;
 
+// Shots fired
+LASER** shots;
+int ammount = 0;
+
 // User Interface
 char* UI_reset = "Press R to reset game";
 char* UI_shoot = "Press spacebar to shoot";
@@ -50,7 +54,8 @@ void keyPress(unsigned char key, int x, int y) {
         } else if (key == 'D') {
                 Ddown = 1;
         } else if (key == ' ') {
-                shootLaser();
+                // SHOOT LASER WHEN SPACEBAR PRESSED
+                shootLaser(shots, ammount);
         } else if (key == 'R') {
                 // reset game
         }
@@ -66,7 +71,7 @@ void keyHold() {
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
-void reshape(int width, int height){
+void reshape(int width, int height) {
     // Screen can't be smaller than 0
     if(height == 0)
         height = 1;
@@ -83,7 +88,6 @@ void reshape(int width, int height){
     glViewport(0, 0, width, height);
 
     // Perspective and projection correction
-    //gluPerspective(45, ratio, -1, 1);
     gluOrtho2D(-ORTHO_X * ratio, ORTHO_X * ratio, -ORTHO_Y, ORTHO_Y);
 
     // Switches matrix mode back to modelview
@@ -114,7 +118,7 @@ void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
 /* -------------------------------- AUDIO ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
-void drawScene(){
+void drawScene() {
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
 
@@ -133,13 +137,28 @@ void drawScene(){
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER--------------------*/
+
+        // Allocate memory
         player = createPlayer();
+
+        // Set player coordinates
+        player->x[0] = 0;
+        player->x[1] = 0;
+        player->x[2] = 0;
+        player->x[3] = 0;
+
+        player->y[0] = 0;
+        player->y[1] = 0;
+        player->y[2] = 0;
+        player->y[3] = 0;
+
+        // Render player
         drawPlayer(player);
 
         /*--------------------END--------------------*/
 }
 
-void drawLoop(){
+void drawLoop() {
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
         glColor3f(1.0f, 1.0f, 1.0f);
