@@ -28,15 +28,17 @@ GLuint hudL, hudM, hudR;
 
 // Textures
 GLuint background_texture, player_texture,
-enemy_texture_1_1, enemy_texture_1_2, enemy_texture_2_1, enemy_texture_2_2,
-enemy_texture_3_1, enemy_texture_3_2;
+alien_1_1, alien_1_2, alien_2_1, alien_2_2,
+alien_3_1, alien_3_2;
 
 // Load all textures to program
 int loadTextures();
 
 /* ------------------------------- TEXTURES --------------------------------- */
 
+
 /* -------------------------------- AUDIO ---------------------------------- */
+int initAudio(); // initializes SDL audio
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, unsigned int len);

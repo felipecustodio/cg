@@ -29,23 +29,8 @@ int main(int argc, char* argv[]) {
         glEnable(GL_BLEND); // Enables color blending
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // TODO: unify audio
         // AUDIO
-        SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
-        IF_DEBUG printf("◆ LOADING AUDIO\n");
-        if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
-            IF_DEBUG printf("✗✗✗ ERROR LOADING AUDIO\n");
-            return EXIT_FAILURE;
-        }
-        IF_DEBUG printf("◆ AUDIO LOADED\n");
-        // set the callback function
-        wav_spec.callback = audioCallback;
-        wav_spec.userdata = NULL;
-        // set our global static variables
-        audio_pos = wav_buffer; // copy sound buffer
-        audio_len = wav_length; // copy file length
-        // open audio device
-        SDL_OpenAudio(&wav_spec, NULL);
+        initAudio(); // load audio files and set callback functions
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window

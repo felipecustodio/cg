@@ -6,7 +6,8 @@
 
 /* ------ THE PLAYER -----*/
 PLAYER* player;
-int playerSpeed = 3.5f;
+int playerSpeed = 7.0f;
+int playerShootSpeed = 10.0f;
 
 /* ------ ENEMIES -----*/
 ENEMY** enemies;
@@ -15,7 +16,8 @@ ENEMY** enemies;
 LASER** shots_player;
 LASER** shots_enemy;
 
-int amount = 0;
+int shots_player_count = 0;
+int shots_enemy_count = 0;
 
 /* ------ UI -----*/
 char* UI_reset = "Press R to reset game";
@@ -43,23 +45,21 @@ int loadTextures() {
         player_texture = loadTexture("./assets/ship.png");
 
         // Enemy sprites
-        enemy_texture_1_1 = loadTexture("./assets/alien_1_1.png");
-        enemy_texture_1_2 = loadTexture("./assets/alien_1_2.png");
-        enemy_texture_2_1 = loadTexture("./assets/alien_2_1.png");
-        enemy_texture_2_2 = loadTexture("./assets/alien_2_2.png");
-        enemy_texture_3_1 = loadTexture("./assets/alien_3_1.png");
-        enemy_texture_3_2 = loadTexture("./assets/alien_3_2.png");
+        alien_1_1 = loadTexture("./assets/alien_1_1.png");
+        alien_1_2 = loadTexture("./assets/alien_1_2.png");
+        alien_2_1 = loadTexture("./assets/alien_2_1.png");
+        alien_2_2 = loadTexture("./assets/alien_2_2.png");
+        alien_3_1 = loadTexture("./assets/alien_3_1.png");
+        alien_3_2 = loadTexture("./assets/alien_3_2.png");
 
         if (!(hudL || hudM || hudR || background_texture
-                || player_texture ||enemy_texture_1_1 ||
-                enemy_texture_1_2 || enemy_texture_2_1 ||
-                enemy_texture_2_2 || enemy_texture_3_1 ||
-                enemy_texture_3_2)) {
-                printf("✗✗✗ ERROR LOADING TEXTURE\n");
+                || player_texture ||alien_1_1 ||
+                alien_1_2 || alien_2_1 ||
+                alien_2_2 || alien_3_1 ||
+                alien_3_2)) {
                 return EXIT_FAILURE;
         }
 
-        IF_DEBUG printf("◆ SUCCESS LOADING TEXTURES\n");
         return 1;
 }
 
@@ -99,7 +99,10 @@ void keyPress(unsigned char key, int x, int y) {
                 Ddown = 1;
         } else if (key == ' ') {
                 // PEW! PEW!
-                shootLaser(shots_player, amount);
+                if(shots_player == NULL) {
+                    shots_player = (LASER**)malloc(sizeof(LASER**));
+                }
+                shootLaser(shots_player, &shots_player_count, player->gun);
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
@@ -126,6 +129,7 @@ void keyHold() {
                         // move left
                         player->boundary_left -= playerSpeed;
                         player->boundary_right -= playerSpeed;
+                        player->gun -= playerSpeed;
                         playerPosition -= playerSpeed;
                 }
         } else if (Ddown) {
@@ -134,6 +138,7 @@ void keyHold() {
                         // move right
                         player->boundary_right += playerSpeed;
                         player->boundary_left += playerSpeed;
+                        player->gun += playerSpeed;
                         playerPosition += playerSpeed;
                 }
         }
@@ -165,7 +170,26 @@ void reshape(int width, int height) {
 }
 /* -------------------------------- WINDOW ---------------------------------- */
 
+
 /* -------------------------------- AUDIO ---------------------------------- */
+int initAudio() {
+        SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
+        IF_DEBUG printf("◆ LOADING AUDIO\n");
+        if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
+            IF_DEBUG printf("✗✗✗ ERROR LOADING AUDIO\n");
+            return EXIT_FAILURE;
+        }
+        IF_DEBUG printf("◆ AUDIO LOADED\n");
+        // set the callback function
+        wav_spec.callback = audioCallback;
+        wav_spec.userdata = NULL;
+        // set our global static variables
+        audio_pos = wav_buffer; // copy sound buffer
+        audio_len = wav_length; // copy file length
+        // open audio device
+        SDL_OpenAudio(&wav_spec, NULL);
+        return 1;
+}
 // CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
 // https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
@@ -210,9 +234,24 @@ void drawScene() {
         if (player == NULL) {
             player = createPlayer();
         }
-        glTranslatef(0.0f, -228, 0.0f);
         drawPlayer(player);
 
+        /*--------------------END--------------------*/
+
+        /*--------------------PLAYER SHOTS--------------------*/
+        // Refresh matrix for new object
+        glLoadIdentity();
+
+        // LASER MATRIX CHECKING
+
+        // Laser Movement TODO i'm onto something
+        int i = 0;
+        for(i = 0; i < shots_player_count; i++){
+            if(shots_player[i]) {
+                shots_player[i]->position += laserSpeed;
+                drawLaser(shots_player[i]);
+            }
+        }
         /*--------------------END--------------------*/
 }
 
@@ -259,6 +298,8 @@ void drawLoop() {
 
         // Draw scene
         drawScene();
+
+        glColor3f(1.0f, 1.0f, 1.0f);
 
         // Draw HUD
         drawHUD();
