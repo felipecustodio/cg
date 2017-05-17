@@ -194,8 +194,8 @@ int initAudio() {
         SDL_OpenAudio(&wav_spec, NULL);
         return 1;
 }
-// CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
-// https://gist.github.com/armornick/3447121
+
+// Audio callback
 void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
 	if (audio_len == 0) {
                 IF_DEBUG printf("LOOPING AUDIO\n");
@@ -205,8 +205,6 @@ void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
         }
 
 	len = ( len > audio_len ? audio_len : len );
-	// SDL_memcpy (stream, audio_pos, len);
-	// simply copy from one buffer into the other
 	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME); // mix from one buffer into another
 
         // Move audio
@@ -247,7 +245,7 @@ void drawScene() {
         freeQuad(parallaxSprite);
         /*--------------------END--------------------*/
 
-        // Refresh matrix for new object
+        // matrix for player
         glLoadIdentity();
 
         /*--------------------PLAYER--------------------*/
@@ -266,11 +264,12 @@ void drawScene() {
 
         // Laser screen collision check
         int i = 0, j = 0;
-        for(i = 0; i < shots_player_count; i++){
+        for(i = 0; i < shots_player_count; i++) {
             // Check Top boundary
-            if(shots_player[i]->y[1] >= 340){
+            // 340
+            if(shots_player[i]->position >= 340){
                 destroyLaser(shots_player[i]);
-                for(j = i + 1; j < shots_player_count; j++){
+                for(j = i + 1; j < shots_player_count; j++) {
                     shots_player[j - 1] = shots_player[j];
                 }
                 shots_player_count = shots_player_count - 1;
@@ -278,15 +277,12 @@ void drawScene() {
             }
         }
 
-        // Laser Movement TODO i'm onto something
+        // Laser Movement
         i = 0;
-        for(i = 0; i < shots_player_count; i++){
-            if(shots_player[i]) {
+        for(i = 0; i < shots_player_count; i++) {
+            if (shots_player[i]) {
                 drawLaser(shots_player[i]);
-                shots_player[i]->y[0] += laserSpeed;
-                shots_player[i]->y[1] += laserSpeed;
-                shots_player[i]->y[2] += laserSpeed;
-                shots_player[i]->y[3] += laserSpeed;
+                shots_player[i]->position += laserSpeed;
             }
         }
         /*--------------------END--------------------*/

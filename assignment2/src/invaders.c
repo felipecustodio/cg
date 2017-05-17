@@ -125,6 +125,8 @@ LASER* createLaser(int x, int y) {
         laser->y[2] = y + 40;
         laser->y[3] = y;
 
+        laser->position = y + 200;
+
         laser->explosion = 0;
 
         return laser;
@@ -137,6 +139,7 @@ void shootLaser(LASER** shots, int *amount, int playerX) {
 }
 
 void drawLaser(LASER* laser) {
+        glLoadIdentity(); // load matrix for new laser
         Quadrilateral *laserSprite = createQuad();
             setQuadCoordinates(laserSprite,
             laser->x[0], laser->y[0],
@@ -144,6 +147,7 @@ void drawLaser(LASER* laser) {
             laser->x[2], laser->y[2],
             laser->x[3], laser->y[3]); // initial coordinates
             setQuadColor(laserSprite, 0.75f, 1.0f, 1.0f); // choose color
+            glTranslatef(0.0f, laser->position, 0.0f);
             drawQuadFilled(laserSprite); // draw player on screen
         freeQuad(laserSprite);
 }
