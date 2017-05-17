@@ -16,6 +16,8 @@ LASER** shots_enemy;
 int shots_player_count = 0;
 int shots_enemy_count = 0;
 
+int wave = 1;
+
 /* ------ UI -----*/
 const char* UI_reset = "Press R to reset game";
 const char* UI_shoot = "Press spacebar to shoot";
@@ -37,6 +39,9 @@ int loadTextures() {
 
         // Background
         background_texture = loadTexture("./assets/bg.png");
+
+        // Parallax
+        parallax_texture = loadTexture("./assets/parallax.png");
 
         // Player sprite
         player_texture = loadTexture("./assets/ship.png");
@@ -227,7 +232,23 @@ void drawScene() {
             setQuadTexture(bgSprite, background_texture);
             drawQuadTextured(bgSprite);
         freeQuad(bgSprite);
+
+        int parallaxfactor = playerPosition / 6;
+
+        glTranslatef(parallaxfactor, 0.0f, 0.0f);
+
+        Quadrilateral *parallaxSprite = createQuad();
+            setQuadCoordinates(parallaxSprite, -VIEWPORT_X - 200, -VIEWPORT_Y - 200,
+                                -VIEWPORT_X - 200, VIEWPORT_Y + 200,
+                                VIEWPORT_X + 200, VIEWPORT_Y + 200,
+                                VIEWPORT_X + 200, -VIEWPORT_Y - 200);
+            setQuadTexture(parallaxSprite, parallax_texture);
+            drawQuadTextured(parallaxSprite);
+        freeQuad(parallaxSprite);
         /*--------------------END--------------------*/
+
+        // Refresh matrix for new object
+        glLoadIdentity();
 
         /*--------------------PLAYER--------------------*/
         if (player == NULL) {
@@ -243,8 +264,22 @@ void drawScene() {
 
         // LASER MATRIX CHECKING
 
+        // Laser screen collision check
+        int i = 0, j = 0;
+        for(i = 0; i < shots_player_count; i++){
+            // Check Top boundary
+            if(shots_player[i]->y[1] >= 340){
+                destroyLaser(shots_player[i]);
+                for(j = i + 1; j < shots_player_count; j++){
+                    shots_player[j - 1] = shots_player[j];
+                }
+                shots_player_count = shots_player_count - 1;
+                shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * shots_player_count);
+            }
+        }
+
         // Laser Movement TODO i'm onto something
-        int i = 0;
+        i = 0;
         for(i = 0; i < shots_player_count; i++){
             if(shots_player[i]) {
                 drawLaser(shots_player[i]);
@@ -296,6 +331,12 @@ void drawHUD() {
     Text* hudM = createText(GLUT_BITMAP_9_BY_15, hudM_text);
         drawText(hudM, VIEWPORT_X/4 - 130, 45);
     freeText(hudM);
+
+    char hudM_cnt_text[2];
+    sprintf(hudM_cnt_text, "%d", wave);
+    Text* hudM_cnt = createText(GLUT_BITMAP_HELVETICA_18, hudM_cnt_text);
+        drawText(hudM_cnt, VIEWPORT_X/4 - 115, 20);
+    freeText(hudM_cnt);
     // -------------- MID FRAME -------------- //
 
     // -------------- RIGHT FRAME -------------- //
