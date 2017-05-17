@@ -127,7 +127,6 @@ void keyHold() {
                         player->boundary_left -= playerSpeed;
                         player->boundary_right -= playerSpeed;
                         playerPosition -= playerSpeed;
-                        printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
                 }
         } else if (Ddown) {
                 // check for collision with window
@@ -136,7 +135,6 @@ void keyHold() {
                         player->boundary_right += playerSpeed;
                         player->boundary_left += playerSpeed;
                         playerPosition += playerSpeed;
-                        printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
                 }
         }
 }

@@ -98,7 +98,6 @@ void destroyEnemy(ENEMY* enemy) {
 /* -------------------------------- MOVEMENT -------------------------------- */
 // Avoids player moving out of window
 char checkBorders(GLfloat x) {
-        printf("CHECKING %f\n", x);
         if (x <= -535|| x >= 535) {
                 return 0;
         } else {
