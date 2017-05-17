@@ -39,10 +39,9 @@ int loadTextures();
 
 /* -------------------------------- AUDIO ----------------------------------- */
 int initAudio(); // initializes SDL audio
-// CODE INSPIRED BY ARMORNICK (github.com/armornick) GIST
-// https://gist.github.com/armornick/3447121
 void audioCallback(void *userdata, Uint8 *stream, unsigned int len);
-// variable declarations
+
+// audio properties
 Uint32 wav_length; // length of our sample
 Uint8 *wav_buffer; // buffer containing our audio file
 SDL_AudioSpec wav_spec; // the specs of our piece of music

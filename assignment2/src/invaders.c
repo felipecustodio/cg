@@ -98,18 +98,6 @@ void destroyEnemy(ENEMY* enemy) {
 
 }
 
-// +--------------------------------------+
-// |                                      |
-// |                                      |
-// XXXXX WORK IN PROGRESS XXXXXXXXXXXXXXXXX
-// |                                      |
-// |                                      |
-// |                                      |
-// +--------------------------------------+
-
-// *********** going through some heavy work ********* !!!!! ******
-// TODO: use texture switcher
-// ********************************************
 void drawEnemy(ENEMY* enemy) {
         Quadrilateral *enemySprite = createQuad();
             setQuadCoordinates(enemySprite,
@@ -117,11 +105,7 @@ void drawEnemy(ENEMY* enemy) {
             enemy->x[1], enemy->y[1],
             enemy->x[2], enemy->y[2],
             enemy->x[3], enemy->y[3]); // initial coordinates
-            // TODO - para cada tipo de inimigo
-
-
-            glTranslatef(enemyPositionX, enemyPositionY, 0.0f); // move enemy matrix
-            // TODO use boundaries that move with the enemy
+            glTranslatef(enemy->pos_x, enemy->pos_y, 0.0f); // move enemy
             drawQuadTextured(enemySprite); // draw enemy on screen
         freeQuad(enemySprite);
 }

@@ -16,7 +16,7 @@
 /* ------------------------------- GLOBALS ---------------------------------- */
 // Movement
 extern GLfloat playerPosition; // player horizontal speed
-extern GLfloat playerSpeed; // laser speed
+extern GLfloat playerSpeed; // player speed
 extern GLfloat laserSpeed; // laser speed
 extern GLfloat enemyPositionX; // enemy position (x)
 extern GLfloat enemyPositionY; // enemy position (y)
