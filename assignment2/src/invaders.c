@@ -52,7 +52,6 @@ void drawPlayer(PLAYER* player) {
             player->x[3], player->y[3]); // initial coordinates
             setQuadTexture(playerSprite, player_texture); // choose texture
             glTranslatef(playerPosition, 0.0f, 0.0f); // move player matrix
-            // TODO use boundaries that move with the player
             drawQuadTextured(playerSprite); // draw player on screen
         freeQuad(playerSprite);
 }
@@ -119,14 +118,8 @@ void drawEnemy(ENEMY* enemy) {
             enemy->x[2], enemy->y[2],
             enemy->x[3], enemy->y[3]); // initial coordinates
             // TODO - para cada tipo de inimigo
-            switch(switchTexture()) {
-                    case 1:
-                        setQuadTexture(enemySprite, alien_1_1); // choose texture
-                        break;
-                    case 2:
-                        setQuadTexture(enemySprite, alien_1_2); // choose texture
-                        break;
-            }
+
+
             glTranslatef(enemyPositionX, enemyPositionY, 0.0f); // move enemy matrix
             // TODO use boundaries that move with the enemy
             drawQuadTextured(enemySprite); // draw enemy on screen
@@ -174,13 +167,12 @@ void drawLaser(LASER* laser) {
 void destroyLaser(LASER* laser) {
         free(laser);
 }
-/* ------------------------------- LASER ------------------------------------ */
+/* -------------------------------- LASER ----------------------------------- */
 
 /* ----------------------------- ANIMATIONS --------------------------------- */
 int switchTexture() {
         return 1;
 }
-// TODO every x time, switch texture numbers
 /* ----------------------------- ANIMATIONS --------------------------------- */
 
 /* -------------------------------- GAME ------------------------------------ */
