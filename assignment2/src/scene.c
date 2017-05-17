@@ -10,19 +10,21 @@ PLAYER* player;
 ENEMY** enemies;
 
 /* ------ LASERS -----*/
+
+// Lasers that exist
 LASER** shots_player;
 LASER** shots_enemy;
 
+// Amount of lasers on screen
 int shots_player_count = 0;
 int shots_enemy_count = 0;
-
-int wave = 1;
 
 /* ------ UI -----*/
 const char* UI_reset = "Press R to reset game";
 const char* UI_shoot = "Press spacebar to shoot";
 const char* UI_move = "Press A/D to move left/right";
 const char* UI_exit = "Press E to exit";
+int wave = 1;
 
 /* ------ INPUT STATUS -----*/
 char leftMouseButtonDown = 0;
@@ -107,7 +109,6 @@ void keyPress(unsigned char key, int x, int y) {
                     shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
                 }
                 shootLaser(shots_player, &shots_player_count, playerPosition);
-                player->score += 10; // TEST
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
