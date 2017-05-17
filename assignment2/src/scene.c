@@ -43,7 +43,8 @@ int loadTextures() {
         background_texture = loadTexture("./assets/bg.png");
 
         // Parallax
-        parallax_texture = loadTexture("./assets/parallax.png");
+        parallax1_texture = loadTexture("./assets/parallax1.png");
+        parallax2_texture = loadTexture("./assets/parallax2.png");
 
         // Player sprite
         player_texture = loadTexture("./assets/ship.png");
@@ -232,18 +233,37 @@ void drawScene() {
             drawQuadTextured(bgSprite);
         freeQuad(bgSprite);
 
-        int parallaxfactor = playerPosition / 6;
+        // Refresh matrix for new object
+        glLoadIdentity();
+
+        int parallaxfactor = playerPosition / 12;
 
         glTranslatef(parallaxfactor, 0.0f, 0.0f);
 
-        Quadrilateral *parallaxSprite = createQuad();
-            setQuadCoordinates(parallaxSprite, -VIEWPORT_X - 200, -VIEWPORT_Y - 200,
+        Quadrilateral *parallax1Sprite = createQuad();
+            setQuadCoordinates(parallax1Sprite, -VIEWPORT_X - 100, -VIEWPORT_Y - 100,
+                                -VIEWPORT_X - 100, VIEWPORT_Y + 100,
+                                VIEWPORT_X + 100, VIEWPORT_Y + 100,
+                                VIEWPORT_X + 100, -VIEWPORT_Y - 100);
+            setQuadTexture(parallax1Sprite, parallax1_texture);
+            drawQuadTextured(parallax1Sprite);
+        freeQuad(parallax1Sprite);
+
+        // Refresh matrix for new object
+        glLoadIdentity();
+
+        parallaxfactor = playerPosition / 6;
+
+        glTranslatef(parallaxfactor, 0.0f, 0.0f);
+
+        Quadrilateral *parallax2Sprite = createQuad();
+            setQuadCoordinates(parallax2Sprite, -VIEWPORT_X - 200, -VIEWPORT_Y - 200,
                                 -VIEWPORT_X - 200, VIEWPORT_Y + 200,
                                 VIEWPORT_X + 200, VIEWPORT_Y + 200,
                                 VIEWPORT_X + 200, -VIEWPORT_Y - 200);
-            setQuadTexture(parallaxSprite, parallax_texture);
-            drawQuadTextured(parallaxSprite);
-        freeQuad(parallaxSprite);
+            setQuadTexture(parallax2Sprite, parallax2_texture);
+            drawQuadTextured(parallax2Sprite);
+        freeQuad(parallax2Sprite);
         /*--------------------END--------------------*/
 
         // matrix for player
@@ -268,7 +288,7 @@ void drawScene() {
         for(i = 0; i < shots_player_count; i++) {
             // Check Top boundary
             // 340
-            if(shots_player[i]->position >= 340){
+            if(shots_player[i]->position - 200 >= 340){
                 destroyLaser(shots_player[i]);
                 for(j = i + 1; j < shots_player_count; j++) {
                     shots_player[j - 1] = shots_player[j];
