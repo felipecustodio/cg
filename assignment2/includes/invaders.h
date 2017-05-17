@@ -96,7 +96,7 @@ typedef struct laser {
 } LASER;
 
 LASER* createLaser(int x, int y);
-void destroyLaser();
+void destroyLaser(LASER *laser);
 
 // Action
 void shootLaser(LASER** shots, int *amount, int playerX);
