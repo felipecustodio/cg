@@ -24,13 +24,19 @@ const char* UI_reset = "Press R to reset game";
 const char* UI_shoot = "Press spacebar to shoot";
 const char* UI_move = "Press A/D to move left/right";
 const char* UI_exit = "Press E to exit";
-int wave = 1;
+int level = 1;
 
 /* ------ INPUT STATUS -----*/
 char leftMouseButtonDown = 0;
 char rightMouseButtonDown = 0;
 char Adown = 0;
 char Ddown = 0;
+
+/* ------ AUDIOS -----*/
+Mix_Chunk *blaster = NULL;
+Mix_Chunk *blaster2 = NULL;
+Mix_Music *music = NULL;
+
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 int loadTextures() {
@@ -102,7 +108,9 @@ void keyPress(unsigned char key, int x, int y) {
         } else if (key == 'd' || key == 'D') {
                 Ddown = 1;
         } else if (key == ' ') {
-                // PEW! PEW!
+                // PEW! PEW! play blaster audio
+                Mix_PlayChannel(-1, blaster2, 0);
+                // create new laser
                 if(shots_player == NULL) {
                     shots_player = (LASER **) malloc(sizeof(LASER *));
                 }
@@ -179,40 +187,41 @@ void reshape(int width, int height) {
 
 /* -------------------------------- AUDIO ----------------------------------- */
 int initAudio() {
-        SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
-        IF_DEBUG printf("◆ LOADING AUDIO\n");
-        if(!(SDL_LoadWAV("./assets/resonance.wav", &wav_spec, &wav_buffer, &wav_length))) {
-            IF_DEBUG printf("✗✗✗ ERROR LOADING AUDIO\n");
-            return EXIT_FAILURE;
-        }
-        IF_DEBUG printf("◆ AUDIO LOADED\n");
-        // set the callback function
-        wav_spec.callback = audioCallback;
-        wav_spec.userdata = NULL;
-        // set our global static variables
-        audio_pos = wav_buffer; // copy sound buffer
-        audio_len = wav_length; // copy file length
-        // open audio device
-        SDL_OpenAudio(&wav_spec, NULL);
-        return 1;
+
+        // Audio assets
+        char* BG = "./assets/resonance.wav";
+        char* BLASTER = "./assets/tie-blaster.wav";
+        char* BLASTER2 = "./assets/blaster-firing.wav";
+        // TODO
+        char* DESTROY1, DESTROY2;
+
+        // Initialize SDL
+	if (SDL_Init(SDL_INIT_AUDIO) < 0)
+		return -1;
+
+	//Initialize SDL_mixer
+	if (Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
+		return -1;
+
+	// Load SFX
+	blaster = Mix_LoadWAV(BLASTER);
+	if (blaster == NULL)
+		return -1;
+
+        blaster2 = Mix_LoadWAV(BLASTER2);
+	if (blaster2 == NULL)
+		return -1;
+
+	// Load BGM
+	music = Mix_LoadMUS(BG);
+	if (music == NULL)
+		return -1;
+
+        // Start BGM
+	Mix_PlayMusic(music, -1);
+
 }
 
-// Audio callback
-void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
-	if (audio_len == 0) {
-                IF_DEBUG printf("LOOPING AUDIO\n");
-                audio_pos = wav_buffer; // copy sound buffer
-                audio_len = wav_length; // copy file length
-                return;
-        }
-
-	len = ( len > audio_len ? audio_len : len );
-	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME); // mix from one buffer into another
-
-        // Move audio
-	audio_pos += len;
-	audio_len -= len;
-}
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
@@ -350,7 +359,7 @@ void drawHUD() {
     freeText(hudM);
 
     char hudM_cnt_text[2];
-    sprintf(hudM_cnt_text, "%d", wave);
+    sprintf(hudM_cnt_text, "%d", level);
     Text* hudM_cnt = createText(GLUT_BITMAP_HELVETICA_18, hudM_cnt_text);
         drawText(hudM_cnt, VIEWPORT_X/4 - 115, 20);
     freeText(hudM_cnt);

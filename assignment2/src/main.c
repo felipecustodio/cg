@@ -18,8 +18,6 @@
 
 int main(int argc, char* argv[]) {
 
-        IF_DEBUG printf("◆ Initializing\n");
-
         // INITIALIZE GLUT
         glutInit(&argc, argv); // Instanciate Glut
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE); // Defines the buffer display mode
@@ -41,7 +39,7 @@ int main(int argc, char* argv[]) {
         glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
         glutIdleFunc(drawLoop); // Set drawLoop to repeat while no events occur
 
-        // EVENTS
+        // EVENT HANDLING
         glutMouseFunc(on_mouseClick); // Handles mouse clicks
         glutKeyboardFunc(keyPress); // Handles keyboard presses
         glutKeyboardUpFunc(keyUp); // Handles keyboard releases
@@ -53,20 +51,14 @@ int main(int argc, char* argv[]) {
         // LOAD ALL TEXTURES
         loadTextures();
 
-        // START BG MUSIC
-        SDL_PauseAudio(1);
-
         // SET KEY PRESSES TO NON-REPEAT MODE
         glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
         // START RENDERING
         glutMainLoop(); // Start operations according to the specifications above
 
-        IF_DEBUG printf("◆ Closing window\n");
-
-        // Shutdown SDL
+        // SHUTDOWN
         SDL_CloseAudio();
-        SDL_FreeWAV(wav_buffer);
 
         return 0;
 }
