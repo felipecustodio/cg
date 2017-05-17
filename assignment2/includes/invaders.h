@@ -107,9 +107,7 @@ void drawLaser(LASER* laser);
 /* -------------------------------- LASER ----------------------------------- */
 
 /* -------------------------------- ANIMATIONS ----------------------------------- */
-int switchTexture() {
-        return 1;
-}
+int switchTexture();
 // TODO every x time, switch texture numbers
 
 /* -------------------------------- ANIMATIONS ----------------------------------- */

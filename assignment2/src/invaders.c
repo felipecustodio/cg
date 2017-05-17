@@ -110,14 +110,8 @@ void drawEnemy(ENEMY* enemy) {
             enemy->x[2], enemy->y[2],
             enemy->x[3], enemy->y[3]); // initial coordinates
             // TODO - para cada tipo de inimigo
-            switch(switchTexture()) {
-                    case 1:
-                        setQuadTexture(enemySprite, alien_1_1); // choose texture
-                        break;
-                    case 2:
-                        setQuadTexture(enemySprite, alien_1_2); // choose texture
-                        break;
-            }
+
+
             glTranslatef(enemyPositionX, enemyPositionY, 0.0f); // move enemy matrix
             // TODO use boundaries that move with the enemy
             drawQuadTextured(enemySprite); // draw enemy on screen
@@ -186,7 +180,9 @@ void destroyLaser(LASER* laser) {
 /* -------------------------------- LASER ----------------------------------- */
 
 /* -------------------------------- ANIMATIONS ----------------------------------- */
-int switchTexture();
+int switchTexture() {
+        return 1;
+}
 
 /* -------------------------------- ANIMATIONS ----------------------------------- */
 
