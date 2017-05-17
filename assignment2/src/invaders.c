@@ -1,16 +1,17 @@
 #include "../includes/invaders.h"
 
-/* -------------------------------- GLOBALS ----------------------------------- */
+/* ------------------------------- GLOBALS ---------------------------------- */
 // Initialize external globals
 GLfloat playerPosition = 0; // player position (x)
-GLfloat laserSpeed = 3.0f; // laser vertical speed
+GLfloat playerSpeed = 7.0f;
+GLfloat laserSpeed = 10.0f; // laser vertical speed
 GLfloat enemyPositionX = 0; // enemy position (x)
 GLfloat enemyPositionY = 0; // enemy position (y)
 GLfloat enemySpeed = 0; // enemy horizontal speed
 GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
-/* -------------------------------- GLOBALS ----------------------------------- */
+/* ------------------------------- GLOBALS ---------------------------------- */
 
-/* -------------------------------- PLAYER ----------------------------------- */
+/* ------------------------------- PLAYER ----------------------------------- */
 PLAYER* createPlayer() {
 
         // Allocate memory
@@ -29,10 +30,6 @@ PLAYER* createPlayer() {
         // Set boundaries
         player->boundary_left = -28;
         player->boundary_right = 28;
-
-        // Gun is the center of the ship
-        // where lasers will be shot from
-        player->gun = -14;
 
         // Player can take 3 hits
         player->health = 3;
@@ -60,9 +57,18 @@ void drawPlayer(PLAYER* player) {
 void destroyPlayer(PLAYER* player) {
         free(player);
 }
-/* -------------------------------- PLAYER ----------------------------------- */
 
-/* -------------------------------- ENEMY ----------------------------------- */
+// Avoids player moving out of window
+char checkBorders(GLfloat x) {
+        if (x <= -535|| x >= 535) {
+                return 0;
+        } else {
+                return 1;
+        }
+}
+/* ------------------------------- PLAYER ----------------------------------- */
+
+/* ------------------------------- ENEMY ------------------------------------ */
 ENEMY* createEnemy(int design) {
         ENEMY* enemy = (ENEMY*)malloc(sizeof(ENEMY));
 
@@ -123,48 +129,31 @@ void drawEnemy(ENEMY* enemy) {
             drawQuadTextured(enemySprite); // draw enemy on screen
         freeQuad(enemySprite);
 }
+/* ------------------------------- ENEMY ------------------------------------ */
 
-
-/* -------------------------------- ENEMY ----------------------------------- */
-
-/* -------------------------------- MOVEMENT -------------------------------- */
-// Avoids player moving out of window
-char checkBorders(GLfloat x) {
-        if (x <= -535|| x >= 535) {
-                return 0;
-        } else {
-                return 1;
-        }
-}
-
-// Action
-void shootLaser(LASER** shots, int *amount, int playerX) {
-        // Add laser to scene
-        shots = (LASER **) realloc(shots, sizeof(LASER *) * (*amount) + 1);
-        shots[(*amount)] = createLaser(playerX, -200);
-        (*amount) = (*amount) + 1; // count ++
-}
-
-/* -------------------------------- MOVEMENT -------------------------------- */
-
-/* -------------------------------- LASER ----------------------------------- */
+/* ------------------------------- LASER ------------------------------------ */
 LASER* createLaser(int x, int y) {
         LASER* laser = (LASER *) malloc(sizeof(LASER));
 
-        laser->x[0] = x + 25;
-        laser->x[1] = x + 25;
-        laser->x[2] = x + 6 + 25;
-        laser->x[3] = x + 6 + 25;
+        laser->x[0] = x - 3;
+        laser->x[1] = x - 3;
+        laser->x[2] = x + 5 - 3;
+        laser->x[3] = x + 5 - 3;
 
         laser->y[0] = y;
         laser->y[1] = y + 40;
         laser->y[2] = y + 40;
         laser->y[3] = y;
 
-        laser->position = 0;
         laser->explosion = 0;
 
         return laser;
+}
+
+void shootLaser(LASER** shots, int *amount, int playerX) {
+        // Add laser to scene
+        shots[(*amount)] = createLaser(playerX, -200);
+        (*amount) = (*amount) + 1; // count ++
 }
 
 void drawLaser(LASER* laser) {
@@ -175,7 +164,6 @@ void drawLaser(LASER* laser) {
             laser->x[2], laser->y[2],
             laser->x[3], laser->y[3]); // initial coordinates
             setQuadColor(laserSprite, 0.75f, 1.0f, 1.0f); // choose color
-            glTranslatef(0.0f, laser->position, 0.0f); // move up while don't collide
             drawQuadFilled(laserSprite); // draw player on screen
         freeQuad(laserSprite);
 }
@@ -183,19 +171,20 @@ void drawLaser(LASER* laser) {
 void destroyLaser(LASER* laser) {
         free(laser);
 }
-/* -------------------------------- LASER ----------------------------------- */
+/* ------------------------------- LASER ------------------------------------ */
 
-/* -------------------------------- ANIMATIONS ----------------------------------- */
-int switchTexture();
+/* ----------------------------- ANIMATIONS --------------------------------- */
+int switchTexture() {
+        return 1;
+}
+// TODO every x time, switch texture numbers
+/* ----------------------------- ANIMATIONS --------------------------------- */
 
-/* -------------------------------- ANIMATIONS ----------------------------------- */
-
-/* -------------------------------- GAME ----------------------------------- */
+/* -------------------------------- GAME ------------------------------------ */
 void saveGame() {
         // save point
 }
 void resetGame() {
         // pop matrix
 }
-
-/* -------------------------------- GAME ----------------------------------- */
+/* -------------------------------- GAME ------------------------------------ */

@@ -2,12 +2,9 @@
 #include "../includes/invaders.h"
 #include "../includes/scene.h"
 
-/* -------------------------------- GLOBALS ----------------------------------- */
-
+/* ------------------------------- GLOBALS ---------------------------------- */
 /* ------ THE PLAYER -----*/
 PLAYER* player;
-int playerSpeed = 7.0f;
-int playerShootSpeed = 10.0f;
 
 /* ------ ENEMIES -----*/
 ENEMY** enemies;
@@ -30,8 +27,8 @@ char leftMouseButtonDown = 0;
 char rightMouseButtonDown = 0;
 char Adown = 0;
 char Ddown = 0;
+/* ------------------------------- GLOBALS ---------------------------------- */
 
-/* -------------------------------- GLOBALS ----------------------------------- */
 int loadTextures() {
         // HUD
         hudL = loadTexture("./assets/hudL.png");
@@ -62,10 +59,9 @@ int loadTextures() {
 
         return 1;
 }
-
 /* -------------------------------- INPUT ----------------------------------- */
-// MOUSE EVENT HANDLING
 
+// ------------ MOUSE EVENT HANDLING ------------ //
 // Mouse clicks
 void on_mouseClick(int button, int click_state,
         int x_mouse_position, int y_mouse_position)
@@ -87,9 +83,9 @@ void mouseHold() {
                 // right mouse event
         }
 }
+// ------------ MOUSE EVENT HANDLING ------------ //
 
-// KEYBOARD EVENT HANDLING
-
+// ----------- KEYBOARD EVENT HANDLING ---------- //
 // Key presses
 void keyPress(unsigned char key, int x, int y) {
         IF_DEBUG printf("E\n");
@@ -100,9 +96,12 @@ void keyPress(unsigned char key, int x, int y) {
         } else if (key == ' ') {
                 // PEW! PEW!
                 if(shots_player == NULL) {
-                    shots_player = (LASER**)malloc(sizeof(LASER**));
+                    shots_player = (LASER **) malloc(sizeof(LASER *));
                 }
-                shootLaser(shots_player, &shots_player_count, player->gun);
+                else{
+                    shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
+                }
+                shootLaser(shots_player, &shots_player_count, playerPosition);
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
@@ -129,7 +128,6 @@ void keyHold() {
                         // move left
                         player->boundary_left -= playerSpeed;
                         player->boundary_right -= playerSpeed;
-                        player->gun -= playerSpeed;
                         playerPosition -= playerSpeed;
                 }
         } else if (Ddown) {
@@ -138,11 +136,11 @@ void keyHold() {
                         // move right
                         player->boundary_right += playerSpeed;
                         player->boundary_left += playerSpeed;
-                        player->gun += playerSpeed;
                         playerPosition += playerSpeed;
                 }
         }
 }
+// ----------- KEYBOARD EVENT HANDLING ---------- //
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
@@ -171,7 +169,7 @@ void reshape(int width, int height) {
 /* -------------------------------- WINDOW ---------------------------------- */
 
 
-/* -------------------------------- AUDIO ---------------------------------- */
+/* -------------------------------- AUDIO ----------------------------------- */
 int initAudio() {
         SDL_Init(SDL_INIT_AUDIO); // Initialize SDL
         IF_DEBUG printf("◆ LOADING AUDIO\n");
@@ -209,7 +207,7 @@ void audioCallback(void *userdata, Uint8 *stream, unsigned int len) {
 	audio_pos += len;
 	audio_len -= len;
 }
-/* -------------------------------- AUDIO ---------------------------------- */
+/* -------------------------------- AUDIO ----------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 void drawScene() {
@@ -248,8 +246,11 @@ void drawScene() {
         int i = 0;
         for(i = 0; i < shots_player_count; i++){
             if(shots_player[i]) {
-                shots_player[i]->position += laserSpeed;
                 drawLaser(shots_player[i]);
+                shots_player[i]->y[0] += laserSpeed;
+                shots_player[i]->y[1] += laserSpeed;
+                shots_player[i]->y[2] += laserSpeed;
+                shots_player[i]->y[3] += laserSpeed;
             }
         }
         /*--------------------END--------------------*/
