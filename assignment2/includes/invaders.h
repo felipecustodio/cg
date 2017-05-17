@@ -13,20 +13,19 @@
 #include "physics.h"
 #include "settings.h"
 
-/* -------------------------------- GLOBALS ----------------------------------- */
-
+/* ------------------------------- GLOBALS ---------------------------------- */
 // Movement
 extern GLfloat playerPosition; // player horizontal speed
+extern GLfloat playerSpeed; // laser speed
 extern GLfloat laserSpeed; // laser speed
 extern GLfloat enemyPositionX; // enemy position (x)
 extern GLfloat enemyPositionY; // enemy position (y)
 extern GLfloat enemySpeed; // enemy horizontal speed
 extern GLfloat enemySpeed; // enemy horizontal speed
 extern GLfloat enemyApproach; // enemy vertical speed (approaching player base)
+/* ------------------------------- GLOBALS ---------------------------------- */
 
-/* -------------------------------- GLOBALS ----------------------------------- */
-
-/* -------------------------------- PLAYER ----------------------------------- */
+/* ------------------------------- PLAYER ----------------------------------- */
 typedef struct player {
 
         // Coordinates
@@ -40,8 +39,8 @@ typedef struct player {
         // Health
         int health;
 
-        // Laser gun
-        int gun;
+        // Score
+        int score;
 
         // Laser cooldown
         int cooldown;
@@ -55,10 +54,9 @@ void destroyPlayer(PLAYER* player);
 
 // Movement
 char checkBorders(GLfloat x);
+/* ------------------------------- PLAYER ----------------------------------- */
 
-/* -------------------------------- PLAYER ----------------------------------- */
-
-/* -------------------------------- ENEMY ----------------------------------- */
+/* ------------------------------- ENEMY ------------------------------------ */
 typedef struct enemy {
 
         // Coordinates
@@ -83,16 +81,15 @@ typedef struct enemy {
 ENEMY* createEnemy(int design);
 void destroyEnemy(ENEMY* enemy);
 void drawEnemy(ENEMY* enemy);
-/* -------------------------------- ENEMY ----------------------------------- */
+/* ------------------------------- ENEMY ------------------------------------ */
 
-/* -------------------------------- LASER ----------------------------------- */
+/* ------------------------------- LASER ------------------------------------ */
 typedef struct laser {
 
         // Coordinates
         GLfloat x[4];
         GLfloat y[4];
 
-        int position;
         // Has it exploded yet?
         int explosion;
 
@@ -104,19 +101,15 @@ void destroyLaser();
 // Action
 void shootLaser(LASER** shots, int *amount, int playerX);
 void drawLaser(LASER* laser);
-/* -------------------------------- LASER ----------------------------------- */
+/* ------------------------------- LASER ------------------------------------ */
 
 /* -------------------------------- ANIMATIONS ----------------------------------- */
 int switchTexture();
-// TODO every x time, switch texture numbers
+/* ----------------------------- ANIMATIONS --------------------------------- */
 
-/* -------------------------------- ANIMATIONS ----------------------------------- */
-
-/* -------------------------------- GAME ----------------------------------- */
+/* -------------------------------- GAME ------------------------------------ */
 void saveGame();
 void resetGame();
-
-/* -------------------------------- GAME ----------------------------------- */
-
+/* -------------------------------- GAME ------------------------------------ */
 
 #endif
