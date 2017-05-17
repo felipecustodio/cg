@@ -6,7 +6,8 @@
 
 /* ------ THE PLAYER -----*/
 PLAYER* player;
-int playerSpeed = 3.5f;
+int playerSpeed = 7.0f;
+int playerShootSpeed = 10.0f;
 
 /* ------ ENEMIES -----*/
 ENEMY** enemies;
@@ -15,7 +16,8 @@ ENEMY** enemies;
 LASER** shots_player;
 LASER** shots_enemy;
 
-int amount = 0;
+int shots_player_count = 0;
+int shots_enemy_count = 0;
 
 /* ------ UI -----*/
 char* UI_reset = "Press R to reset game";
@@ -99,7 +101,10 @@ void keyPress(unsigned char key, int x, int y) {
                 Ddown = 1;
         } else if (key == ' ') {
                 // PEW! PEW!
-                shootLaser(shots_player, amount);
+                if(shots_player == NULL){
+                    shots_player = (LASER **) malloc(sizeof(LASER *));
+                }
+                shootLaser(shots_player, &shots_player_count, player->x[0]);
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
@@ -126,8 +131,11 @@ void keyHold() {
                         // move left
                         player->boundary_left -= playerSpeed;
                         player->boundary_right -= playerSpeed;
-                        playerPosition -= playerSpeed;
-                        printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
+                        player->x[0] -= playerSpeed;
+                        player->x[1] -= playerSpeed;
+                        player->x[2] -= playerSpeed;
+                        player->x[3] -= playerSpeed;
+                        IF_DEBUG printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
                 }
         } else if (Ddown) {
                 // check for collision with window
@@ -135,8 +143,11 @@ void keyHold() {
                         // move right
                         player->boundary_right += playerSpeed;
                         player->boundary_left += playerSpeed;
-                        playerPosition += playerSpeed;
-                        printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
+                        player->x[0] += playerSpeed;
+                        player->x[1] += playerSpeed;
+                        player->x[2] += playerSpeed;
+                        player->x[3] += playerSpeed;
+                        IF_DEBUG printf("PLAYER BOUNDARIES: %f %f\n", player->boundary_left, player->boundary_right);
                 }
         }
 }
@@ -212,9 +223,24 @@ void drawScene() {
         if (player == NULL) {
             player = createPlayer();
         }
-        glTranslatef(0.0f, -228, 0.0f);
         drawPlayer(player);
 
+        /*--------------------END--------------------*/
+
+        /*--------------------PLAYER SHOTS--------------------*/
+        // Refresh matrix for new object
+        glLoadIdentity();
+
+        int i = 0;
+        for(i = 0; i < shots_player_count; i++){
+            if(shots_player[i]){
+                drawLaser(shots_player[i]);
+                shots_player[i]->y[0] += playerShootSpeed;
+                shots_player[i]->y[1] += playerShootSpeed;
+                shots_player[i]->y[2] += playerShootSpeed;
+                shots_player[i]->y[3] += playerShootSpeed;
+            }
+        }
         /*--------------------END--------------------*/
 }
 
@@ -261,6 +287,8 @@ void drawLoop() {
 
         // Draw scene
         drawScene();
+
+        glColor3f(1.0f, 1.0f, 1.0f);
 
         // Draw HUD
         drawHUD();

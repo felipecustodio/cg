@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
         loadTextures();
 
         // START BG MUSIC
-        SDL_PauseAudio(0);
+        SDL_PauseAudio(1);
 
         // SET KEY PRESSES TO NON-REPEAT MODE
         glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
