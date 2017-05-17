@@ -35,6 +35,7 @@ char Ddown = 0;
 /* ------ AUDIOS -----*/
 Mix_Chunk *blaster = NULL;
 Mix_Chunk *blaster2 = NULL;
+Mix_Chunk *bg = NULL;
 Mix_Music *music = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -189,7 +190,7 @@ void reshape(int width, int height) {
 int initAudio() {
 
         // Audio assets
-        char* BG = "./assets/resonance.wav";
+        char* BG = "./assets/unchartedworlds.mp3";
         char* BLASTER = "./assets/tie-blaster.wav";
         char* BLASTER2 = "./assets/blaster-firing.wav";
         // TODO
@@ -199,7 +200,11 @@ int initAudio() {
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 		return -1;
 
-	//Initialize SDL_mixer
+
+        // load support for mp3
+        Mix_Init(MIX_INIT_MP3);
+
+	// Initialize SDL_mixer
 	if (Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
 		return -1;
 
@@ -212,14 +217,24 @@ int initAudio() {
 	if (blaster2 == NULL)
 		return -1;
 
+        bg = Mix_LoadWAV(BG);
+	if (bg == NULL) {
+                printf("ERROR %s\n", Mix_GetError());
+                return -1;
+        }
+
 	// Load BGM
 	music = Mix_LoadMUS(BG);
-	if (music == NULL)
-		return -1;
+        if(!music) {
+                printf("ERROR %s\n", Mix_GetError());
+        }
 
-        // Start BGM
-	Mix_PlayMusic(music, -1);
+}
 
+void audioCleanup() {
+        Mix_FreeChunk(blaster);
+	Mix_FreeChunk(blaster2);
+        Mix_FreeMusic(music);
 }
 
 /* -------------------------------- AUDIO ----------------------------------- */

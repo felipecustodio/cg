@@ -29,6 +29,10 @@ int main(int argc, char* argv[]) {
 
         // AUDIO
         initAudio(); // load audio files and set callback functions
+        // Start BGM
+        if(Mix_PlayMusic(music, -1)==-1) {
+            printf("Mix_PlayMusic: %s\n", Mix_GetError());
+        }
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
@@ -58,6 +62,8 @@ int main(int argc, char* argv[]) {
         glutMainLoop(); // Start operations according to the specifications above
 
         // SHUTDOWN
+        audioCleanup();
+        Mix_CloseAudio();
         SDL_CloseAudio();
 
         return 0;
