@@ -17,10 +17,10 @@ int shots_player_count = 0;
 int shots_enemy_count = 0;
 
 /* ------ UI -----*/
-char* UI_reset = "Press R to reset game";
-char* UI_shoot = "Press spacebar to shoot";
-char* UI_move = "Press A/D to move left/right";
-char* UI_exit = "Press E to exit";
+const char* UI_reset = "Press R to reset game";
+const char* UI_shoot = "Press spacebar to shoot";
+const char* UI_move = "Press A/D to move left/right";
+const char* UI_exit = "Press E to exit";
 
 /* ------ INPUT STATUS -----*/
 char leftMouseButtonDown = 0;
@@ -102,6 +102,7 @@ void keyPress(unsigned char key, int x, int y) {
                     shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
                 }
                 shootLaser(shots_player, &shots_player_count, playerPosition);
+                player->score += 10; // TEST
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
@@ -257,7 +258,7 @@ void drawScene() {
 }
 
 void drawHUD() {
-
+    // -------------- LEFT FRAME -------------- //
     // Refresh matrix for new object
     glLoadIdentity();
     glTranslatef(-(VIEWPORT_X/2) - 112, VIEWPORT_Y/2, 0.0f);
@@ -268,6 +269,19 @@ void drawHUD() {
         drawQuadTextured(hudL_sprite);
     freeQuad(hudL_sprite);
 
+    char const* hudL_text = "SHIPS";
+    Text* hudL = createText(GLUT_BITMAP_9_BY_15, hudL_text);
+        drawText(hudL, 10, 20);
+    freeText(hudL);
+
+    char hudL_cnt_text[2];
+    sprintf(hudL_cnt_text, "%d", player->health);
+    Text* hudL_cnt = createText(GLUT_BITMAP_HELVETICA_18, hudL_cnt_text);
+        drawText(hudL_cnt, 190, 20);
+    freeText(hudL_cnt);
+    // -------------- LEFT FRAME -------------- //
+
+    // -------------- MID FRAME -------------- //
     // Refresh matrix for new object
     glLoadIdentity();
     glTranslatef(-88, VIEWPORT_Y/2, 0.0f);
@@ -278,6 +292,13 @@ void drawHUD() {
         drawQuadTextured(hudM_sprite);
     freeQuad(hudM_sprite);
 
+    char const* hudM_text = "WAVE";
+    Text* hudM = createText(GLUT_BITMAP_9_BY_15, hudM_text);
+        drawText(hudM, VIEWPORT_X/4 - 130, 45);
+    freeText(hudM);
+    // -------------- MID FRAME -------------- //
+
+    // -------------- RIGHT FRAME -------------- //
     // Refresh matrix for new object
     glLoadIdentity();
     glTranslatef(VIEWPORT_X/2 - 178, VIEWPORT_Y/2, 0.0f);
@@ -287,6 +308,18 @@ void drawHUD() {
         setQuadTexture(hudR_sprite , hudR);
         drawQuadTextured(hudR_sprite);
     freeQuad(hudR_sprite);
+
+    char const* hudR_text = "SCORE";
+    Text* hudR = createText(GLUT_BITMAP_9_BY_15, hudR_text);
+        drawText(hudR, VIEWPORT_X/2 - 188, 20);
+    freeText(hudR);
+
+    char hudR_cnt_text[2];
+    sprintf(hudR_cnt_text, "%d", player->score);
+    Text* hudR_cnt = createText(GLUT_BITMAP_HELVETICA_18, hudR_cnt_text);
+        drawText(hudR_cnt, VIEWPORT_X/2 - 317, 20);
+    freeText(hudR_cnt);
+    // -------------- RIGHT FRAME -------------- //
 }
 
 void drawLoop() {

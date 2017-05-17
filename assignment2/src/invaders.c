@@ -34,6 +34,9 @@ PLAYER* createPlayer() {
         // Player can take 3 hits
         player->health = 3;
 
+        // Player score starts in 0
+        player->score = 0;
+
         // Timer before shooting again
         player->cooldown = 0;
 

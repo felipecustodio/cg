@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
-        glutCreateWindow("Invaders"); // Defines the window title
+        glutCreateWindow("Invaders Must Die"); // Defines the window title
 
         // RENDERING
         glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"

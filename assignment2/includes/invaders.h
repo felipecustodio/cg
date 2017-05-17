@@ -39,6 +39,9 @@ typedef struct player {
         // Health
         int health;
 
+        // Score
+        int score;
+
         // Laser cooldown
         int cooldown;
 
