@@ -41,29 +41,29 @@ Mix_Chunk *bg = NULL;
 
 int loadTextures() {
         // HUD
-        hudL = loadTexture("./assets/hudL.png");
-        hudM = loadTexture("./assets/hudM.png");
-        hudR = loadTexture("./assets/hudR.png");
+        hudL = loadTexture("./assets/textures/hudL.png");
+        hudM = loadTexture("./assets/textures/hudM.png");
+        hudR = loadTexture("./assets/textures/hudR.png");
 
         // Background
-        background_texture = loadTexture("./assets/bg.png");
-        // background_texture = loadTexture("./assets/bgmaterial.png");
-        base_texture = loadTexture("./assets/base.png");
+        background_texture = loadTexture("./assets/textures/bg.png");
+        // background_texture = loadTexture("./assets/textures/bgmaterial.png");
+        base_texture = loadTexture("./assets/textures/base.png");
 
         // Parallax
-        parallax1_texture = loadTexture("./assets/parallax1.png");
-        parallax2_texture = loadTexture("./assets/parallax2.png");
+        parallax1_texture = loadTexture("./assets/textures/parallax1.png");
+        parallax2_texture = loadTexture("./assets/textures/parallax2.png");
 
         // Player sprite
-        player_texture = loadTexture("./assets/ship.png");
+        player_texture = loadTexture("./assets/textures/ship.png");
 
         // Enemy sprites
-        alien_1_1 = loadTexture("./assets/alien_1_1.png");
-        alien_1_2 = loadTexture("./assets/alien_1_2.png");
-        alien_2_1 = loadTexture("./assets/alien_2_1.png");
-        alien_2_2 = loadTexture("./assets/alien_2_2.png");
-        alien_3_1 = loadTexture("./assets/alien_3_1.png");
-        alien_3_2 = loadTexture("./assets/alien_3_2.png");
+        alien_1_1 = loadTexture("./assets/textures/alien_1_1.png");
+        alien_1_2 = loadTexture("./assets/textures/alien_1_2.png");
+        alien_2_1 = loadTexture("./assets/textures/alien_2_1.png");
+        alien_2_2 = loadTexture("./assets/textures/alien_2_2.png");
+        alien_3_1 = loadTexture("./assets/textures/alien_3_1.png");
+        alien_3_2 = loadTexture("./assets/textures/alien_3_2.png");
 
         if (!(hudL || hudM || hudR || background_texture
                 || player_texture ||alien_1_1 ||
@@ -190,18 +190,15 @@ void reshape(int width, int height) {
 int initAudio() {
 
         // Audio assets
-        char* BG = "./assets/unchartedworlds.wav";
-        char* BLASTER = "./assets/tie-blaster.wav";
-        char* BLASTER2 = "./assets/laser1.wav";
-        // TODO
-        char* DESTROY1, DESTROY2;
+        char* BG = "./assets/audio/unchartedworlds.wav";
+        char* BLASTER = "./assets/audio/tie-blaster.wav";
+        char* BLASTER2 = "./assets/audio/laser1.wav";
+        char* DESTROY1;
+        char* DESTROY2;
 
         // Initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 		return -1;
-
-        // load support for mp3
-        Mix_Init(MIX_INIT_MP3);
 
 	// Initialize SDL_mixer
 	if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
@@ -234,7 +231,9 @@ void audioCleanup() {
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
-void destroyDesallocLaser(int i){
+
+/*--------------------DESTRUCTION--------------------*/
+void destroyDesallocLaser(int i) {
     destroyLaser(shots_player[i]);
     int j = 0;
     for(j = i + 1; j < shots_player_count; j++) {
@@ -244,15 +243,16 @@ void destroyDesallocLaser(int i){
     shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * shots_player_count);
 }
 
-void destroyDesallocEnemy(int i){
+void destroyDesallocEnemy(int i) {
     destroyEnemy(enemies[i]);
     int j = 0;
     for(j = i + 1; j < 25; j++) {
         enemies[j - 1] = enemies[j];
     }
 }
+/*--------------------DESTRUCTION--------------------*/
 
-
+/*--------------------RENDERING--------------------*/
 void drawScene() {
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
@@ -471,4 +471,6 @@ void drawLoop() {
         // Clear buffer
         glutSwapBuffers();
 }
+/*--------------------RENDERING--------------------*/
+
 /* ----------------------------- SCENE DRAWING ------------------------------ */
