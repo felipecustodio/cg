@@ -38,7 +38,7 @@ int loadTextures();
 /* ------------------------------- TEXTURES --------------------------------- */
 
 /* -------------------------------- AUDIO ----------------------------------- */
-extern Mix_Music *music; // BGM needs to be played by main.c
+extern Mix_Chunk *bg; // BGM starts playing at main
 int initAudio();
 /* -------------------------------- AUDIO ----------------------------------- */
 

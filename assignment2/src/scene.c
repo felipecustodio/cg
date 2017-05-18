@@ -36,7 +36,6 @@ char Ddown = 0;
 Mix_Chunk *blaster = NULL;
 Mix_Chunk *blaster2 = NULL;
 Mix_Chunk *bg = NULL;
-Mix_Music *music = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
 
@@ -105,11 +104,10 @@ void mouseHold() {
 // ----------- KEYBOARD EVENT HANDLING ---------- //
 // Key presses
 void keyPress(unsigned char key, int x, int y) {
-        IF_DEBUG printf("E\n");
         if (key == 'a' || key == 'A') {
-                Adown = 1;
+                Adown = 1; // hold A key
         } else if (key == 'd' || key == 'D') {
-                Ddown = 1;
+                Ddown = 1; // hold D key
         } else if (key == ' ') {
                 // PEW! PEW! play blaster audio
                 Mix_PlayChannel(-1, blaster2, 0);
@@ -218,20 +216,19 @@ int initAudio() {
 	if (blaster2 == NULL)
 		return -1;
 
-    bg = Mix_LoadWAV(BG);
+        // Load BGM
+        bg = Mix_LoadWAV(BG);
 	if (bg == NULL) {
                 printf("ERROR %s\n", Mix_GetError());
                 return -1;
         }
 
-	// Load BGM
-	music = Mix_LoadWAV(BG);
 }
 
 void audioCleanup() {
         Mix_FreeChunk(blaster);
 	Mix_FreeChunk(blaster2);
-        Mix_FreeMusic(music);
+        Mix_FreeChunk(bg);
 }
 
 /* -------------------------------- AUDIO ----------------------------------- */

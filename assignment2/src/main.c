@@ -29,10 +29,9 @@ int main(int argc, char* argv[]) {
 
         // AUDIO
         initAudio(); // load audio files and set callback functions
-        // Start BGM
-        if(Mix_PlayMusic(music, -1)==-1) {
-            printf("Mix_PlayMusic: %s\n", Mix_GetError());
-        }
+
+        // Start BGM on loop
+        Mix_PlayChannel(-1, bg, -1);
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
