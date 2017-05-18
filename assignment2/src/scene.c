@@ -277,6 +277,7 @@ void drawScene() {
         // Refresh matrix for new object
         glLoadIdentity();
 
+        // Move parallax relative to player
         int parallaxfactor = playerPosition / 12;
 
         glTranslatef(parallaxfactor, 0.0f, 0.0f);
@@ -365,6 +366,38 @@ void drawScene() {
             }
         }
 
+        /*--------------------ENEMY LASERS VS PLAYER--------------------*/
+        i = 0;
+        for (i = 0; i < shots_enemy_count; i++) {
+                if (shots_enemy[i]->x[0] >= player->boundary_left - 200) {
+                        // Laser is aligned with player, check if hit
+                        if (shots_enemy[i]->position <= -200) {
+                                // Laser hit player!
+                                player->health--;
+                                if (player->health <= 0) {
+                                        // gameOverScreen();
+                                }
+                                destroyLaser(shots_enemy[i]); // TODO fazer destroyDesallocLaser
+                        }
+                }
+                // verify y
+                // if hit, -1 player health
+                // if player health == 0 game over
+        }
+
+        /*-------------------------END-------------------------*/
+
+        /*--------------------ENEMY VS BASE--------------------*/
+        i = 0;
+        for (i = 0; i < 25; i++) {
+                if (enemies[i]->pos_y <= -200) {
+                        // Enemy hit base! Game Over!
+                        // gameOverScreen();
+                }
+        }
+        /*-------------------------END-------------------------*/
+
+        /*--------------------LASER MOVEMENT--------------------*/
         // Player lasers Movement
         i = 0;
         for(i = 0; i < shots_player_count; i++) {
@@ -386,22 +419,9 @@ void drawScene() {
         }
         /*--------------------END--------------------*/
 
-        /*--------------------ENEMY LASERS VS PLAYER--------------------*/
-
-
-        /*-------------------------END-------------------------*/
-
-        /*--------------------ENEMY VS BASE--------------------*/
-        i = 0;
-        for (i = 0; i < 25; i++) {
-                if (enemies[i]->pos_y <= -200) {
-                        // Enemy hit base! Game Over!
-                        // gameOverScreen();
-                }
-        }
-        /*-------------------------END-------------------------*/
 }
 
+/*--------------------HUD--------------------*/
 void drawHUD() {
     // -------------- LEFT FRAME -------------- //
     // Refresh matrix for new object
@@ -472,6 +492,7 @@ void drawHUD() {
     freeText(hudR_cnt);
     // -------------- RIGHT FRAME -------------- //
 }
+/*--------------------END--------------------*/
 
 void gameOverScreen() {
         // Refresh matrix for new object
@@ -484,6 +505,7 @@ void gameOverScreen() {
             setQuadTexture(gameOver, game_over);
             drawQuadTextured(gameOver);
         freeQuad(gameOver);
+        // TODO - Reset game
 }
 
 void drawLoop() {
