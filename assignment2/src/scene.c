@@ -190,9 +190,9 @@ void reshape(int width, int height) {
 int initAudio() {
 
         // Audio assets
-        char* BG = "./assets/unchartedworlds.mp3";
+        char* BG = "./assets/unchartedworld.mp3";
         char* BLASTER = "./assets/tie-blaster.wav";
-        char* BLASTER2 = "./assets/blaster-firing.wav";
+        char* BLASTER2 = "./assets/laser1.wav";
         // TODO
         char* DESTROY1, DESTROY2;
 
@@ -205,7 +205,7 @@ int initAudio() {
         Mix_Init(MIX_INIT_MP3);
 
 	// Initialize SDL_mixer
-	if (Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
+	if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
 		return -1;
 
 	// Load SFX
@@ -224,7 +224,7 @@ int initAudio() {
         }
 
 	// Load BGM
-	music = Mix_LoadMUS(BG);
+	music = Mix_LoadWAV(BG);
         if(!music) {
                 printf("ERROR %s\n", Mix_GetError());
         }
@@ -240,6 +240,25 @@ void audioCleanup() {
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
+void destroyDesallocLaser(int i){
+    destroyLaser(shots_player[i]);
+    int j = 0;
+    for(j = i + 1; j < shots_player_count; j++) {
+        shots_player[j - 1] = shots_player[j];
+    }
+    shots_player_count = shots_player_count - 1;
+    shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * shots_player_count);
+}
+
+void destroyDesallocEnemy(int i){
+    destroyEnemy(enemies[i]);
+    int j = 0;
+    for(j = i + 1; j < 25; j++) {
+        enemies[j - 1] = enemies[j];
+    }
+}
+
+
 void drawScene() {
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
@@ -307,18 +326,33 @@ void drawScene() {
 
         // LASER MATRIX CHECKING
 
-        // Laser screen collision check
+        // Laser enemy collision check
         int i = 0, j = 0;
+        for(i = 0; i < shots_player_count; i++) {
+            for(j = 0; j < 25; j ++){
+                if(enemies != NULL){ // Temporary placeholder
+                    if(enemies[j] != NULL){
+                        // Check X boundaries -> TODO: update enemy coordinates
+                        if(shots_player[i]->x[0] >= enemies[j]->pos_x){
+                            // Check Y boundaries -> TODO: update enemy coordinates
+                            if(shots_player[i]->position - 200 >= enemies[j]){
+                                destroyDesallocLaser(i);
+                                destroyDesallocEnemy(j);
+                                player->score = player->score + 10;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Laser screen collision check
+        i = 0, j = 0;
         for(i = 0; i < shots_player_count; i++) {
             // Check Top boundary
             // 340
             if(shots_player[i]->position - 200 >= 340){
-                destroyLaser(shots_player[i]);
-                for(j = i + 1; j < shots_player_count; j++) {
-                    shots_player[j - 1] = shots_player[j];
-                }
-                shots_player_count = shots_player_count - 1;
-                shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * shots_player_count);
+                destroyDesallocLaser(i);
             }
         }
 

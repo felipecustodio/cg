@@ -95,7 +95,7 @@ ENEMY* createEnemy(int design) {
         return enemy;
 }
 void destroyEnemy(ENEMY* enemy) {
-
+    free(enemy);
 }
 
 void drawEnemy(ENEMY* enemy) {
