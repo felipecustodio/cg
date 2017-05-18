@@ -48,6 +48,7 @@ int loadTextures() {
 
         // Background
         background_texture = loadTexture("./assets/bg.png");
+        // background_texture = loadTexture("./assets/bgmaterial.png");
 
         // Parallax
         parallax1_texture = loadTexture("./assets/parallax1.png");
@@ -190,7 +191,7 @@ void reshape(int width, int height) {
 int initAudio() {
 
         // Audio assets
-        char* BG = "./assets/unchartedworlds.mp3";
+        char* BG = "./assets/unchartedworlds.wav";
         char* BLASTER = "./assets/tie-blaster.wav";
         char* BLASTER2 = "./assets/blaster-firing.wav";
         // TODO
@@ -199,7 +200,6 @@ int initAudio() {
         // Initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 		return -1;
-
 
         // load support for mp3
         Mix_Init(MIX_INIT_MP3);
@@ -217,18 +217,11 @@ int initAudio() {
 	if (blaster2 == NULL)
 		return -1;
 
-        bg = Mix_LoadWAV(BG);
-	if (bg == NULL) {
-                printf("ERROR %s\n", Mix_GetError());
-                return -1;
-        }
-
-	// Load BGM
+        // Load BGM
 	music = Mix_LoadMUS(BG);
         if(!music) {
                 printf("ERROR %s\n", Mix_GetError());
         }
-
 }
 
 void audioCleanup() {
@@ -298,7 +291,6 @@ void drawScene() {
             player = createPlayer();
         }
         drawPlayer(player);
-
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER SHOTS--------------------*/
@@ -331,6 +323,7 @@ void drawScene() {
             }
         }
         /*--------------------END--------------------*/
+
 }
 
 void drawHUD() {
