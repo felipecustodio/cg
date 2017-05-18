@@ -48,6 +48,8 @@ int loadTextures() {
 
         // Background
         background_texture = loadTexture("./assets/bg.png");
+        // background_texture = loadTexture("./assets/bgmaterial.png");
+        base_texture = loadTexture("./assets/base.png");
 
         // Parallax
         parallax1_texture = loadTexture("./assets/parallax1.png");
@@ -190,7 +192,7 @@ void reshape(int width, int height) {
 int initAudio() {
 
         // Audio assets
-        char* BG = "./assets/unchartedworld.mp3";
+        char* BG = "./assets/unchartedworlds.wav";
         char* BLASTER = "./assets/tie-blaster.wav";
         char* BLASTER2 = "./assets/laser1.wav";
         // TODO
@@ -199,7 +201,6 @@ int initAudio() {
         // Initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
 		return -1;
-
 
         // load support for mp3
         Mix_Init(MIX_INIT_MP3);
@@ -217,7 +218,7 @@ int initAudio() {
 	if (blaster2 == NULL)
 		return -1;
 
-        bg = Mix_LoadWAV(BG);
+    bg = Mix_LoadWAV(BG);
 	if (bg == NULL) {
                 printf("ERROR %s\n", Mix_GetError());
                 return -1;
@@ -225,10 +226,6 @@ int initAudio() {
 
 	// Load BGM
 	music = Mix_LoadWAV(BG);
-        if(!music) {
-                printf("ERROR %s\n", Mix_GetError());
-        }
-
 }
 
 void audioCleanup() {
@@ -309,15 +306,29 @@ void drawScene() {
         freeQuad(parallax2Sprite);
         /*--------------------END--------------------*/
 
+        /*--------------------BASE--------------------*/
+        glLoadIdentity();
+        Quadrilateral *base = createQuad();
+        setQuadCoordinates(base, -VIEWPORT_X, -VIEWPORT_Y,
+                                 -VIEWPORT_X, -200,
+                                VIEWPORT_X, -200,
+                                VIEWPORT_X, -VIEWPORT_Y);
+        setQuadTexture(base, base_texture);
+        drawQuadTextured(base);
+        freeQuad(base);
+
+        /*--------------------END--------------------*/
+
+
         // matrix for player
         glLoadIdentity();
 
         /*--------------------PLAYER--------------------*/
+        glColor3f(1.0f, 1.0f, 1.0f);
         if (player == NULL) {
             player = createPlayer();
         }
         drawPlayer(player);
-
         /*--------------------END--------------------*/
 
         /*--------------------PLAYER SHOTS--------------------*/
@@ -365,6 +376,7 @@ void drawScene() {
             }
         }
         /*--------------------END--------------------*/
+
 }
 
 void drawHUD() {
