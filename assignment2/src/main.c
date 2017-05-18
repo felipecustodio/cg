@@ -10,7 +10,6 @@
 
 #include <GL/glut.h>
 #include <SDL/SDL.h>
-#include <math.h>
 
 #include "scene.h"
 #include "settings.h"

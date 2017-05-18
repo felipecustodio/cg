@@ -24,6 +24,7 @@ const char* UI_reset = "Press R to reset game";
 const char* UI_shoot = "Press spacebar to shoot";
 const char* UI_move = "Press A/D to move left/right";
 const char* UI_exit = "Press E to exit";
+const char* UI_gameover = "GAME OVER";
 int level = 1;
 
 /* ------ INPUT STATUS -----*/
@@ -44,6 +45,9 @@ int loadTextures() {
         hudL = loadTexture("./assets/textures/hudL.png");
         hudM = loadTexture("./assets/textures/hudM.png");
         hudR = loadTexture("./assets/textures/hudR.png");
+
+        // TODO Game over screen
+        // game_over = loadTexture("./assets/textures/game_over.png");
 
         // Background
         background_texture = loadTexture("./assets/textures/bg.png");
@@ -313,14 +317,11 @@ void drawScene() {
         setQuadTexture(base, base_texture);
         drawQuadTextured(base);
         freeQuad(base);
-
         /*--------------------END--------------------*/
 
-
+        /*--------------------PLAYER--------------------*/
         // matrix for player
         glLoadIdentity();
-
-        /*--------------------PLAYER--------------------*/
         glColor3f(1.0f, 1.0f, 1.0f);
         if (player == NULL) {
             player = createPlayer();
@@ -328,25 +329,26 @@ void drawScene() {
         drawPlayer(player);
         /*--------------------END--------------------*/
 
+        /*--------------------COLLISION CHECKING-------------------*/
+
         /*--------------------PLAYER SHOTS--------------------*/
         // Refresh matrix for new object
         glLoadIdentity();
 
         // LASER MATRIX CHECKING
-
         // Laser enemy collision check
         int i = 0, j = 0;
-        for(i = 0; i < shots_player_count; i++) {
-            for(j = 0; j < 25; j ++){
-                if(enemies != NULL){ // Temporary placeholder
-                    if(enemies[j] != NULL){
+        for (i = 0; i < shots_player_count; i++) {
+            for (j = 0; j < 25; j ++) {
+                if (enemies != NULL) { // Temporary placeholder
+                    if (enemies[j] != NULL) {
                         // Check X boundaries -> TODO: update enemy coordinates
-                        if(shots_player[i]->x[0] >= enemies[j]->pos_x){
+                        if (shots_player[i]->x[0] >= enemies[j]->pos_x) {
                             // Check Y boundaries -> TODO: update enemy coordinates
-                            if(shots_player[i]->position - 200 >= enemies[j]){
-                                destroyDesallocLaser(i);
-                                destroyDesallocEnemy(j);
-                                player->score = player->score + 10;
+                            if (shots_player[i]->position - 200 >= enemies[j]) {
+                                destroyDesallocLaser(i); // destroy laser
+                                destroyDesallocEnemy(j); // destroy enemy
+                                player->score = player->score + 10; // update score
                             }
                         }
                     }
@@ -357,8 +359,7 @@ void drawScene() {
         // Laser screen collision check
         i = 0, j = 0;
         for(i = 0; i < shots_player_count; i++) {
-            // Check Top boundary
-            // 340
+            // Check top boundary
             if(shots_player[i]->position - 200 >= 340){
                 destroyDesallocLaser(i);
             }
@@ -373,6 +374,21 @@ void drawScene() {
             }
         }
         /*--------------------END--------------------*/
+
+        /*--------------------ENEMY LASERS VS PLAYER--------------------*/
+
+
+        /*-------------------------END-------------------------*/
+
+        /*--------------------ENEMY VS BASE--------------------*/
+        i = 0;
+        for (i = 0; i < 25; i++) {
+                if (enemies[i]->pos_y <= -200) {
+                        // Enemy hit base! Game Over!
+                        // gameOverScreen();
+                }
+        }
+        /*-------------------------END-------------------------*/
 
 }
 
@@ -445,6 +461,19 @@ void drawHUD() {
         drawText(hudR_cnt, VIEWPORT_X/2 - 317, 20);
     freeText(hudR_cnt);
     // -------------- RIGHT FRAME -------------- //
+}
+
+void gameOverScreen() {
+        // Refresh matrix for new object
+        glLoadIdentity();
+        Quadrilateral *gameOver = createQuad();
+            setQuadCoordinates(gameOver, -VIEWPORT_X, -VIEWPORT_Y,
+                                -VIEWPORT_X, VIEWPORT_Y,
+                                VIEWPORT_X, VIEWPORT_Y,
+                                VIEWPORT_X, -VIEWPORT_Y);
+            setQuadTexture(gameOver, game_over);
+            drawQuadTextured(gameOver);
+        freeQuad(gameOver);
 }
 
 void drawLoop() {
