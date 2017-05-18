@@ -113,7 +113,7 @@ void drawEnemy(ENEMY* enemy) {
 /* ------------------------------- ENEMY ------------------------------------ */
 
 /* ------------------------------- LASER ------------------------------------ */
-LASER* createLaser(int x, int y) {
+LASER* createLaser(int x, int y, int color) {
         LASER* laser = (LASER *) malloc(sizeof(LASER));
 
         laser->x[0] = x - 3;
@@ -127,16 +127,22 @@ LASER* createLaser(int x, int y) {
         laser->y[3] = y;
 
         laser->position = 0;
-
+        laser->color = color;
         laser->explosion = 0;
 
         return laser;
 }
 
-void shootLaser(LASER** shots, int *amount, int playerX) {
+void shootLaser_Player(LASER** shots, int *amount, int x) {
         // Add laser to scene
-        shots[(*amount)] = createLaser(playerX, -200);
-        (*amount) = (*amount) + 1; // count ++
+        shots[(*amount)] = createLaser(x, -200, 0);
+        (*amount) = (*amount) + 1;
+}
+
+void shootLaser_Enemy(LASER** shots, int *amount, int x, int y) {
+        // Add laser to scene
+        shots[(*amount)] = createLaser(x, y, 1);
+        (*amount) = (*amount) + 1;
 }
 
 void drawLaser(LASER* laser) {
@@ -147,7 +153,14 @@ void drawLaser(LASER* laser) {
             laser->x[1], laser->y[1],
             laser->x[2], laser->y[2],
             laser->x[3], laser->y[3]); // initial coordinates
-            setQuadColor(laserSprite, 0.75f, 1.0f, 1.0f); // choose color
+            switch(laser->color) {
+                    case 0:
+                        setQuadColor(laserSprite, 0.75f, 1.0f, 1.0f); // player laser = blue
+                        break;
+                    case 1:
+                        setQuadColor(laserSprite, 0.88f, 0.2f, 0.2f); // enemy laser = red
+                        break;
+            }
             glTranslatef(0.0f, laser->position, 0.0f); // move laser
             drawQuadFilled(laserSprite); // draw player on screen
         freeQuad(laserSprite);
@@ -159,16 +172,26 @@ void destroyLaser(LASER* laser) {
 /* -------------------------------- LASER ----------------------------------- */
 
 /* ----------------------------- ANIMATIONS --------------------------------- */
-int switchTexture() {
-        return 1;
+// Change animation frame
+int switchTexture(int frame) {
+        switch(frame) {
+                case 1:
+                        frame = 2;
+                        break;
+                case 2:
+                        frame = 1;
+                        break;
+        }
+        return frame;
 }
 /* ----------------------------- ANIMATIONS --------------------------------- */
 
 /* -------------------------------- GAME ------------------------------------ */
 void saveGame() {
-        // save point
+
 }
+
 void resetGame() {
-        // pop matrix
+
 }
 /* -------------------------------- GAME ------------------------------------ */

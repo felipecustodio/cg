@@ -7,7 +7,7 @@
 PLAYER* player;
 
 /* ------ ENEMIES -----*/
-ENEMY** enemies;
+ENEMY** enemies; // 25 enemies (5x5)
 
 /* ------ LASERS -----*/
 
@@ -122,7 +122,7 @@ void keyPress(unsigned char key, int x, int y) {
                 else{
                     shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
                 }
-                shootLaser(shots_player, &shots_player_count, playerPosition);
+                shootLaser_Player(shots_player, &shots_player_count, playerPosition);
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
@@ -365,12 +365,23 @@ void drawScene() {
             }
         }
 
-        // Laser Movement
+        // Player lasers Movement
         i = 0;
         for(i = 0; i < shots_player_count; i++) {
             if (shots_player[i]) {
                 drawLaser(shots_player[i]);
+                // Move laser (player) up
                 shots_player[i]->position += laserSpeed;
+            }
+        }
+
+        // Enemy lasers movement
+        i = 0;
+        for(i = 0; i < shots_enemy_count; i++) {
+            if (shots_enemy[i]) {
+                drawLaser(shots_enemy[i]);
+                // Move laser (enemy) down
+                shots_enemy[i]->position -= laserSpeed;
             }
         }
         /*--------------------END--------------------*/
@@ -389,7 +400,6 @@ void drawScene() {
                 }
         }
         /*-------------------------END-------------------------*/
-
 }
 
 void drawHUD() {
@@ -483,8 +493,6 @@ void drawLoop() {
 
         // Repaint screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Check collisions
 
         // Draw scene
         drawScene();

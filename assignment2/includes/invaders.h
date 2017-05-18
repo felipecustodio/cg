@@ -96,13 +96,17 @@ typedef struct laser {
         // Has it exploded yet?
         int explosion;
 
+        // Color
+        char color;
+
 } LASER;
 
-LASER* createLaser(int x, int y);
+LASER* createLaser(int x, int y, int color);
 void destroyLaser(LASER *laser);
 
 // Action
-void shootLaser(LASER** shots, int *amount, int playerX);
+void shootLaser_Player(LASER** shots, int *amount, int x);
+void shootLaser_Enemy(LASER** shots, int *amount, int x, int y);
 void drawLaser(LASER* laser);
 /* ------------------------------- LASER ------------------------------------ */
 
