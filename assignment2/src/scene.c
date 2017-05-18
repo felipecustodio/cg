@@ -49,6 +49,7 @@ int loadTextures() {
         // Background
         background_texture = loadTexture("./assets/bg.png");
         // background_texture = loadTexture("./assets/bgmaterial.png");
+        base_texture = loadTexture("./assets/base.png");
 
         // Parallax
         parallax1_texture = loadTexture("./assets/parallax1.png");
@@ -283,10 +284,25 @@ void drawScene() {
         freeQuad(parallax2Sprite);
         /*--------------------END--------------------*/
 
+        /*--------------------BASE--------------------*/
+        glLoadIdentity();
+        Quadrilateral *base = createQuad();
+        setQuadCoordinates(base, -VIEWPORT_X, -VIEWPORT_Y,
+                                -VIEWPORT_X, -200,
+                                VIEWPORT_X, -200,
+                                VIEWPORT_X, -VIEWPORT_Y);
+        setQuadTexture(base, base_texture);
+        drawQuadTextured(base);
+        freeQuad(base);
+
+        /*--------------------END--------------------*/
+
+
         // matrix for player
         glLoadIdentity();
 
         /*--------------------PLAYER--------------------*/
+        glColor3f(1.0f, 1.0f, 1.0f);
         if (player == NULL) {
             player = createPlayer();
         }
