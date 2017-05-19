@@ -8,6 +8,7 @@
 #include <GL/glut.h>
 #include "./SOIL/SOIL.h"
 #include <SDL/SDL.h>
+#include <time.h>
 #include "shapes.h"
 #include "transforms.h"
 #include "physics.h"

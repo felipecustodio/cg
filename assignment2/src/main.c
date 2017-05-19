@@ -10,6 +10,7 @@
 
 #include <GL/glut.h>
 #include <SDL/SDL.h>
+#include <time.h>
 
 #include "scene.h"
 #include "settings.h"
@@ -58,6 +59,9 @@ int main(int argc, char* argv[]) {
 
         // PLAYER COOLDOWN TIMER INIT
         glutTimerFunc(500, cooldown, 0);
+
+        // SET SEED FOR RANDOM NUMBERS
+        srand(time(NULL));
 
         // START RENDERING LOOP
         glutMainLoop(); // Start operations according to the specifications above

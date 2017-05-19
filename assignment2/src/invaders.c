@@ -209,7 +209,6 @@ void moveEnemies(ENEMY** enemies) {
 }
 
 void drawEnemy(ENEMY* enemy) {
-        GLfloat time; // get curret elapsed time since init
         glLoadIdentity(); // load matrix for new enemy
         Quadrilateral *enemySprite = createQuad();
             setQuadCoordinates(enemySprite,
@@ -219,10 +218,11 @@ void drawEnemy(ENEMY* enemy) {
             enemy->x[3], enemy->y[3]); // initial coordinates
 
             // Change enemy animation frame every 500 ms
-            time = glutGet(GLUT_ELAPSED_TIME);
+            int random = rand() % 20; // 0 to 19
+            GLfloat time = glutGet(GLUT_ELAPSED_TIME);
             if (enemy->current_time - time < -500) {
                     // change animation frame
-                    enemy->frame = changeFrame(enemy->frame);
+                    if (random <= 14) enemy->frame = changeFrame(enemy->frame); // only change when random <= 14
                     enemy->current_time = time;
             }
 
