@@ -156,24 +156,21 @@ void moveEnemies(ENEMY** enemies) {
   int i = 0;
 
   // Verificar colisão com direita
-  //printf("conta: %f\n", enemies[14]->pos_x - enemies[14]->x[2]);
-  printf("coordenada: %f\n", enemies[14]->x[2]);
-  if(!(checkBorders(enemies[14]->pos_x - enemies[14]->x[2]))) {
+  if(enemyXSpeed == 1 && (!checkBorders(enemies[14]->boundaryR))) {
           // move left
           enemyXSpeed = -1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y += enemyYSpeed;
+            enemies[i]->pos_y -= enemyYSpeed;
             enemies[i]->boundaryD += enemyYSpeed;
           }
   }
 
   // Verificar colisão com esquerda
-  //printf("pos_x[10]: %f\n", enemies[10]->pos_x + enemies[10]->x[1]);
-  if(!(checkBorders(enemies[10]->pos_x + enemies[10]->x[1]))) {
+  if(enemyXSpeed == -1.0f && (!checkBorders(enemies[10]->boundaryL))) {
           // move right
           enemyXSpeed = 1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y += enemyYSpeed;
+            enemies[i]->pos_y -= enemyYSpeed;
             enemies[i]->boundaryD += enemyYSpeed;
           }
   }
