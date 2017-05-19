@@ -325,7 +325,7 @@ void saveGame() {
 
 }
 
-void resetGame(){
+void resetGame() {
     // invaders.c variables
     playerPosition = 0;
 

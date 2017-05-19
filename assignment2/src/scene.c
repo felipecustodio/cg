@@ -137,6 +137,7 @@ void keyPress(unsigned char key, int x, int y) {
                 shoot_flag = 0;
             }
             else if(gameover) {
+                enemies_left = 25;
                 resetGame();
             }
         } else if (key == 'r' || key == 'R') {
@@ -213,7 +214,7 @@ void reshape(int width, int height) {
 int initAudio() {
 
         // Audio assets
-        char* BG = "./assets/audio/unchartedworlds.wav";
+        char* BG = "./assets/audio/uncharted8bit.wav";
         char* BLASTER = "./assets/audio/tie-blaster.wav";
         char* BLASTER2 = "./assets/audio/laser1.wav";
         char* DESTROY1 = "./assets/audio/explosion.wav";
