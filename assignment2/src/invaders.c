@@ -58,6 +58,9 @@ PLAYER* createPlayer() {
         // Player score starts in 0
         player->score = 0;
 
+        // Player starts without powerup
+        player->powerup = 0;
+
         // Timer before shooting again
         player->cooldown = 0;
 

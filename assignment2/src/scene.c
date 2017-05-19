@@ -1,5 +1,4 @@
 #include <stdlib.h>
-//#include "../includes/invaders.h"
 #include "../includes/scene.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -34,15 +33,16 @@ Mix_Chunk *explosion = NULL;
 Mix_Chunk *fanfare = NULL;
 Mix_Chunk *coin = NULL;
 Mix_Chunk *lose = NULL;
+Mix_Chunk *powerup = NULL;
 Mix_Chunk *bg = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
 
-void timer(int value){
+void cooldown(int value) {
     //glutPostRedisplay();
     // 100 milliseconds
     shoot_flag = 1;
-    glutTimerFunc(500, timer, 0);
+    glutTimerFunc(500, cooldown, 0);
 }
 
 int loadTextures() {
@@ -143,7 +143,7 @@ void keyPress(unsigned char key, int x, int y) {
                     shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
                 }
                 shootLaser_Player(shots_player, &shots_player_count, playerPosition);
-                shoot_flag = 0;
+                if(!player->powerup) shoot_flag = 0;
             }
             else if(gameover) {
                 enemies_left = 25;
@@ -157,6 +157,9 @@ void keyPress(unsigned char key, int x, int y) {
                 exit(0);
         } else if (key == 'g' || key == 'G') {
                 gameover = 1;
+        } else if (key == 'k' || key == 'K') {
+                Mix_PlayChannel(-1, powerup, 0);
+                player->powerup = 1;
         }
 }
 
@@ -227,11 +230,12 @@ int initAudio() {
         char* BLASTER = "./assets/audio/tie-blaster.wav";
         char* BLASTER2 = "./assets/audio/laser1.wav";
         char* DESTROY1 = "./assets/audio/explosion.wav";
-        char* DESTROY2;
         char* WILHELM = "./assets/audio/wilhelm.wav";
         char* VICTORY = "./assets/audio/victory.wav";
         char* COIN_SOUND = "./assets/audio/coin.wav";
         char* LOSE_SOUND = "./assets/audio/lose.wav";
+        char* POWERUP_SOUND = "./assets/audio/powerup.wav";
+
 
         // Initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
@@ -283,6 +287,12 @@ int initAudio() {
         lose = Mix_LoadWAV(LOSE_SOUND);
         if (lose == NULL) {
                 printf("ERROR lose %s\n", Mix_GetError());
+                // return -1;
+        }
+
+        powerup = Mix_LoadWAV(POWERUP_SOUND);
+        if (lose == NULL) {
+                printf("ERROR powerup %s\n", Mix_GetError());
                 // return -1;
         }
 
@@ -723,6 +733,7 @@ void checkScore() {
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 void drawLoop() {
+
         // Background color
         glClearColor(0.0f, 0.0f, 0.0f, 1);
         glColor3f(1.0f, 1.0f, 1.0f);

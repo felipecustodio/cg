@@ -52,6 +52,9 @@ typedef struct player {
         // Score
         int score;
 
+        // Powerup
+        int powerup;
+
         // Laser cooldown
         int cooldown;
 

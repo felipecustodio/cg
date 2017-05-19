@@ -22,7 +22,7 @@ void keyPress(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);
 void keyHold();
 /* -------------------------------- INPUT ----------------------------------- */
-void timer(int value);
+void cooldown(int value);
 
 /* ------------------------------- TEXTURES --------------------------------- */
 // HUD
