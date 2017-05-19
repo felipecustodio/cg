@@ -283,15 +283,15 @@ void checkCollisions() {
     for (i = 0; i < shots_player_count; i++) {
         for (j = 0; j < 25; j ++) {
             if (enemies != NULL) {
-                if (enemies[j] != NULL) {
-                        if(shots_player[i] != NULL) {
+                if (enemies[j]->health > 0) {
+                        if(shots_player[i]->explosion == 0) {
                             // Check X boundaries
                             if (shots_player[i]->x[0] >= enemies[j]->boundaryL &&
                                 shots_player[i]->x[2] <= enemies[j]->boundaryR) {
                                 // Check Y boundaries
                                 if (shots_player[i]->boundaryU >= enemies[j]->boundaryD) {
                                         Mix_PlayChannel(-1, explosion, 0);
-                                        // destroyDesallocLaser(i); // destroy laser
+                                        destroyLaser(shots_player[i]); // destroy laser
                                         destroyEnemy(enemies[j]); // destroy enemy
                                         player->score = player->score + 10; // update score
                                 }
@@ -458,7 +458,7 @@ void drawScene() {
         }
 
         for (i = 0; i < 25; i++) {
-                if (enemies[i] != NULL) {
+                if (enemies[i]->health > 0) {
                         drawEnemy(enemies[i]);
                 }
         }

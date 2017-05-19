@@ -188,7 +188,7 @@ void moveEnemies(ENEMY** enemies) {
 
   // Update positions
   for (i = 0; i < TOTAL_ENEMIES; i++) {
-                if (enemies[i] != NULL) {
+                if (enemies[i]->health > 0) {
                         enemies[i]->pos_x += enemyXSpeed;
                         enemies[i]->boundaryL += enemyXSpeed;
                         enemies[i]->boundaryR += enemyXSpeed;
@@ -226,7 +226,10 @@ void drawEnemy(ENEMY* enemy) {
 }
 
 void destroyEnemy(ENEMY* enemy) {
-        if(enemy != NULL) free(enemy);
+        // if(enemy != NULL) free(enemy);
+        enemy->health = 0;
+        enemy->boundaryL = 999999;
+        enemy->boundaryR = 999999;
 }
 
 /* ------------------------------- ENEMY ------------------------------------ */
@@ -274,6 +277,7 @@ void shootLaser_Enemy(LASER** shots, int *amount, int x, int y) {
 }
 
 void drawLaser(LASER* laser) {
+        if (laser->explosion == 1) return -1;
         glLoadIdentity(); // load matrix for new laser
         Quadrilateral *laserSprite = createQuad();
             setQuadCoordinates(laserSprite,
@@ -295,7 +299,9 @@ void drawLaser(LASER* laser) {
 }
 
 void destroyLaser(LASER* laser) {
-        if (laser != NULL) free(laser);
+        laser->explosion = 1;
+        laser->boundaryU = 999999;
+        laser->boundaryD = 999999;
 }
 /* -------------------------------- LASER ----------------------------------- */
 
