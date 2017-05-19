@@ -345,7 +345,7 @@ void checkCollisions() {
     for(i = 0; i < shots_player_count; i++) {
         // Check top boundary
         if(shots_player[i] != NULL && shots_player[i]->boundaryU >= 340) {
-                destroyDesallocLaser(i);
+                destroyLaser(shots_player[i]);
         }
     }
 
