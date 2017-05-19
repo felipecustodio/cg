@@ -9,6 +9,10 @@ GLfloat enemyPositionX = 0; // enemy position (x)
 GLfloat enemyPositionY = 0; // enemy position (y)
 GLfloat enemySpeed = 0; // enemy horizontal speed
 GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
+
+const int WIDTH_ENEMY_MATRIX = 5;
+const int HEIGHT_ENEMY_MATRIX = 5;
+const int TOTAL_ENEMIES = 25;
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 /* ------------------------------- PLAYER ----------------------------------- */
@@ -71,47 +75,90 @@ char checkBorders(GLfloat x) {
 /* ------------------------------- PLAYER ----------------------------------- */
 
 /* ------------------------------- ENEMY ------------------------------------ */
-ENEMY* createEnemy(int design) {
-        ENEMY* enemy = (ENEMY*)malloc(sizeof(ENEMY));
+ENEMY** createEnemyMatrix() {
+  int i = 0, j = 0;
+
+  ENEMY** enemies = (ENEMY**) malloc (sizeof(ENEMY*) * TOTAL_ENEMIES);
+
+  for (i = 0; i < TOTAL_ENEMIES; i++) {
+    enemies[i] = (ENEMY*) malloc (sizeof(ENEMY));
+    createEnemy(enemies[i], i/WIDTH_ENEMY_MATRIX, (i - (i / WIDTH_ENEMY_MATRIX) * WIDTH_ENEMY_MATRIX));
+  }
+
+  return enemies;
+}
+
+void destroyEnemyMatrix(ENEMY** enemies) {
+  int i = 0;
+
+  for (i = 0; i < TOTAL_ENEMIES; i++) {
+    free(enemies[i]);
+  }
+
+  enemies = NULL;
+}
+
+void createEnemy(ENEMY* enemy, int xindex, int yindex) {
 
         // Set coordinates
-        enemy->x[0] = 0;
-        enemy->x[1] = 0;
-        enemy->x[2] = 0;
-        enemy->x[3] = 0;
+        enemy->x[0] = -220 + (yindex * 100);
+        enemy->x[1] = -220 + (yindex * 100);
+        enemy->x[2] = -180 + (yindex * 100);
+        enemy->x[3] = -180 + (yindex * 100);
 
-        enemy->y[0] = 0;
-        enemy->y[1] = 0;
-        enemy->y[2] = 0;
-        enemy->y[3] = 0;
+        enemy->y[0] = 120 - (xindex * 60);
+        enemy->y[1] = 160 - (xindex * 60);
+        enemy->y[2] = 160 - (xindex * 60);
+        enemy->y[3] = 120 - (xindex * 60);
 
-        enemy->shape = 0;
+        if (xindex == 3 || xindex == 4) {
+          enemy->shape = 1;
+        }
+        else if (xindex == 0 || xindex == 1) {
+          enemy->shape = 3;
+        }
+        else {
+          enemy->shape = 2;
+        }
 
         // Reset variables
-        enemy->pos_x = 0;
-        enemy->pos_y = 0;
         enemy->health = 1;
         enemy->cooldown = 0;
-        return enemy;
-}
-void destroyEnemy(ENEMY* enemy) {
-    free(enemy);
 }
 
 void drawEnemy(ENEMY* enemy) {
-        glLoadIdentity(); // load matrix for new laser
+        glLoadIdentity(); // load matrix for new enemy
         Quadrilateral *enemySprite = createQuad();
             setQuadCoordinates(enemySprite,
             enemy->x[0], enemy->y[0],
             enemy->x[1], enemy->y[1],
             enemy->x[2], enemy->y[2],
             enemy->x[3], enemy->y[3]); // initial coordinates
-            glTranslatef(enemy->pos_x, enemy->pos_y, 0.0f); // move enemy
+
+            // set enemy shape
+            switch(enemy->shape) {
+                    case 1:
+                            setQuadTexture(enemySprite, alien_1_1); // choose texture
+                            break;
+                    case 2:
+                            setQuadTexture(enemySprite, alien_2_1); // choose texture
+                            break;
+                    case 3:
+                            setQuadTexture(enemySprite, alien_3_1); // choose texture
+                            break;
+            }
+
+            //glTranslatef(enemy->pos_x, enemy->pos_y, 0.0f); // move enemy
             drawQuadTextured(enemySprite); // draw enemy on screen
         freeQuad(enemySprite);
 }
-/* ------------------------------- ENEMY ------------------------------------ */
 
+void destroyEnemy(ENEMY* enemy){
+
+}
+
+
+/* ------------------------------- ENEMY ------------------------------------ */
 
 /* ------------------------------- LASER ------------------------------------ */
 LASER* createLaser(int x, int y, int color) {

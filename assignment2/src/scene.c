@@ -70,12 +70,12 @@ int loadTextures() {
         player_texture = loadTexture("./assets/textures/ship.png");
 
         // Enemy sprites
-        alien_1_1 = loadTexture("./assets/textures/alien_1_1.png");
-        alien_1_2 = loadTexture("./assets/textures/alien_1_2.png");
-        alien_2_1 = loadTexture("./assets/textures/alien_2_1.png");
-        alien_2_2 = loadTexture("./assets/textures/alien_2_2.png");
-        alien_3_1 = loadTexture("./assets/textures/alien_3_1.png");
-        alien_3_2 = loadTexture("./assets/textures/alien_3_2.png");
+        alien_1_1 = loadTexture("./assets/textures/alien1_1.png");
+        alien_1_2 = loadTexture("./assets/textures/alien1_2.png");
+        alien_2_1 = loadTexture("./assets/textures/alien2_1.png");
+        alien_2_2 = loadTexture("./assets/textures/alien2_2.png");
+        alien_3_1 = loadTexture("./assets/textures/alien3_1.png");
+        alien_3_2 = loadTexture("./assets/textures/alien3_2.png");
 
         if (!(hudL || hudM || hudR || background_texture
                 || player_texture ||alien_1_1 ||
@@ -392,6 +392,16 @@ void drawScene() {
                 // verify y
                 // if hit, -1 player health
                 // if player health == 0 game over
+        }
+
+        /*-------------------------END-------------------------*/
+
+        /*------------------------ENEMY------------------------*/
+
+        enemies = createEnemyMatrix();
+
+        for (i = 0; i < 25; i++) {
+          drawEnemy(enemies[i]);
         }
 
         /*-------------------------END-------------------------*/

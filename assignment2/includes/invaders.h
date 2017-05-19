@@ -78,9 +78,11 @@ typedef struct enemy {
 
 } ENEMY;
 
-ENEMY* createEnemy(int design);
-void destroyEnemy(ENEMY* enemy);
+ENEMY** createEnemyMatrix();
+void destroyEnemyMatrix(ENEMY** enemies);
+void createEnemy(ENEMY* enemy, int xindex, int yindex);
 void drawEnemy(ENEMY* enemy);
+void destroyEnemy(ENEMY* enemy);
 /* ------------------------------- ENEMY ------------------------------------ */
 
 /* ------------------------------- LASER ------------------------------------ */
