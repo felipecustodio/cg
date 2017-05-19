@@ -293,6 +293,7 @@ void checkCollisions() {
                                         Mix_PlayChannel(-1, explosion, 0);
                                         destroyLaser(shots_player[i]); // destroy laser
                                         destroyEnemy(enemies[j]); // destroy enemy
+                                        enemies_left--;
                                         player->score = player->score + 10; // update score
                                 }
                         }
@@ -370,6 +371,12 @@ void checkCollisions() {
 void checkGameOver(){
     if(player->health == 0)
         gameover = 1;
+}
+
+void checkVictory() {
+        if (enemies_left <= 0) {
+                gameover = 1;
+        }
 }
 /*--------------------GAME OVER CHECK-------------------*/
 /* ------------------------------- MECHANICS -------------------------------- */
@@ -628,6 +635,9 @@ void drawLoop() {
 
         // Check for Game Over
         checkGameOver();
+
+        // Check for Victory
+        checkVictory();
 
         if(!paused && !gameover) {
             // Check for key presses

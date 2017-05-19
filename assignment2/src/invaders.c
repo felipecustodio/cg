@@ -5,6 +5,8 @@
 // Amount of lasers on screen
 int shots_player_count = 0;
 int shots_enemy_count = 0;
+int enemies_left = 25;
+
 
 // Current level
 int level = 1;

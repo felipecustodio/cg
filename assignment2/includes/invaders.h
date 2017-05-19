@@ -17,6 +17,7 @@
 // Game mechanics
 extern int shots_player_count;
 extern int shots_enemy_count;
+extern int enemies_left;
 extern int level;
 extern int paused;
 extern int gameover;
