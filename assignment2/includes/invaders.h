@@ -21,6 +21,7 @@ extern int enemies_left;
 extern int level;
 extern int paused;
 extern int gameover;
+extern int victory;
 
 // Movement
 extern GLfloat playerPosition; // player position (x)

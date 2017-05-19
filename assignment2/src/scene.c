@@ -24,6 +24,7 @@ Mix_Chunk *blaster = NULL;
 Mix_Chunk *blaster2 = NULL;
 Mix_Chunk *wilhelm = NULL;
 Mix_Chunk *explosion = NULL;
+Mix_Chunk *fanfare = NULL;
 Mix_Chunk *bg = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -40,9 +41,6 @@ int loadTextures() {
         hudL = loadTexture("./assets/textures/hudL.png");
         hudM = loadTexture("./assets/textures/hudM.png");
         hudR = loadTexture("./assets/textures/hudR.png");
-
-        // TODO Game over screen
-        // game_over = loadTexture("./assets/textures/game_over.png");
 
         // Background
         background_texture = loadTexture("./assets/textures/bg.png");
@@ -66,12 +64,13 @@ int loadTextures() {
 
         pause = loadTexture("./assets/textures/paused.png");
         game_over = loadTexture("./assets/textures/gameover.png");
+        victory_screen = loadTexture("./assets/textures/victory_screen.png");
 
         if (!(hudL || hudM || hudR || background_texture
                 || player_texture ||alien_1_1 ||
                 alien_1_2 || alien_2_1 ||
                 alien_2_2 || alien_3_1 ||
-                alien_3_2 || pause || game_over)) {
+                alien_3_2 || pause || game_over || victory_screen)) {
                 return EXIT_FAILURE;
         }
 
@@ -217,6 +216,7 @@ int initAudio() {
         char* DESTROY1 = "./assets/audio/explosion.wav";
         char* DESTROY2;
         char* WILHELM = "./assets/audio/wilhelm.wav";
+        char* VICTORY = "./assets/audio/victory.wav";
 
         // Initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO) < 0)
@@ -241,6 +241,10 @@ int initAudio() {
 
         explosion = Mix_LoadWAV(DESTROY1);
         if (explosion == NULL)
+    		return -1;
+
+        fanfare = Mix_LoadWAV(VICTORY);
+        if (victory == NULL)
     		return -1;
 
     // Load BGM
@@ -294,6 +298,10 @@ void checkCollisions() {
                                         destroyLaser(shots_player[i]); // destroy laser
                                         destroyEnemy(enemies[j]); // destroy enemy
                                         enemies_left--;
+                                        // check for victory
+                                        if (enemies_left == 0) {
+                                                Mix_PlayChannel(-1, fanfare, 0); // play fanfare
+                                        }
                                         player->score = player->score + 10; // update score
                                 }
                         }
@@ -374,8 +382,8 @@ void checkGameOver(){
 }
 
 void checkVictory() {
-        if (enemies_left <= 0) {
-                gameover = 1;
+        if (enemies_left == 0) {
+                victory = 1;
         }
 }
 /*--------------------GAME OVER CHECK-------------------*/
@@ -614,6 +622,32 @@ void gameOverScreen() {
             drawQuadTextured(gameOver);
         freeQuad(gameOver);
 }
+
+void victoryScreen() {
+        // Refresh matrix for new object
+        glLoadIdentity();
+
+        glColor4f(0.0f, 0.0f, 0.0f, 0.5f);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glBegin(GL_QUADS);
+                glVertex2f(-VIEWPORT_X, -VIEWPORT_Y);
+                glVertex2f(-VIEWPORT_X, VIEWPORT_Y);
+                glVertex2f(VIEWPORT_X, VIEWPORT_Y);
+                glVertex2f(VIEWPORT_X, -VIEWPORT_Y);
+            glEnd();
+            glDisable(GL_BLEND);
+        glColor3f(1.0f, 1.0f, 1.0f);
+
+        Quadrilateral *victoryQuad = createQuad();
+            setQuadCoordinates(victoryQuad, -265, -75,
+                                -265, 75,
+                                265, 75,
+                                265, -75);
+            setQuadTexture(victoryQuad, victory_screen);
+            drawQuadTextured(victoryQuad);
+        freeQuad(victoryQuad);
+}
 /*-------------------------------- RENDERING ---------------------------------*/
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
@@ -638,8 +672,10 @@ void drawLoop() {
 
         // Check for Victory
         checkVictory();
+        printf("ENEMIES LEFT: %d\n", enemies_left);
 
-        if(!paused && !gameover) {
+
+        if(!paused && !gameover && !victory) {
             // Check for key presses
             keyHold();
 
@@ -654,6 +690,11 @@ void drawLoop() {
         // Game Over Screen
         if (gameover)
             gameOverScreen();
+
+        // Victory screen
+        if (victory) {
+                victoryScreen();
+        }
 
         // Clear buffer
         glutSwapBuffers();

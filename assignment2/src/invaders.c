@@ -7,11 +7,11 @@ int shots_player_count = 0;
 int shots_enemy_count = 0;
 int enemies_left = 25;
 
-
 // Current level
 int level = 1;
 int paused = 0;
 int gameover = 0;
+int victory = 0;
 
 // Initialize external globals
 GLfloat playerPosition = 0; // player position (x)
