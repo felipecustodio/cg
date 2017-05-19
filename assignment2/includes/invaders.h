@@ -14,6 +14,9 @@
 #include "settings.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
+// Textures
+extern GLuint laserblur;
+
 // Game mechanics
 extern int shots_player_count;
 extern int shots_enemy_count;

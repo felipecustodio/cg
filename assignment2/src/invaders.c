@@ -1,6 +1,9 @@
 #include "../includes/invaders.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
+// Textures
+GLuint laserblur;
+
 // Game mechanics
 // Amount of lasers on screen
 int shots_player_count = 0;
@@ -35,14 +38,14 @@ PLAYER* createPlayer() {
         PLAYER* player = (PLAYER*)malloc(sizeof(PLAYER));
 
         // Set coordinates
-        player->x[0] = -28;
-        player->x[1] = -28;
-        player->x[2] = 28;
-        player->x[3] = 28;
-        player->y[0] = -256;
+        player->x[0] = -22;
+        player->x[1] = -22;
+        player->x[2] = 22;
+        player->x[3] = 22;
+        player->y[0] = -250;
         player->y[1] = -200;
         player->y[2] = -200;
-        player->y[3] = -256;
+        player->y[3] = -250;
 
         // Set boundaries
         player->boundary_left = -28;
@@ -151,7 +154,7 @@ void moveEnemies(ENEMY** enemies){
 
   // Verificar colisão com direita
   //printf("conta: %f\n", enemies[14]->pos_x - enemies[14]->x[2]);
-  printf("coordenada: %f\n", enemies[14]->x[2]);
+  IF_DEBUG printf("coordenada: %f\n", enemies[14]->x[2]);
   if(!(checkBorders(enemies[14]->pos_x - enemies[14]->x[2]))) {
           // move left
           enemyXSpeed = -1.0f;
@@ -222,8 +225,8 @@ LASER* createLaser(int x, int y, int color) {
         laser->x[3] = x + 5 - 3;
 
         laser->y[0] = y;
-        laser->y[1] = y + 40;
-        laser->y[2] = y + 40;
+        laser->y[1] = y + 30;
+        laser->y[2] = y + 30;
         laser->y[3] = y;
 
         laser->position = 0;
@@ -253,6 +256,7 @@ void drawLaser(LASER* laser) {
             laser->x[1], laser->y[1],
             laser->x[2], laser->y[2],
             laser->x[3], laser->y[3]); // initial coordinates
+            setQuadTexture(laserSprite, laserblur);
             switch(laser->color) {
                     case 0:
                         setQuadColor(laserSprite, 0.75f, 1.0f, 1.0f); // player laser = blue
@@ -263,6 +267,12 @@ void drawLaser(LASER* laser) {
             }
             glTranslatef(0.0f, laser->position, 0.0f); // move laser
             drawQuadFilled(laserSprite); // draw player on screen
+            setQuadCoordinates(laserSprite,
+            laser->x[0] - 8, laser->y[0] - 8,
+            laser->x[1] - 8, laser->y[1] + 8,
+            laser->x[2] + 8, laser->y[2] + 8,
+            laser->x[3] + 8, laser->y[3] - 8); // initial coordinates
+            drawQuadTextured(laserSprite);
         freeQuad(laserSprite);
 }
 
