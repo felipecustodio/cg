@@ -43,3 +43,5 @@ clear:
 
 clean:
 	rm *.o
+zip:
+	zip -r spaceinvaders.zip ../assignment2
