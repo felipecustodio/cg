@@ -17,10 +17,8 @@ int victory = 0;
 GLfloat playerPosition = 0; // player position (x)
 GLfloat playerSpeed = 7.0f;
 GLfloat enemyXSpeed = 1.0f;
-GLfloat enemyYSpeed = -0.5f;
+GLfloat enemyYSpeed = 3.0f;
 GLfloat laserSpeed = 10.0f; // laser vertical speed
-GLfloat enemySpeed = 0; // enemy horizontal speed
-GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
 
 GLfloat matrix_boundR;
 GLfloat matrix_boundL;

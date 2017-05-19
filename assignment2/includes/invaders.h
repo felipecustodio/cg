@@ -30,7 +30,6 @@ extern GLfloat laserSpeed; // laser speed
 extern GLfloat enemyPositionX; // enemy position (x)
 extern GLfloat enemyPositionY; // enemy position (y)
 extern GLfloat enemySpeed; // enemy horizontal speed
-extern GLfloat enemyApproach; // enemy vertical speed (approaching player base)
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 /* ------------------------------- PLAYER ----------------------------------- */
