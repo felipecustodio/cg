@@ -86,9 +86,10 @@ typedef struct enemy {
         GLfloat pos_y;
 
         // Boundaries
-        GLfloat boundaryL;
-        GLfloat boundaryR;
-        GLfloat boundaryD;
+        GLfloat boundaryL; // left
+        GLfloat boundaryR; // right
+        GLfloat boundaryD; // down
+        GLfloat boundaryU; // up
 
         // Laser cooldown
         int cooldown;

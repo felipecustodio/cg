@@ -235,7 +235,7 @@ int initAudio() {
 
         // Initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
-                printf("ERROR %s\n", Mix_GetError());
+                printf("ERROR SDL %s\n", Mix_GetError());
                 return -1;
         }
 
@@ -246,25 +246,25 @@ int initAudio() {
 	// Load SFX
 	blaster = Mix_LoadWAV(BLASTER);
 	if (blaster == NULL) {
-                printf("ERROR %s\n", Mix_GetError());
+                printf("ERROR blaster %s\n", Mix_GetError());
                 return -1;
         }
 
         blaster2 = Mix_LoadWAV(BLASTER2);
         if (blaster2 == NULL) {
-                printf("ERROR %s\n", Mix_GetError());
+                printf("ERROR blaster2 %s\n", Mix_GetError());
                 return -1;
         }
 
         wilhelm = Mix_LoadWAV(WILHELM);
         if (wilhelm == NULL) {
-                printf("ERROR %s\n", Mix_GetError());
+                printf("ERROR wilhelm %s\n", Mix_GetError());
                 return -1;
         }
 
         explosion = Mix_LoadWAV(DESTROY1);
         if (explosion == NULL) {
-                printf("ERROR %s\n", Mix_GetError());
+                printf("ERROR explosion %s\n", Mix_GetError());
                 return -1;
         }
 
@@ -342,7 +342,7 @@ void checkCollisions() {
                             if (shots_player[i]->x[0] >= enemies[j]->boundaryL &&
                                 shots_player[i]->x[2] <= enemies[j]->boundaryR) {
                                 // Check Y boundaries
-                                if (shots_player[i]->boundaryU >= enemies[j]->boundaryD) {
+                                if (shots_player[i]->boundaryU <= enemies[j]->boundaryD && shots_player[i]->boundaryD >= enemies[j]->boundaryU) {
                                         Mix_PlayChannel(-1, explosion, 0);
                                         destroyLaser(shots_player[i]); // destroy laser
                                         destroyEnemy(enemies[j]); // destroy enemy
@@ -715,7 +715,6 @@ void victoryScreen() {
 void checkScore() {
         if (player->score > current_score) {
                 Mix_PlayChannel(-1, coin, 0);
-                printf("ERROR %s\n", Mix_GetError());
                 current_score += 50;
         }
 }

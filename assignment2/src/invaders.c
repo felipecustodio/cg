@@ -150,6 +150,7 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
         enemy->boundaryL = enemy->x[0]; // left
         enemy->boundaryR = enemy->x[2]; // right
         enemy->boundaryD = enemy->y[1]; // down
+        enemy->boundaryU = enemy->y[0]; // up
 
         // Reset variables
         enemy->pos_x = 0;
@@ -167,9 +168,10 @@ void moveEnemies(ENEMY** enemies) {
           // reverse, move left
           enemyXSpeed = -enemyXSpeed;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-                  if(enemies[i] != NULL) {
+                  if(enemies[i]->health > 0) {
                           enemies[i]->pos_y -= enemyYSpeed; // update position
                           enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                          enemies[i]->boundaryU -= enemyYSpeed; // move boundary
                   }
           }
   }
@@ -179,9 +181,10 @@ void moveEnemies(ENEMY** enemies) {
           // reverse, move right
           enemyXSpeed = -enemyXSpeed;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-                  if(enemies[i] != NULL) {
+                  if(enemies[i]->health > 0) {
                           enemies[i]->pos_y -= enemyYSpeed; // update position
                           enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                          enemies[i]->boundaryU -= enemyYSpeed; // move boundary
                   }
           }
   }
@@ -189,9 +192,9 @@ void moveEnemies(ENEMY** enemies) {
   // Update positions
   for (i = 0; i < TOTAL_ENEMIES; i++) {
                 if (enemies[i]->health > 0) {
-                        enemies[i]->pos_x += enemyXSpeed;
-                        enemies[i]->boundaryL += enemyXSpeed;
-                        enemies[i]->boundaryR += enemyXSpeed;
+                        enemies[i]->pos_x += enemyXSpeed; // move enemy
+                        enemies[i]->boundaryL += enemyXSpeed; // move boundary
+                        enemies[i]->boundaryR += enemyXSpeed; // move boundary
                 }
         }
         matrix_boundL += enemyXSpeed;
@@ -230,6 +233,8 @@ void destroyEnemy(ENEMY* enemy) {
         enemy->health = 0;
         enemy->boundaryL = 999999;
         enemy->boundaryR = 999999;
+        enemy->boundaryD = 999999;
+        enemy->boundaryU = 999999;
 }
 
 /* ------------------------------- ENEMY ------------------------------------ */

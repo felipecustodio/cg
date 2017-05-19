@@ -30,9 +30,7 @@ int main(int argc, char* argv[]) {
         initAudio(); // load audio files and set callback functions
 
         // Start BGM on loop
-        if (Mix_PlayChannel(-1, bg, -1) < 0) {
-                printf("ERROR %s\n", Mix_GetError());
-        }
+        Mix_PlayChannel(-1, bg, -1);
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
