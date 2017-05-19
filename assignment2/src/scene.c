@@ -204,7 +204,6 @@ void reshape(int width, int height) {
 }
 /* -------------------------------- WINDOW ---------------------------------- */
 
-
 /* -------------------------------- AUDIO ----------------------------------- */
 int initAudio() {
 
@@ -230,13 +229,13 @@ int initAudio() {
 	if (blaster == NULL)
 		return -1;
 
-    blaster2 = Mix_LoadWAV(BLASTER2);
-	if (blaster2 == NULL)
-		return -1;
+        blaster2 = Mix_LoadWAV(BLASTER2);
+        if (blaster2 == NULL)
+        	return -1;
 
-    wilhelm = Mix_LoadWAV(WILHELM);
-	if (wilhelm == NULL)
-		return -1;
+        wilhelm = Mix_LoadWAV(WILHELM);
+        if (wilhelm == NULL)
+        	return -1;
 
         explosion = Mix_LoadWAV(DESTROY1);
         if (explosion == NULL)
@@ -246,12 +245,11 @@ int initAudio() {
         if (victory == NULL)
     		return -1;
 
-    // Load BGM
-    bg = Mix_LoadWAV(BG);
-	if (bg == NULL) {
-        printf("ERROR %s\n", Mix_GetError());
-        return -1;
-    }
+        // Load BGM
+        bg = Mix_LoadWAV(BG);
+        if (bg == NULL) {
+                return -1;
+        }
 
 }
 
