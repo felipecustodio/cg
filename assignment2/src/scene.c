@@ -229,7 +229,6 @@ int initAudio() {
                 return -1;
         }
 
-
 	// Initialize SDL_mixer
 	if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
 		return -1;
