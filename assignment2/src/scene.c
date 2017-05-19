@@ -3,10 +3,15 @@
 #include "../includes/scene.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
+/* ------ BG ----- */
+GLfloat parallax_curYbg = 0.0;
+GLfloat parallax_curYfg = 0.0;
+GLfloat parallax_speedY = 0.5;
+
 /* ------ LASERS -----*/
 int shoot_flag = 1;
 
-/* ------ UI -----*/
+/* ------ UI ----- */
 const char* UI_reset = "Press R to reset game";
 const char* UI_shoot = "Press spacebar to shoot";
 const char* UI_move = "Press A/D to move left/right";
@@ -36,9 +41,12 @@ void timer(int value){
 
 int loadTextures() {
         // HUD
-        hudL = loadTexture("./assets/textures/hudL.png");
-        hudM = loadTexture("./assets/textures/hudM.png");
-        hudR = loadTexture("./assets/textures/hudR.png");
+        hudL = loadTexture("./assets/textures/hud/hudL.png");
+        hudM = loadTexture("./assets/textures/hud/hudM.png");
+        hudR = loadTexture("./assets/textures/hud/hudR.png");
+        hudShips = loadTexture("./assets/textures/hud/ships.png");
+        hudWave = loadTexture("./assets/textures/hud/wave.png");
+        hudScore = loadTexture("./assets/textures/hud/score.png");
 
         // TODO Game over screen
         // game_over = loadTexture("./assets/textures/game_over.png");
@@ -53,7 +61,7 @@ int loadTextures() {
         parallax2_texture = loadTexture("./assets/textures/parallax2.png");
 
         // Player sprite
-        player_texture = loadTexture("./assets/textures/ship.png");
+        player_texture = loadTexture("./assets/textures/galaga.png");
 
         // Enemy sprites
         alien_1_1 = loadTexture("./assets/textures/alien_1_1.png");
@@ -63,6 +71,8 @@ int loadTextures() {
         alien_3_1 = loadTexture("./assets/textures/alien_3_1.png");
         alien_3_2 = loadTexture("./assets/textures/alien_3_2.png");
 
+        laserblur = loadTexture("./assets/textures/laserblur.png");
+
         pause = loadTexture("./assets/textures/paused.png");
         game_over = loadTexture("./assets/textures/gameover.png");
 
@@ -70,7 +80,7 @@ int loadTextures() {
                 || player_texture ||alien_1_1 ||
                 alien_1_2 || alien_2_1 ||
                 alien_2_2 || alien_3_1 ||
-                alien_3_2 || pause || game_over)) {
+                alien_3_2 || laserblur || pause || game_over)) {
                 return EXIT_FAILURE;
         }
 
@@ -253,6 +263,15 @@ void audioCleanup() {
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /* ------------------------------- MECHANICS -------------------------------- */
+void parallaxMotionY(){
+    parallax_curYfg += parallax_speedY;
+    parallax_curYbg += parallax_speedY/2;
+    if(parallax_curYbg >= 2*VIEWPORT_Y + 200)
+        parallax_curYbg = 0;
+    if(parallax_curYfg >= 2*VIEWPORT_Y + 200)
+        parallax_curYfg = 0;
+}
+
 /*--------------------DESTRUCTION--------------------*/
 void destroyDesallocLaser(int i) {
     destroyLaser(shots_player[i]);
@@ -395,7 +414,7 @@ void drawScene() {
         // Move parallax relative to player
         int parallaxfactor = playerPosition / 12;
 
-        glTranslatef(parallaxfactor, 0.0f, 0.0f);
+        glTranslatef(parallaxfactor, parallax_curYbg, 0.0f);
 
         Quadrilateral *parallax1Sprite = createQuad();
             setQuadCoordinates(parallax1Sprite, -VIEWPORT_X - 100, -VIEWPORT_Y - 100,
@@ -404,6 +423,8 @@ void drawScene() {
                                 VIEWPORT_X + 100, -VIEWPORT_Y - 100);
             setQuadTexture(parallax1Sprite, parallax1_texture);
             drawQuadTextured(parallax1Sprite);
+            glTranslatef(0.0f, -(2*VIEWPORT_Y + 200), 0.0f);
+            drawQuadTextured(parallax1Sprite);
         freeQuad(parallax1Sprite);
 
         // Refresh matrix for new object
@@ -411,7 +432,7 @@ void drawScene() {
 
         parallaxfactor = playerPosition / 6;
 
-        glTranslatef(parallaxfactor, 0.0f, 0.0f);
+        glTranslatef(parallaxfactor, parallax_curYfg, 0.0f);
 
         Quadrilateral *parallax2Sprite = createQuad();
             setQuadCoordinates(parallax2Sprite, -VIEWPORT_X - 200, -VIEWPORT_Y - 200,
@@ -419,6 +440,8 @@ void drawScene() {
                                 VIEWPORT_X + 200, VIEWPORT_Y + 200,
                                 VIEWPORT_X + 200, -VIEWPORT_Y - 200);
             setQuadTexture(parallax2Sprite, parallax2_texture);
+            drawQuadTextured(parallax2Sprite);
+            glTranslatef(0.0f, -(2*VIEWPORT_Y + 200), 0.0f);
             drawQuadTextured(parallax2Sprite);
         freeQuad(parallax2Sprite);
         /*--------------------END--------------------*/
@@ -475,10 +498,13 @@ void drawHUD() {
         drawQuadTextured(hudL_sprite);
     freeQuad(hudL_sprite);
 
-    char const* hudL_text = "SHIPS";
-    Text* hudL = createText(GLUT_BITMAP_9_BY_15, hudL_text);
-        drawText(hudL, 10, 20);
-    freeText(hudL);
+    Quadrilateral *hudL_text = createQuad();
+        setQuadCoordinates(hudL_text, 0, 0, 0, 22, 72, 22, 72, 0);
+        setQuadTexture(hudL_text , hudShips);
+        glTranslatef(10.0f, 10.0f, 0.0f);
+        drawQuadTextured(hudL_text);
+        glTranslatef(-10.0f, -10.0f, 0.0f);
+    freeQuad(hudL_text);
 
     char hudL_cnt_text[2];
     sprintf(hudL_cnt_text, "%d", player->health);
@@ -498,10 +524,13 @@ void drawHUD() {
         drawQuadTextured(hudM_sprite);
     freeQuad(hudM_sprite);
 
-    char const* hudM_text = "WAVE";
-    Text* hudM = createText(GLUT_BITMAP_9_BY_15, hudM_text);
-        drawText(hudM, VIEWPORT_X/4 - 130, 45);
-    freeText(hudM);
+    Quadrilateral *hudM_text = createQuad();
+        setQuadCoordinates(hudM_text, 0, 0, 0, 18, 72, 18, 72, 0);
+        setQuadTexture(hudM_text , hudWave);
+        glTranslatef(57.0f, 42.0f, 0.0f);
+        drawQuadTextured(hudM_text);
+        glTranslatef(-57.0f, -42.0f, 0.0f);
+    freeQuad(hudM_text);
 
     char hudM_cnt_text[2];
     sprintf(hudM_cnt_text, "%d", level);
@@ -521,10 +550,13 @@ void drawHUD() {
         drawQuadTextured(hudR_sprite);
     freeQuad(hudR_sprite);
 
-    char const* hudR_text = "SCORE";
-    Text* hudR = createText(GLUT_BITMAP_9_BY_15, hudR_text);
-        drawText(hudR, VIEWPORT_X/2 - 188, 20);
-    freeText(hudR);
+    Quadrilateral *hudR_text = createQuad();
+        setQuadCoordinates(hudR_text, 0, 0, 0, 20, 84, 20, 84, 0);
+        setQuadTexture(hudR_text , hudScore);
+        glTranslatef(190.0f, 10.0f, 0.0f);
+        drawQuadTextured(hudR_text);
+        glTranslatef(-190.0f, -10.0f, 0.0f);
+    freeQuad(hudR_text);
 
     char hudR_cnt_text[2];
     sprintf(hudR_cnt_text, "%d", player->score);
@@ -606,6 +638,9 @@ void drawLoop() {
 
         // Check for Game Over
         checkGameOver();
+
+        // Parallax vertical motion
+        parallaxMotionY();
 
         if(!paused && !gameover){
             // Check for key presses

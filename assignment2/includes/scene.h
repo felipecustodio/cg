@@ -26,7 +26,7 @@ void timer(int value);
 
 /* ------------------------------- TEXTURES --------------------------------- */
 // HUD
-GLuint hudL, hudM, hudR;
+GLuint hudL, hudM, hudR, hudShips, hudWave, hudScore;
 
 // Textures
 GLuint background_texture, parallax1_texture, parallax2_texture, player_texture,
