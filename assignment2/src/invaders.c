@@ -128,6 +128,7 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
         enemy->y[2] = 160 - (xindex * 60);
         enemy->y[3] = 120 - (xindex * 60);
 
+        // Set enemy shapes for each line
         if (xindex == 3 || xindex == 4) {
           enemy->shape = 1;
         }
@@ -138,6 +139,11 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
           enemy->shape = 2;
         }
 
+        // Set boundaries
+        enemy->boundaryL = enemy->x[0]; // left
+        enemy->boundaryR = enemy->x[2]; // right
+        enemy->boundaryD = enemy->y[1]; // down
+
         // Reset variables
         enemy->pos_x = 0;
         enemy->pos_y = 0;
@@ -146,7 +152,7 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
 }
 
 
-void moveEnemies(ENEMY** enemies){
+void moveEnemies(ENEMY** enemies) {
   int i = 0;
 
   // Verificar colisão com direita
@@ -157,6 +163,7 @@ void moveEnemies(ENEMY** enemies){
           enemyXSpeed = -1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
             enemies[i]->pos_y += enemyYSpeed;
+            enemies[i]->boundaryD += enemyYSpeed;
           }
   }
 
@@ -167,11 +174,14 @@ void moveEnemies(ENEMY** enemies){
           enemyXSpeed = 1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
             enemies[i]->pos_y += enemyYSpeed;
+            enemies[i]->boundaryD += enemyYSpeed;
           }
   }
 
   for (i = 0; i < TOTAL_ENEMIES; i++) {
     enemies[i]->pos_x += enemyXSpeed;
+    enemies[i]->boundaryL += enemyXSpeed;
+    enemies[i]->boundaryR += enemyXSpeed;
   }
 }
 
