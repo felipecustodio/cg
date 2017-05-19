@@ -334,16 +334,16 @@ void resetGame(){
     player = createPlayer();
 
     int i = 0;
-    if(enemies){
-        for(i = 0; i < 25; i++){
-            if(enemies[i]){
+    if(enemies) {
+        for(i = 0; i < 25; i++) {
+            if(enemies[i]) {
                 destroyEnemy(enemies[i]);
             }
         }
     }
 
     i = 0;
-    for(i = 0; i < shots_player_count; i++){
+    for(i = 0; i < shots_player_count; i++) {
         destroyLaser(shots_player[i]);
     }
     free(shots_player);

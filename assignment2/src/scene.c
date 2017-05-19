@@ -6,6 +6,9 @@
 /* ------ LASERS -----*/
 int shoot_flag = 1;
 
+/* ------ SCORE -----*/
+int current_score = 50;
+
 /* ------ UI -----*/
 const char* UI_reset = "Press R to reset game";
 const char* UI_shoot = "Press spacebar to shoot";
@@ -25,6 +28,8 @@ Mix_Chunk *blaster2 = NULL;
 Mix_Chunk *wilhelm = NULL;
 Mix_Chunk *explosion = NULL;
 Mix_Chunk *fanfare = NULL;
+Mix_Chunk *coin = NULL;
+Mix_Chunk *lose = NULL;
 Mix_Chunk *bg = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -215,10 +220,15 @@ int initAudio() {
         char* DESTROY2;
         char* WILHELM = "./assets/audio/wilhelm.wav";
         char* VICTORY = "./assets/audio/victory.wav";
+        char* COIN_SOUND = "./assets/audio/coin.wav";
+        char* LOSE_SOUND = "./assets/lose.wav";
 
         // Initialize SDL
-	if (SDL_Init(SDL_INIT_AUDIO) < 0)
-		return -1;
+	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
+                printf("ERROR %s\n", Mix_GetError());
+                return -1;
+        }
+
 
 	// Initialize SDL_mixer
 	if (Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1)
@@ -226,29 +236,52 @@ int initAudio() {
 
 	// Load SFX
 	blaster = Mix_LoadWAV(BLASTER);
-	if (blaster == NULL)
-		return -1;
+	if (blaster == NULL) {
+                printf("ERROR %s\n", Mix_GetError());
+                return -1;
+        }
 
         blaster2 = Mix_LoadWAV(BLASTER2);
-        if (blaster2 == NULL)
-        	return -1;
+        if (blaster2 == NULL) {
+                printf("ERROR %s\n", Mix_GetError());
+                return -1;
+        }
 
         wilhelm = Mix_LoadWAV(WILHELM);
-        if (wilhelm == NULL)
-        	return -1;
+        if (wilhelm == NULL) {
+                printf("ERROR %s\n", Mix_GetError());
+                return -1;
+        }
 
         explosion = Mix_LoadWAV(DESTROY1);
-        if (explosion == NULL)
-    		return -1;
+        if (explosion == NULL) {
+                printf("ERROR %s\n", Mix_GetError());
+                return -1;
+        }
 
         fanfare = Mix_LoadWAV(VICTORY);
-        if (victory == NULL)
-    		return -1;
+        if (fanfare == NULL) {
+                printf("ERROR fanfare %s\n", Mix_GetError());
+                return -1;
+        }
+
+        coin = Mix_LoadWAV(COIN_SOUND);
+        if (coin == NULL) {
+                printf("ERROR coin %s\n", Mix_GetError());
+                // return -1;
+        }
+
+        lose = Mix_LoadWAV(LOSE_SOUND);
+        if (lose == NULL) {
+                printf("ERROR lose %s\n", Mix_GetError());
+                // return -1;
+        }
 
         // Load BGM
         bg = Mix_LoadWAV(BG);
         if (bg == NULL) {
-                return -1;
+                printf("ERROR bg %s\n", Mix_GetError());
+                // return -1;
         }
 
 }
@@ -336,6 +369,7 @@ void checkCollisions() {
             if (enemies[i] != NULL) {
                     if (enemies[i]->boundaryD <= -200) {
                             // Enemy hit base! Game Over!
+                            Mix_PlayChannel(-1, lose, 0);
                             gameover = 1;
                     }
             }
@@ -372,8 +406,10 @@ void checkCollisions() {
 
 /*--------------------GAME OVER CHECK-------------------*/
 void checkGameOver(){
-    if(player->health == 0)
-        gameover = 1;
+    if(player->health == 0) {
+            Mix_PlayChannel(-1, lose, 0);
+            gameover = 1;
+    }
 }
 
 void checkVictory() {
@@ -464,7 +500,7 @@ void drawScene() {
 
         /*------------------------ENEMY------------------------*/
         if(enemies == NULL) {
-          enemies = createEnemyMatrix();
+                enemies = createEnemyMatrix();
         }
 
         for (i = 0; i < 25; i++) {
@@ -643,6 +679,15 @@ void victoryScreen() {
             drawQuadTextured(victoryQuad);
         freeQuad(victoryQuad);
 }
+
+void checkScore() {
+        if (player->score > current_score) {
+                Mix_PlayChannel(-1, coin, 0);
+                printf("ERROR %s\n", Mix_GetError());
+                current_score += 50;
+        }
+}
+
 /*-------------------------------- RENDERING ---------------------------------*/
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
@@ -668,7 +713,10 @@ void drawLoop() {
         // Check for Victory
         checkVictory();
 
-        if(!paused && !gameover && !victory) {
+        // Check for coins
+        checkScore();
+
+        if (!paused && !gameover && !victory) {
             // Check for key presses
             keyHold();
 
