@@ -292,9 +292,9 @@ void checkCollisions() {
                                 if (shots_player[i]->boundaryU >= enemies[j]->boundaryD) {
                                         Mix_PlayChannel(-1, explosion, 0);
 
-                                    // destroyDesallocLaser(i); // destroy laser
-                                    // destroyEnemy(enemies[j]); // destroy enemy
-                                    player->score = player->score + 10; // update score
+                                        // destroyDesallocLaser(i); // destroy laser
+                                        destroyEnemy(enemies[j]); // destroy enemy
+                                        player->score = player->score + 10; // update score
                                 }
                         }
                     }
