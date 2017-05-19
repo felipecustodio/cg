@@ -149,6 +149,10 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
           enemy->shape = 2;
         }
 
+        // Set animation frame
+        enemy->frame = 1;
+        enemy->current_time = glutGet(GLUT_ELAPSED_TIME);
+
         // Set boundaries
         enemy->boundaryL = enemy->x[0]; // left
         enemy->boundaryR = enemy->x[2]; // right
@@ -205,6 +209,7 @@ void moveEnemies(ENEMY** enemies) {
 }
 
 void drawEnemy(ENEMY* enemy) {
+        GLfloat time; // get curret elapsed time since init
         glLoadIdentity(); // load matrix for new enemy
         Quadrilateral *enemySprite = createQuad();
             setQuadCoordinates(enemySprite,
@@ -213,16 +218,28 @@ void drawEnemy(ENEMY* enemy) {
             enemy->x[2], enemy->y[2],
             enemy->x[3], enemy->y[3]); // initial coordinates
 
+            // Change enemy animation frame every 500 ms
+            time = glutGet(GLUT_ELAPSED_TIME);
+            if (enemy->current_time - time < -500) {
+                    // change animation frame
+                    enemy->frame = changeFrame(enemy->frame);
+                    enemy->current_time = time;
+            }
+
             // set enemy shape
             switch(enemy->shape) {
                     case 1:
-                            setQuadTexture(enemySprite, alien_1_1); // choose texture
+                            // Set texture
+                            if (enemy->frame == 1) setQuadTexture(enemySprite, alien_1_1);
+                            if (enemy->frame == 2) setQuadTexture(enemySprite, alien_1_2);
                             break;
                     case 2:
-                            setQuadTexture(enemySprite, alien_2_1); // choose texture
+                            if (enemy->frame == 1) setQuadTexture(enemySprite, alien_2_1);
+                            if (enemy->frame == 2) setQuadTexture(enemySprite, alien_2_2);
                             break;
                     case 3:
-                            setQuadTexture(enemySprite, alien_3_1); // choose texture
+                            if (enemy->frame == 1) setQuadTexture(enemySprite, alien_3_1);
+                            if (enemy->frame == 2) setQuadTexture(enemySprite, alien_3_2);
                             break;
             }
 

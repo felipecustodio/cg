@@ -9,6 +9,7 @@ GLfloat parallax_speedY = 0.5;
 
 /* ------ LASERS -----*/
 int shoot_flag = 1;
+int powerup_flag = 0;
 
 /* ------ SCORE -----*/
 int current_score = 50;
@@ -43,6 +44,15 @@ void cooldown(int value) {
     // 100 milliseconds
     shoot_flag = 1;
     glutTimerFunc(500, cooldown, 0);
+}
+
+int changeFrame(int value) {
+        switch(value) {
+                case 1:
+                        return 2;
+                case 2:
+                        return 1;
+        }
 }
 
 int loadTextures() {
@@ -125,7 +135,7 @@ void keyPress(unsigned char key, int x, int y) {
             if(!paused && !gameover)
                 Ddown = 1; // hold D key
         } else if (key == 'p' || key == 'P') {
-            if(!gameover){
+            if (!gameover) {
                 if(paused == 0)
                     paused = 1;
                 else
@@ -159,7 +169,8 @@ void keyPress(unsigned char key, int x, int y) {
                 gameover = 1;
         } else if (key == 'k' || key == 'K') {
                 Mix_PlayChannel(-1, powerup, 0);
-                player->powerup = 1;
+                if(!powerup_flag) player->powerup = 1;
+                powerup_flag = 1;
         }
 }
 

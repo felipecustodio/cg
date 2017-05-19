@@ -88,6 +88,10 @@ typedef struct enemy {
         GLfloat pos_x;
         GLfloat pos_y;
 
+        // Animation
+        int frame;
+        GLfloat current_time;
+
         // Boundaries
         GLfloat boundaryL; // left
         GLfloat boundaryR; // right
