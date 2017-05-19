@@ -160,8 +160,10 @@ void moveEnemies(ENEMY** enemies) {
           // reverse, move left
           enemyXSpeed = -1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y -= enemyYSpeed; // update position
-            enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                  if(enemies[i] != NULL) {
+                          enemies[i]->pos_y -= enemyYSpeed; // update position
+                          enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                  }
           }
   }
 
@@ -170,17 +172,21 @@ void moveEnemies(ENEMY** enemies) {
           // reverse, move right
           enemyXSpeed = 1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y -= enemyYSpeed; // update position
-            enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                  if(enemies[i] != NULL) {
+                          enemies[i]->pos_y -= enemyYSpeed; // update position
+                          enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                  }
           }
   }
 
   // Update positions
   for (i = 0; i < TOTAL_ENEMIES; i++) {
-    enemies[i]->pos_x += enemyXSpeed;
-    enemies[i]->boundaryL += enemyXSpeed;
-    enemies[i]->boundaryR += enemyXSpeed;
-  }
+                if (enemies[i] != NULL) {
+                        enemies[i]->pos_x += enemyXSpeed;
+                        enemies[i]->boundaryL += enemyXSpeed;
+                        enemies[i]->boundaryR += enemyXSpeed;
+                }
+        }
 }
 
 void drawEnemy(ENEMY* enemy) {
