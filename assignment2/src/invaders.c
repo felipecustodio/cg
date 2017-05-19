@@ -1,9 +1,6 @@
 #include "../includes/invaders.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
-// Textures
-GLuint laserblur;
-
 // Game mechanics
 // Amount of lasers on screen
 int shots_player_count = 0;
@@ -18,9 +15,9 @@ int victory = 0;
 
 // Initialize external globals
 GLfloat playerPosition = 0; // player position (x)
-GLfloat playerSpeed = 7.0f;
-GLfloat enemyXSpeed = 1.0f;
-GLfloat enemyYSpeed = 3.0f;
+GLfloat playerSpeed = 3.0f;
+GLfloat enemyXSpeed = 3.0f;
+GLfloat enemyYSpeed = 10.0f;
 GLfloat laserSpeed = 10.0f; // laser vertical speed
 
 GLfloat matrix_boundR;
@@ -166,9 +163,9 @@ void moveEnemies(ENEMY** enemies) {
   int i = 0;
 
   // Check if enemy matrix reached window border (right)
-  if(enemyXSpeed == 1 && (!checkBorders(matrix_boundR))) {
+  if(enemyXSpeed > 0 && (!checkBorders(matrix_boundR))) {
           // reverse, move left
-          enemyXSpeed = -1.0f;
+          enemyXSpeed = -enemyXSpeed;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
                   if(enemies[i] != NULL) {
                           enemies[i]->pos_y -= enemyYSpeed; // update position
@@ -178,9 +175,9 @@ void moveEnemies(ENEMY** enemies) {
   }
 
   // Check if enemy matrix reached window border (left)
-  if(enemyXSpeed == -1.0f && (!checkBorders(matrix_boundL))) {
+  if(enemyXSpeed < 0 && (!checkBorders(matrix_boundL))) {
           // reverse, move right
-          enemyXSpeed = 1.0f;
+          enemyXSpeed = -enemyXSpeed;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
                   if(enemies[i] != NULL) {
                           enemies[i]->pos_y -= enemyYSpeed; // update position

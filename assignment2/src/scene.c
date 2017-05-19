@@ -19,7 +19,6 @@ const char* UI_reset = "Press R to reset game";
 const char* UI_shoot = "Press spacebar to shoot";
 const char* UI_move = "Press A/D to move left/right";
 const char* UI_exit = "Press E to exit";
-const char* UI_gameover = "GAME OVER";
 
 /* ------ INPUT STATUS -----*/
 char leftMouseButtonDown = 0;
@@ -232,7 +231,7 @@ int initAudio() {
         char* WILHELM = "./assets/audio/wilhelm.wav";
         char* VICTORY = "./assets/audio/victory.wav";
         char* COIN_SOUND = "./assets/audio/coin.wav";
-        char* LOSE_SOUND = "./assets/lose.wav";
+        char* LOSE_SOUND = "./assets/audio/lose.wav";
 
         // Initialize SDL
 	if (SDL_Init(SDL_INIT_AUDIO) < 0) {
@@ -386,7 +385,7 @@ void checkCollisions() {
     /*--------------------ENEMY VS BASE--------------------*/
     i = 0;
     for (i = 0; i < 25; i++) {
-            if (enemies[i] != NULL) {
+            if (enemies[i]->health > 0) {
                     if (enemies[i]->boundaryD <= -200) {
                             // Enemy hit base! Game Over!
                             Mix_PlayChannel(-1, lose, 0);
