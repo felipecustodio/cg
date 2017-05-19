@@ -53,7 +53,7 @@ int loadTextures() {
         parallax2_texture = loadTexture("./assets/textures/parallax2.png");
 
         // Player sprite
-        player_texture = loadTexture("./assets/textures/ship.png");
+        player_texture = loadTexture("./assets/textures/galaga.png");
 
         // Enemy sprites
         alien_1_1 = loadTexture("./assets/textures/alien1_1.png");
@@ -286,7 +286,7 @@ void checkCollisions(){
         for (j = 0; j < 25; j ++) {
             if (enemies != NULL) { // Temporary placeholder
                 if (enemies[j] != NULL) {
-                    // Check X boundaries -> TODO: update enemy coordinates
+                    // Check X boundaries
                     if (shots_player[i]->x[0] >= enemies[j]->pos_x) {
                         // Check Y boundaries -> TODO: update enemy coordinates
                         if (shots_player[i]->position - 200 >= enemies[j]->pos_x) {
