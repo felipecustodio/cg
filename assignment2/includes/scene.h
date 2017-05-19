@@ -49,6 +49,8 @@ void reshape(int width, int height);
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 void drawLoop();
+void checkCollisions();
+void destroyDesallocLaser(int i);
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 
 #endif

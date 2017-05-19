@@ -109,8 +109,12 @@ typedef struct laser {
         GLfloat x[4];
         GLfloat y[4];
 
-        // Position to translate
+        // Movement
         int position;
+
+        // Boundary
+        GLfloat boundaryU; // up
+        GLfloat boundaryD; // down
 
         // Has it exploded yet?
         int explosion;

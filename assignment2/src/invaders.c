@@ -155,26 +155,27 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
 void moveEnemies(ENEMY** enemies) {
   int i = 0;
 
-  // Verificar colisão com direita
+  // Check if enemy matrix reached window border (right)
   if(enemyXSpeed == 1 && (!checkBorders(enemies[14]->boundaryR))) {
-          // move left
+          // reverse, move left
           enemyXSpeed = -1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y -= enemyYSpeed;
-            enemies[i]->boundaryD += enemyYSpeed;
+            enemies[i]->pos_y -= enemyYSpeed; // update position
+            enemies[i]->boundaryD += enemyYSpeed; // move boundary
           }
   }
 
-  // Verificar colisão com esquerda
+  // Check if enemy matrix reached window border (left)
   if(enemyXSpeed == -1.0f && (!checkBorders(enemies[10]->boundaryL))) {
-          // move right
+          // reverse, move right
           enemyXSpeed = 1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y -= enemyYSpeed;
-            enemies[i]->boundaryD += enemyYSpeed;
+            enemies[i]->pos_y -= enemyYSpeed; // update position
+            enemies[i]->boundaryD += enemyYSpeed; // move boundary
           }
   }
 
+  // Update positions
   for (i = 0; i < TOTAL_ENEMIES; i++) {
     enemies[i]->pos_x += enemyXSpeed;
     enemies[i]->boundaryL += enemyXSpeed;
@@ -209,8 +210,8 @@ void drawEnemy(ENEMY* enemy) {
         freeQuad(enemySprite);
 }
 
-void destroyEnemy(ENEMY* enemy){
-
+void destroyEnemy(ENEMY* enemy) {
+        if(enemy != NULL) free(enemy);
 }
 
 /* ------------------------------- ENEMY ------------------------------------ */
@@ -233,7 +234,12 @@ LASER* createLaser(int x, int y, int color) {
         laser->y[2] = y + 40;
         laser->y[3] = y;
 
+        // movement
         laser->position = 0;
+        // boundaries
+        laser->boundaryU = laser->y[1];
+        laser->boundaryD = laser->y[0];
+
         laser->color = color;
         laser->explosion = 0;
 
@@ -274,7 +280,7 @@ void drawLaser(LASER* laser) {
 }
 
 void destroyLaser(LASER* laser) {
-        free(laser);
+        if (laser != NULL) free(laser);
 }
 /* -------------------------------- LASER ----------------------------------- */
 
