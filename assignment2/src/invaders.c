@@ -4,9 +4,9 @@
 // Initialize external globals
 GLfloat playerPosition = 0; // player position (x)
 GLfloat playerSpeed = 7.0f;
+GLfloat enemyXSpeed = 1.0f;
+GLfloat enemyYSpeed = -0.5f;
 GLfloat laserSpeed = 10.0f; // laser vertical speed
-GLfloat enemyPositionX = 0; // enemy position (x)
-GLfloat enemyPositionY = 0; // enemy position (y)
 GLfloat enemySpeed = 0; // enemy horizontal speed
 GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
 
@@ -66,7 +66,7 @@ void destroyPlayer(PLAYER* player) {
 
 // Avoids player moving out of window
 char checkBorders(GLfloat x) {
-        if (x <= -535|| x >= 535) {
+        if (x <= -535 || x >= 535) {
                 return 0;
         } else {
                 return 1;
@@ -76,7 +76,7 @@ char checkBorders(GLfloat x) {
 
 /* ------------------------------- ENEMY ------------------------------------ */
 ENEMY** createEnemyMatrix() {
-  int i = 0, j = 0;
+  int i = 0;
 
   ENEMY** enemies = (ENEMY**) malloc (sizeof(ENEMY*) * TOTAL_ENEMIES);
 
@@ -122,8 +122,40 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
         }
 
         // Reset variables
+        enemy->pos_x = 0;
+        enemy->pos_y = 0;
         enemy->health = 1;
         enemy->cooldown = 0;
+}
+
+
+void moveEnemies(ENEMY** enemies){
+  int i = 0;
+
+  // Verificar colisão com direita
+  //printf("conta: %f\n", enemies[14]->pos_x - enemies[14]->x[2]);
+  printf("coordenada: %f\n", enemies[14]->x[2]);
+  if(!(checkBorders(enemies[14]->pos_x - enemies[14]->x[2]))) {
+          // move left
+          enemyXSpeed = -1.0f;
+          for (i = 0; i < TOTAL_ENEMIES; i++) {
+            enemies[i]->pos_y += enemyYSpeed;
+          }
+  }
+
+  // Verificar colisão com esquerda
+  //printf("pos_x[10]: %f\n", enemies[10]->pos_x + enemies[10]->x[1]);
+  if(!(checkBorders(enemies[10]->pos_x + enemies[10]->x[1]))) {
+          // move right
+          enemyXSpeed = 1.0f;
+          for (i = 0; i < TOTAL_ENEMIES; i++) {
+            enemies[i]->pos_y += enemyYSpeed;
+          }
+  }
+
+  for (i = 0; i < TOTAL_ENEMIES; i++) {
+    enemies[i]->pos_x += enemyXSpeed;
+  }
 }
 
 void drawEnemy(ENEMY* enemy) {
@@ -148,7 +180,7 @@ void drawEnemy(ENEMY* enemy) {
                             break;
             }
 
-            //glTranslatef(enemy->pos_x, enemy->pos_y, 0.0f); // move enemy
+            glTranslatef(enemy->pos_x, enemy->pos_y, 0.0f); // move enemy
             drawQuadTextured(enemySprite); // draw enemy on screen
         freeQuad(enemySprite);
 }
@@ -156,7 +188,6 @@ void drawEnemy(ENEMY* enemy) {
 void destroyEnemy(ENEMY* enemy){
 
 }
-
 
 /* ------------------------------- ENEMY ------------------------------------ */
 

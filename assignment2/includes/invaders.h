@@ -81,6 +81,7 @@ typedef struct enemy {
 ENEMY** createEnemyMatrix();
 void destroyEnemyMatrix(ENEMY** enemies);
 void createEnemy(ENEMY* enemy, int xindex, int yindex);
+void moveEnemies(ENEMY** enemies);
 void drawEnemy(ENEMY* enemy);
 void destroyEnemy(ENEMY* enemy);
 /* ------------------------------- ENEMY ------------------------------------ */
