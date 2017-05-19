@@ -20,9 +20,13 @@ GLfloat laserSpeed = 10.0f; // laser vertical speed
 GLfloat enemySpeed = 0; // enemy horizontal speed
 GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
 
+GLfloat matrix_boundR;
+GLfloat matrix_boundL;
+
 const int WIDTH_ENEMY_MATRIX = 5;
 const int HEIGHT_ENEMY_MATRIX = 5;
 const int TOTAL_ENEMIES = 25;
+
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 /* ------------------------------- PLAYER ----------------------------------- */
@@ -102,6 +106,9 @@ ENEMY** createEnemyMatrix() {
     createEnemy(enemies[i], i/WIDTH_ENEMY_MATRIX, (i - (i / WIDTH_ENEMY_MATRIX) * WIDTH_ENEMY_MATRIX));
   }
 
+  matrix_boundR = enemies[14]->boundaryR;
+  matrix_boundL = enemies[10]->boundaryL;
+
   return enemies;
 }
 
@@ -156,7 +163,7 @@ void moveEnemies(ENEMY** enemies) {
   int i = 0;
 
   // Check if enemy matrix reached window border (right)
-  if(enemyXSpeed == 1 && (!checkBorders(enemies[14]->boundaryR))) {
+  if(enemyXSpeed == 1 && (!checkBorders(matrix_boundR))) {
           // reverse, move left
           enemyXSpeed = -1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
@@ -168,7 +175,7 @@ void moveEnemies(ENEMY** enemies) {
   }
 
   // Check if enemy matrix reached window border (left)
-  if(enemyXSpeed == -1.0f && (!checkBorders(enemies[10]->boundaryL))) {
+  if(enemyXSpeed == -1.0f && (!checkBorders(matrix_boundL))) {
           // reverse, move right
           enemyXSpeed = 1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
@@ -187,6 +194,8 @@ void moveEnemies(ENEMY** enemies) {
                         enemies[i]->boundaryR += enemyXSpeed;
                 }
         }
+        matrix_boundL += enemyXSpeed;
+        matrix_boundR += enemyXSpeed;
 }
 
 void drawEnemy(ENEMY* enemy) {
