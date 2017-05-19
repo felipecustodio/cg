@@ -14,13 +14,19 @@
 #include "settings.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
+// Game mechanics
+extern int shots_player_count;
+extern int shots_enemy_count;
+extern int level;
+extern int paused;
+extern int gameover;
+
 // Movement
-extern GLfloat playerPosition; // player horizontal speed
+extern GLfloat playerPosition; // player position (x)
 extern GLfloat playerSpeed; // player speed
 extern GLfloat laserSpeed; // laser speed
 extern GLfloat enemyPositionX; // enemy position (x)
 extern GLfloat enemyPositionY; // enemy position (y)
-extern GLfloat enemySpeed; // enemy horizontal speed
 extern GLfloat enemySpeed; // enemy horizontal speed
 extern GLfloat enemyApproach; // enemy vertical speed (approaching player base)
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -46,6 +52,8 @@ typedef struct player {
         int cooldown;
 
 } PLAYER;
+
+extern PLAYER* player;
 
 // Create/Destroy
 PLAYER* createPlayer();
@@ -78,9 +86,13 @@ typedef struct enemy {
 
 } ENEMY;
 
+extern ENEMY** enemies; // 25 enemies (5x5)
+
+// Create/Destroy
 ENEMY* createEnemy(int design);
-void destroyEnemy(ENEMY* enemy);
 void drawEnemy(ENEMY* enemy);
+void destroyEnemy(ENEMY* enemy);
+
 /* ------------------------------- ENEMY ------------------------------------ */
 
 /* ------------------------------- LASER ------------------------------------ */
@@ -101,6 +113,10 @@ typedef struct laser {
 
 } LASER;
 
+extern LASER** shots_player;
+extern LASER** shots_enemy;
+
+// Create/Destroy
 LASER* createLaser(int x, int y, int color);
 void destroyLaser(LASER *laser);
 
@@ -110,7 +126,7 @@ void shootLaser_Enemy(LASER** shots, int *amount, int x, int y);
 void drawLaser(LASER* laser);
 /* ------------------------------- LASER ------------------------------------ */
 
-/* -------------------------------- ANIMATIONS ----------------------------------- */
+/* ----------------------------- ANIMATIONS --------------------------------- */
 int switchTexture();
 /* ----------------------------- ANIMATIONS --------------------------------- */
 

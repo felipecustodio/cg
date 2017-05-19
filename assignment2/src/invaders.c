@@ -1,9 +1,19 @@
 #include "../includes/invaders.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
+// Game mechanics
+// Amount of lasers on screen
+int shots_player_count = 0;
+int shots_enemy_count = 0;
+
+// Current level
+int level = 1;
+int paused = 0;
+int gameover = 0;
+
 // Initialize external globals
 GLfloat playerPosition = 0; // player position (x)
-GLfloat playerSpeed = 7.0f;
+GLfloat playerSpeed = 7.0f; // player speed
 GLfloat laserSpeed = 10.0f; // laser vertical speed
 GLfloat enemyPositionX = 0; // enemy position (x)
 GLfloat enemyPositionY = 0; // enemy position (y)
@@ -12,6 +22,9 @@ GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 /* ------------------------------- PLAYER ----------------------------------- */
+/* ------ THE PLAYER -----*/
+PLAYER* player;
+
 PLAYER* createPlayer() {
 
         // Allocate memory
@@ -71,6 +84,9 @@ char checkBorders(GLfloat x) {
 /* ------------------------------- PLAYER ----------------------------------- */
 
 /* ------------------------------- ENEMY ------------------------------------ */
+/* ------ ENEMIES -----*/
+ENEMY** enemies; // 25 enemies (5x5)
+
 ENEMY* createEnemy(int design) {
         ENEMY* enemy = (ENEMY*)malloc(sizeof(ENEMY));
 
@@ -114,6 +130,10 @@ void drawEnemy(ENEMY* enemy) {
 
 
 /* ------------------------------- LASER ------------------------------------ */
+// Lasers that exist
+LASER** shots_player;
+LASER** shots_enemy;
+
 LASER* createLaser(int x, int y, int color) {
         LASER* laser = (LASER *) malloc(sizeof(LASER));
 
@@ -192,7 +212,44 @@ void saveGame() {
 
 }
 
-void resetGame() {
+void resetGame(){
+    // invaders.c variables
+    playerPosition = 0;
+    enemyPositionX = 0; // enemy position (x)
+    enemyPositionY = 0; // enemy position (y)
 
+    // scene.c variables
+    destroyPlayer(player);
+    player = createPlayer();
+
+    int i = 0;
+    if(enemies){
+        for(i = 0; i < 25; i++){
+            if(enemies[i]){
+                destroyEnemy(enemies[i]);
+            }
+        }
+    }
+
+    i = 0;
+    for(i = 0; i < shots_player_count; i++){
+        destroyLaser(shots_player[i]);
+    }
+    free(shots_player);
+    shots_player = NULL;
+
+    i = 0;
+    for(i = 0; i < shots_enemy_count; i++){
+        destroyLaser(shots_enemy[i]);
+    }
+    free(shots_enemy);
+    shots_enemy = NULL;
+
+    shots_player_count = 0;
+    shots_enemy_count = 0;
+
+    level = 1;
+    paused = 0;
+    gameover = 0;
 }
 /* -------------------------------- GAME ------------------------------------ */

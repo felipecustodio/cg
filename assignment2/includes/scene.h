@@ -31,16 +31,16 @@ GLuint hudL, hudM, hudR;
 // Textures
 GLuint background_texture, parallax1_texture, parallax2_texture, player_texture,
 alien_1_1, alien_1_2, alien_2_1, alien_2_2,
-alien_3_1, alien_3_2, base_texture, game_over;
+alien_3_1, alien_3_2, base_texture, pause, game_over;
 
 // Load all textures to program
 int loadTextures();
-
 /* ------------------------------- TEXTURES --------------------------------- */
 
 /* -------------------------------- AUDIO ----------------------------------- */
 extern Mix_Chunk *bg; // BGM starts playing at main
 int initAudio();
+void audioCleanup();
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
