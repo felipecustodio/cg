@@ -141,6 +141,8 @@ void keyPress(unsigned char key, int x, int y) {
         } else if (key == 'e' || key == 'E') {
                 Mix_PlayChannel(-1, blaster2, 0);
                 exit(0);
+        } else if (key == 'g' || key == 'G') {
+                gameover = 1;
         }
 }
 
