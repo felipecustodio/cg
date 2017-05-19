@@ -161,7 +161,7 @@ void moveEnemies(ENEMY** enemies) {
           enemyXSpeed = -1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
             enemies[i]->pos_y -= enemyYSpeed; // update position
-            enemies[i]->boundaryD += enemyYSpeed; // move boundary
+            enemies[i]->boundaryD -= enemyYSpeed; // move boundary
           }
   }
 
@@ -171,7 +171,7 @@ void moveEnemies(ENEMY** enemies) {
           enemyXSpeed = 1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
             enemies[i]->pos_y -= enemyYSpeed; // update position
-            enemies[i]->boundaryD += enemyYSpeed; // move boundary
+            enemies[i]->boundaryD -= enemyYSpeed; // move boundary
           }
   }
 

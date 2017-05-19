@@ -23,6 +23,7 @@ char Ddown = 0;
 Mix_Chunk *blaster = NULL;
 Mix_Chunk *blaster2 = NULL;
 Mix_Chunk *wilhelm = NULL;
+Mix_Chunk *explosion = NULL;
 Mix_Chunk *bg = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -213,7 +214,7 @@ int initAudio() {
         char* BG = "./assets/audio/unchartedworlds.wav";
         char* BLASTER = "./assets/audio/tie-blaster.wav";
         char* BLASTER2 = "./assets/audio/laser1.wav";
-        char* DESTROY1;
+        char* DESTROY1 = "./assets/audio/explosion.wav";
         char* DESTROY2;
         char* WILHELM = "./assets/audio/wilhelm.wav";
 
@@ -237,6 +238,10 @@ int initAudio() {
     wilhelm = Mix_LoadWAV(WILHELM);
 	if (wilhelm == NULL)
 		return -1;
+
+        explosion = Mix_LoadWAV(DESTROY1);
+        if (explosion == NULL)
+    		return -1;
 
     // Load BGM
     bg = Mix_LoadWAV(BG);
@@ -274,7 +279,7 @@ void checkCollisions() {
 
     // LASER MATRIX CHECKING
     // Laser enemy collision check
-    int i = 0, j = 0;
+    int i, j;
     for (i = 0; i < shots_player_count; i++) {
         for (j = 0; j < 25; j ++) {
             if (enemies != NULL) {
@@ -282,14 +287,16 @@ void checkCollisions() {
                         if(shots_player[i] != NULL) {
                             // Check X boundaries
                             if (shots_player[i]->x[0] >= enemies[j]->boundaryL &&
-                                shots_player[i]->x[2] >= enemies[j]->boundaryR) {
+                                shots_player[i]->x[2] <= enemies[j]->boundaryR) {
                                 // Check Y boundaries
                                 if (shots_player[i]->boundaryU >= enemies[j]->boundaryD) {
-                                    destroyDesallocLaser(i); // destroy laser
-                                    destroyEnemy(enemies[j]); // destroy enemy
+                                        Mix_PlayChannel(-1, explosion, 0);
+
+                                    // destroyDesallocLaser(i); // destroy laser
+                                    // destroyEnemy(enemies[j]); // destroy enemy
                                     player->score = player->score + 10; // update score
                                 }
-                            }
+                        }
                     }
                 }
             }
@@ -324,9 +331,9 @@ void checkCollisions() {
     i = 0;
     for (i = 0; i < 25; i++) {
             if (enemies[i] != NULL) {
-                    if (enemies[i]->pos_y <= -200) {
+                    if (enemies[i]->boundaryD <= -200) {
                             // Enemy hit base! Game Over!
-                            // gameOverScreen();
+                            gameover = 1;
                     }
             }
     }
@@ -447,8 +454,7 @@ void drawScene() {
         /*--------------------LASERS--------------------*/
 
         /*------------------------ENEMY------------------------*/
-
-        if(enemies == NULL){
+        if(enemies == NULL) {
           enemies = createEnemyMatrix();
         }
 
@@ -459,7 +465,6 @@ void drawScene() {
         }
 
         if(!paused) moveEnemies(enemies);
-
         /*-------------------------END-------------------------*/
 
         /*--------------------LASERS--------------------*/
