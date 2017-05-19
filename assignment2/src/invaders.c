@@ -112,6 +112,7 @@ void drawEnemy(ENEMY* enemy) {
 }
 /* ------------------------------- ENEMY ------------------------------------ */
 
+
 /* ------------------------------- LASER ------------------------------------ */
 LASER* createLaser(int x, int y, int color) {
         LASER* laser = (LASER *) malloc(sizeof(LASER));

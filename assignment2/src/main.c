@@ -56,6 +56,8 @@ int main(int argc, char* argv[]) {
         // SET KEY PRESSES TO NON-REPEAT MODE
         glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
+        glutTimerFunc(500, timer, 0);
+
         // START RENDERING
         glutMainLoop(); // Start operations according to the specifications above
 

@@ -10,6 +10,7 @@ PLAYER* player;
 ENEMY** enemies; // 25 enemies (5x5)
 
 /* ------ LASERS -----*/
+int shoot_flag = 1;
 
 // Lasers that exist
 LASER** shots_player;
@@ -39,6 +40,13 @@ Mix_Chunk *blaster2 = NULL;
 Mix_Chunk *bg = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
+
+void timer(int value){
+    //glutPostRedisplay();
+    // 100 milliseconds
+    shoot_flag = 1;
+    glutTimerFunc(500, timer, 0);
+}
 
 int loadTextures() {
         // HUD
@@ -112,7 +120,7 @@ void keyPress(unsigned char key, int x, int y) {
                 Adown = 1; // hold A key
         } else if (key == 'd' || key == 'D') {
                 Ddown = 1; // hold D key
-        } else if (key == ' ') {
+        } else if (key == ' ' && shoot_flag) {
                 // PEW! PEW! play blaster audio
                 Mix_PlayChannel(-1, blaster2, 0);
                 // create new laser
@@ -123,6 +131,7 @@ void keyPress(unsigned char key, int x, int y) {
                     shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
                 }
                 shootLaser_Player(shots_player, &shots_player_count, playerPosition);
+                shoot_flag = 0;
         } else if (key == 'r' || key == 'R') {
                 // reset game
         } else if (key == 'e' || key == 'E') {
