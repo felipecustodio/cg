@@ -169,8 +169,13 @@ void keyPress(unsigned char key, int x, int y) {
                 gameover = 1;
         } else if (key == 'k' || key == 'K') {
                 Mix_PlayChannel(-1, powerup, 0);
-                if(!powerup_flag) player->powerup = 1;
-                powerup_flag = 1;
+                if(!powerup_flag) {
+                        player->powerup = 1;
+                        powerup_flag = 1;
+                } else {
+                        powerup_flag = 0;
+                        player->powerup = 0;
+                }
         }
 }
 
