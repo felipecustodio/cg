@@ -44,7 +44,6 @@ int loadTextures() {
 
         // Background
         background_texture = loadTexture("./assets/textures/bg.png");
-        // background_texture = loadTexture("./assets/textures/bgmaterial.png");
         base_texture = loadTexture("./assets/textures/base.png");
 
         // Parallax
@@ -297,7 +296,7 @@ void checkCollisions() {
                                         Mix_PlayChannel(-1, explosion, 0);
                                         destroyLaser(shots_player[i]); // destroy laser
                                         destroyEnemy(enemies[j]); // destroy enemy
-                                        enemies_left--;
+                                        enemies_left--; // one down, more to go
                                         // check for victory
                                         if (enemies_left == 0) {
                                                 Mix_PlayChannel(-1, fanfare, 0); // play fanfare
@@ -312,7 +311,6 @@ void checkCollisions() {
     }
 
     // Laser screen collision check
-    i = 0, j = 0;
     for(i = 0; i < shots_player_count; i++) {
         // Check top boundary
         if(shots_player[i] != NULL && shots_player[i]->boundaryU >= 340) {
@@ -321,7 +319,6 @@ void checkCollisions() {
     }
 
     /*--------------------ENEMY LASERS VS PLAYER--------------------*/
-    i = 0;
     for (i = 0; i < shots_enemy_count; i++) {
             if (shots_enemy[i]->x[0] >= player->boundary_left
                 && shots_enemy[i]->x[2] <= player->boundary_right) {
@@ -329,7 +326,7 @@ void checkCollisions() {
                     if (shots_enemy[i]->boundaryD <= -200) {
                             // Laser hit player!
                             player->health--;
-                            destroyDesallocLaser(i);
+                            destroyLaser(shots_enemy[i]);
                     }
             }
     }
@@ -478,7 +475,7 @@ void drawScene() {
                 }
         }
 
-        if(!paused) moveEnemies(enemies);
+        if(!paused && !gameover) moveEnemies(enemies);
         /*-------------------------END-------------------------*/
 
         /*--------------------LASERS--------------------*/
@@ -672,8 +669,6 @@ void drawLoop() {
 
         // Check for Victory
         checkVictory();
-        printf("ENEMIES LEFT: %d\n", enemies_left);
-
 
         if(!paused && !gameover && !victory) {
             // Check for key presses
