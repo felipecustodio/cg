@@ -91,8 +91,10 @@ typedef struct enemy {
 
 extern ENEMY** enemies; // 25 enemies (5x5)
 
-// Create/Destroy
-ENEMY* createEnemy(int design);
+ENEMY** createEnemyMatrix();
+void destroyEnemyMatrix(ENEMY** enemies);
+void createEnemy(ENEMY* enemy, int xindex, int yindex);
+void moveEnemies(ENEMY** enemies);
 void drawEnemy(ENEMY* enemy);
 void destroyEnemy(ENEMY* enemy);
 

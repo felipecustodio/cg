@@ -64,12 +64,12 @@ int loadTextures() {
         player_texture = loadTexture("./assets/textures/galaga.png");
 
         // Enemy sprites
-        alien_1_1 = loadTexture("./assets/textures/alien_1_1.png");
-        alien_1_2 = loadTexture("./assets/textures/alien_1_2.png");
-        alien_2_1 = loadTexture("./assets/textures/alien_2_1.png");
-        alien_2_2 = loadTexture("./assets/textures/alien_2_2.png");
-        alien_3_1 = loadTexture("./assets/textures/alien_3_1.png");
-        alien_3_2 = loadTexture("./assets/textures/alien_3_2.png");
+        alien_1_1 = loadTexture("./assets/textures/alien1_1.png");
+        alien_1_2 = loadTexture("./assets/textures/alien1_2.png");
+        alien_2_1 = loadTexture("./assets/textures/alien2_1.png");
+        alien_2_2 = loadTexture("./assets/textures/alien2_2.png");
+        alien_3_1 = loadTexture("./assets/textures/alien3_1.png");
+        alien_3_2 = loadTexture("./assets/textures/alien3_2.png");
 
         laserblur = loadTexture("./assets/textures/laserblur.png");
 
@@ -469,7 +469,91 @@ void drawScene() {
         /*--------------------END--------------------*/
 
         /*--------------------LASERS--------------------*/
-        int i = 0;
+
+        /*--------------------COLLISION CHECKING-------------------*/
+
+        /*--------------------PLAYER SHOTS--------------------*/
+        // Refresh matrix for new object
+        glLoadIdentity();
+
+        // LASER MATRIX CHECKING
+        // Laser enemy collision check
+        int i = 0, j = 0;/*
+        for (i = 0; i < shots_player_count; i++) {
+            for (j = 0; j < 25; j ++) {
+                if (enemies != NULL) { // Temporary placeholder
+                    if (enemies[j] != NULL) {
+                        // Check X boundaries -> TODO: update enemy coordinates
+                        if (shots_player[i]->x[0] >= enemies[j]->pos_x) {
+                            // Check Y boundaries -> TODO: update enemy coordinates
+                            if (shots_player[i]->position - 200 >= enemies[j]) {
+                                destroyDesallocLaser(i); // destroy laser
+                                destroyDesallocEnemy(j); // destroy enemy
+                                player->score = player->score + 10; // update score
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
+
+        // Laser screen collision check
+        i = 0, j = 0;
+        for(i = 0; i < shots_player_count; i++) {
+            // Check top boundary
+            if(shots_player[i]->position - 200 >= 340){
+                destroyDesallocLaser(i);
+            }
+        }
+
+        /*--------------------ENEMY LASERS VS PLAYER--------------------*/
+        /*i = 0;
+        for (i = 0; i < shots_enemy_count; i++) {
+                if (shots_enemy[i]->x[0] >= player->boundary_left - 200) {
+                        // Laser is aligned with player, check if hit
+                        if (shots_enemy[i]->position <= -200) {
+                                // Laser hit player!
+                                player->health--;
+                                if (player->health <= 0) {
+                                        // gameOverScreen();
+                                }
+                                destroyLaser(shots_enemy[i]); // TODO fazer destroyDesallocLaser
+                        }
+                }
+                // verify y
+                // if hit, -1 player health
+                // if player health == 0 game over
+        }*/
+
+        /*-------------------------END-------------------------*/
+
+        /*------------------------ENEMY------------------------*/
+
+        if(enemies == NULL){
+          enemies = createEnemyMatrix();
+        }
+
+        for (i = 0; i < 25; i++) {
+          drawEnemy(enemies[i]);
+        }
+
+        moveEnemies(enemies);
+
+        /*-------------------------END-------------------------*/
+
+        /*--------------------ENEMY VS BASE--------------------*/
+        /*i = 0;
+        for (i = 0; i < 25; i++) {
+                if (enemies[i]->pos_y <= -200) {
+                        // Enemy hit base! Game Over!
+                        // gameOverScreen();
+                }
+        }*/
+        /*-------------------------END-------------------------*/
+
+        /*--------------------LASER MOVEMENT--------------------*/
+        // Player lasers Movement
+        i = 0;
         for(i = 0; i < shots_player_count; i++) {
             if (shots_player[i]) {
                 drawLaser(shots_player[i]);
