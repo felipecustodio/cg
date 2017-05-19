@@ -31,7 +31,7 @@ GLuint hudL, hudM, hudR, hudShips, hudWave, hudScore;
 // Textures
 GLuint background_texture, parallax1_texture, parallax2_texture, player_texture,
 alien_1_1, alien_1_2, alien_2_1, alien_2_2,
-alien_3_1, alien_3_2, base_texture, pause, game_over;
+alien_3_1, alien_3_2, base_texture, pause, game_over, victory_screen;
 
 // Load all textures to program
 int loadTextures();
@@ -49,6 +49,8 @@ void reshape(int width, int height);
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 void drawLoop();
+void checkCollisions();
+void destroyDesallocLaser(int i);
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 
 #endif

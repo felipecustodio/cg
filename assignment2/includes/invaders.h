@@ -20,9 +20,11 @@ extern GLuint laserblur;
 // Game mechanics
 extern int shots_player_count;
 extern int shots_enemy_count;
+extern int enemies_left;
 extern int level;
 extern int paused;
 extern int gameover;
+extern int victory;
 
 // Movement
 extern GLfloat playerPosition; // player position (x)
@@ -31,7 +33,6 @@ extern GLfloat laserSpeed; // laser speed
 extern GLfloat enemyPositionX; // enemy position (x)
 extern GLfloat enemyPositionY; // enemy position (y)
 extern GLfloat enemySpeed; // enemy horizontal speed
-extern GLfloat enemyApproach; // enemy vertical speed (approaching player base)
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 /* ------------------------------- PLAYER ----------------------------------- */
@@ -84,6 +85,11 @@ typedef struct enemy {
         GLfloat pos_x;
         GLfloat pos_y;
 
+        // Boundaries
+        GLfloat boundaryL;
+        GLfloat boundaryR;
+        GLfloat boundaryD;
+
         // Laser cooldown
         int cooldown;
 
@@ -107,8 +113,12 @@ typedef struct laser {
         GLfloat x[4];
         GLfloat y[4];
 
-        // Position to translate
+        // Movement
         int position;
+
+        // Boundary
+        GLfloat boundaryU; // up
+        GLfloat boundaryD; // down
 
         // Has it exploded yet?
         int explosion;

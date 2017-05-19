@@ -8,24 +8,28 @@ GLuint laserblur;
 // Amount of lasers on screen
 int shots_player_count = 0;
 int shots_enemy_count = 0;
+int enemies_left = 25;
 
 // Current level
 int level = 1;
 int paused = 0;
 int gameover = 0;
+int victory = 0;
 
 // Initialize external globals
 GLfloat playerPosition = 0; // player position (x)
 GLfloat playerSpeed = 7.0f;
 GLfloat enemyXSpeed = 1.0f;
-GLfloat enemyYSpeed = -0.5f;
+GLfloat enemyYSpeed = 3.0f;
 GLfloat laserSpeed = 10.0f; // laser vertical speed
-GLfloat enemySpeed = 0; // enemy horizontal speed
-GLfloat enemyApproach = 0; // enemy vertical speed (approaching player base)
+
+GLfloat matrix_boundR;
+GLfloat matrix_boundL;
 
 const int WIDTH_ENEMY_MATRIX = 5;
 const int HEIGHT_ENEMY_MATRIX = 5;
 const int TOTAL_ENEMIES = 25;
+
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 /* ------------------------------- PLAYER ----------------------------------- */
@@ -105,6 +109,9 @@ ENEMY** createEnemyMatrix() {
     createEnemy(enemies[i], i/WIDTH_ENEMY_MATRIX, (i - (i / WIDTH_ENEMY_MATRIX) * WIDTH_ENEMY_MATRIX));
   }
 
+  matrix_boundR = enemies[14]->boundaryR;
+  matrix_boundL = enemies[10]->boundaryL;
+
   return enemies;
 }
 
@@ -131,6 +138,7 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
         enemy->y[2] = 160 - (xindex * 60);
         enemy->y[3] = 120 - (xindex * 60);
 
+        // Set enemy shapes for each line
         if (xindex == 3 || xindex == 4) {
           enemy->shape = 1;
         }
@@ -141,6 +149,11 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
           enemy->shape = 2;
         }
 
+        // Set boundaries
+        enemy->boundaryL = enemy->x[0]; // left
+        enemy->boundaryR = enemy->x[2]; // right
+        enemy->boundaryD = enemy->y[1]; // down
+
         // Reset variables
         enemy->pos_x = 0;
         enemy->pos_y = 0;
@@ -149,33 +162,43 @@ void createEnemy(ENEMY* enemy, int xindex, int yindex) {
 }
 
 
-void moveEnemies(ENEMY** enemies){
+void moveEnemies(ENEMY** enemies) {
   int i = 0;
 
-  // Verificar colisão com direita
-  //printf("conta: %f\n", enemies[14]->pos_x - enemies[14]->x[2]);
-  IF_DEBUG printf("coordenada: %f\n", enemies[14]->x[2]);
-  if(!(checkBorders(enemies[14]->pos_x - enemies[14]->x[2]))) {
-          // move left
+  // Check if enemy matrix reached window border (right)
+  if(enemyXSpeed == 1 && (!checkBorders(matrix_boundR))) {
+          // reverse, move left
           enemyXSpeed = -1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y += enemyYSpeed;
+                  if(enemies[i] != NULL) {
+                          enemies[i]->pos_y -= enemyYSpeed; // update position
+                          enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                  }
           }
   }
 
-  // Verificar colisão com esquerda
-  //printf("pos_x[10]: %f\n", enemies[10]->pos_x + enemies[10]->x[1]);
-  if(!(checkBorders(enemies[10]->pos_x + enemies[10]->x[1]))) {
-          // move right
+  // Check if enemy matrix reached window border (left)
+  if(enemyXSpeed == -1.0f && (!checkBorders(matrix_boundL))) {
+          // reverse, move right
           enemyXSpeed = 1.0f;
           for (i = 0; i < TOTAL_ENEMIES; i++) {
-            enemies[i]->pos_y += enemyYSpeed;
+                  if(enemies[i] != NULL) {
+                          enemies[i]->pos_y -= enemyYSpeed; // update position
+                          enemies[i]->boundaryD -= enemyYSpeed; // move boundary
+                  }
           }
   }
 
+  // Update positions
   for (i = 0; i < TOTAL_ENEMIES; i++) {
-    enemies[i]->pos_x += enemyXSpeed;
-  }
+                if (enemies[i]->health > 0) {
+                        enemies[i]->pos_x += enemyXSpeed;
+                        enemies[i]->boundaryL += enemyXSpeed;
+                        enemies[i]->boundaryR += enemyXSpeed;
+                }
+        }
+        matrix_boundL += enemyXSpeed;
+        matrix_boundR += enemyXSpeed;
 }
 
 void drawEnemy(ENEMY* enemy) {
@@ -205,8 +228,11 @@ void drawEnemy(ENEMY* enemy) {
         freeQuad(enemySprite);
 }
 
-void destroyEnemy(ENEMY* enemy){
-
+void destroyEnemy(ENEMY* enemy) {
+        // if(enemy != NULL) free(enemy);
+        enemy->health = 0;
+        enemy->boundaryL = 999999;
+        enemy->boundaryR = 999999;
 }
 
 /* ------------------------------- ENEMY ------------------------------------ */
@@ -229,7 +255,12 @@ LASER* createLaser(int x, int y, int color) {
         laser->y[2] = y + 30;
         laser->y[3] = y;
 
+        // movement
         laser->position = 0;
+        // boundaries
+        laser->boundaryU = laser->y[1];
+        laser->boundaryD = laser->y[0];
+
         laser->color = color;
         laser->explosion = 0;
 
@@ -249,6 +280,7 @@ void shootLaser_Enemy(LASER** shots, int *amount, int x, int y) {
 }
 
 void drawLaser(LASER* laser) {
+        if (laser->explosion == 1) return -1;
         glLoadIdentity(); // load matrix for new laser
         Quadrilateral *laserSprite = createQuad();
             setQuadCoordinates(laserSprite,
@@ -277,7 +309,9 @@ void drawLaser(LASER* laser) {
 }
 
 void destroyLaser(LASER* laser) {
-        free(laser);
+        laser->explosion = 1;
+        laser->boundaryU = 999999;
+        laser->boundaryD = 999999;
 }
 /* -------------------------------- LASER ----------------------------------- */
 
@@ -301,7 +335,7 @@ void saveGame() {
 
 }
 
-void resetGame(){
+void resetGame() {
     // invaders.c variables
     playerPosition = 0;
 
@@ -310,16 +344,16 @@ void resetGame(){
     player = createPlayer();
 
     int i = 0;
-    if(enemies){
-        for(i = 0; i < 25; i++){
-            if(enemies[i]){
+    if(enemies) {
+        for(i = 0; i < 25; i++) {
+            if(enemies[i]) {
                 destroyEnemy(enemies[i]);
             }
         }
     }
 
     i = 0;
-    for(i = 0; i < shots_player_count; i++){
+    for(i = 0; i < shots_player_count; i++) {
         destroyLaser(shots_player[i]);
     }
     free(shots_player);
