@@ -148,7 +148,7 @@ void keyPress(unsigned char key, int x, int y) {
             }
         } else if (key == ' ') {
             if(screen == 0){
-                //Mix_PlayChannel(-1, coin, 0);
+                Mix_PlayChannel(-1, coin, 0);
                 screen = 1;
             } else if(screen == 1){
                 if(!paused && !gameover && !victory && shoot_flag){
