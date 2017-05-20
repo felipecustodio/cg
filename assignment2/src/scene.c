@@ -590,13 +590,13 @@ void drawScene() {
 
         parallaxfactor = playerPosition / 4;
 
-        glTranslatef(parallaxfactor, 0.0f, 0.0f);
+        glTranslatef(parallaxfactor, 50.0f, 0.0f);
 
         Quadrilateral *base = createQuad();
-        setQuadCoordinates(base, -VIEWPORT_X, -VIEWPORT_Y,
+        setQuadCoordinates(base, -VIEWPORT_X, -VIEWPORT_Y - 200,
                                  -VIEWPORT_X, -200,
                                 VIEWPORT_X, -200,
-                                VIEWPORT_X, -VIEWPORT_Y);
+                                VIEWPORT_X, -VIEWPORT_Y - 200);
         setQuadTexture(base, base_texture);
         drawQuadTextured(base);
         freeQuad(base);
