@@ -80,6 +80,13 @@ void drawPlayer(PLAYER* player) {
         freeQuad(playerSprite);
 }
 
+void killPlayer(PLAYER* player){
+    player->health -= 1;
+    player->boundaryL = -28;
+    player->boundaryR = 28;
+    playerPosition = 0;
+}
+
 void destroyPlayer(PLAYER* player) {
         free(player);
 }
@@ -349,7 +356,7 @@ void drawLaser(LASER* laser) {
                         setQuadColor(laserSprite, 0.75f, 1.0f, 1.0f); // player laser = blue
                         break;
                     case 1:
-                        setQuadColor(laserSprite, 0.88f, 0.2f, 0.2f); // enemy laser = red
+                        setQuadColor(laserSprite, 1.0f, 0.75f, 0.75f); // enemy laser = red
                         break;
             }
             glTranslatef(0.0f, laser->position, 0.0f); // move laser
@@ -383,7 +390,7 @@ void drawExplosion(float x, float y, int color){
                     setQuadColor(expSprite, 0.75f, 1.0f, 1.0f); // player laser = blue
                     break;
                 case 1:
-                    setQuadColor(expSprite, 0.88f, 0.2f, 0.2f); // enemy laser = red
+                    setQuadColor(expSprite, 1.0f, 0.75f, 0.75f); // enemy laser = red
                     break;
         }
         glTranslatef(x, y, 0.0f);
@@ -408,7 +415,7 @@ int switchTexture(int frame) {
 /* ----------------------------- ANIMATIONS --------------------------------- */
 
 /* -------------------------------- GAME ------------------------------------ */
-void levelUp(){
+void levelUp() {
     level += 1;
     enemyXSpeed = level;
     enemies_left = 25;
@@ -419,6 +426,27 @@ void levelUp(){
 
 void saveGame() {
 
+}
+
+void enemyShoot(LASER*** shots_enemy, ENEMY** enemies) {
+        GLfloat time = glutGet(GLUT_ELAPSED_TIME);
+
+        // Choose enemy that will shoot
+        int random = rand() % 25; // 0 to 24
+        while (enemies[random]->health == 0) {
+                random = rand() % 25;
+        }
+
+        // PEW! PEW! play blaster audio
+        Mix_PlayChannel(-1, blaster, 0);
+        // create new laser
+        if(*shots_enemy == NULL) {
+            *shots_enemy = (LASER **)malloc(sizeof(LASER*));
+        }
+        else {
+            *shots_enemy = (LASER **)realloc(*shots_enemy, sizeof(LASER *) * (shots_enemy_count + 1));
+        }
+        shootLaser_Enemy(*shots_enemy, &shots_enemy_count, enemies[random]->boundaryL + WIDTH_ENEMY_MATRIX, enemies[random]->boundaryU);
 }
 
 void resetGame() {

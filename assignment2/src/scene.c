@@ -26,6 +26,10 @@ char rightMouseButtonDown = 0;
 char Adown = 0;
 char Ddown = 0;
 
+/* ------ TIMER -----*/
+GLfloat shoot_timer = 0;
+GLfloat current_time = 0;
+
 /* ------ AUDIOS -----*/
 Mix_Chunk *blaster = NULL;
 Mix_Chunk *blaster2 = NULL;
@@ -142,7 +146,7 @@ void keyPress(unsigned char key, int x, int y) {
                 if(shots_player == NULL) {
                     shots_player = (LASER **) malloc(sizeof(LASER *));
                 }
-                else{
+                else {
                     shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
                 }
                 shootLaser_Player(shots_player, &shots_player_count, playerPosition);
@@ -234,15 +238,15 @@ void reshape(int width, int height) {
 int initAudio() {
 
         // Audio assets
-        char* BG = "./assets/audio/uncharted8bit.wav";
-        char* BLASTER = "./assets/audio/tie-blaster.wav";
-        char* BLASTER2 = "./assets/audio/laser1.wav";
-        char* DESTROY1 = "./assets/audio/explosion.wav";
-        char* WILHELM = "./assets/audio/wilhelm.wav";
-        char* VICTORY = "./assets/audio/victory.wav";
-        char* COIN_SOUND = "./assets/audio/coin.wav";
-        char* LOSE_SOUND = "./assets/audio/lose.wav";
-        char* POWERUP_SOUND = "./assets/audio/powerup.wav";
+        char* BG = "./assets/audio/uncharted8bit.wav"; // BGM
+        char* BLASTER = "./assets/audio/tie-blaster.wav"; // enemy blaster
+        char* BLASTER2 = "./assets/audio/laser1.wav"; // player blaster
+        char* DESTROY1 = "./assets/audio/explosion.wav"; // explosion
+        char* WILHELM = "./assets/audio/wilhelm.wav"; // reset game
+        char* VICTORY = "./assets/audio/victory.wav"; // victory fanfare
+        char* COIN_SOUND = "./assets/audio/coin.wav"; // score
+        char* LOSE_SOUND = "./assets/audio/lose.wav"; // game over
+        char* POWERUP_SOUND = "./assets/audio/powerup.wav"; // powerup
 
 
         // Initialize SDL
@@ -330,7 +334,7 @@ void parallaxMotionY(){
         parallax_curYfg = 0;
 }
 
-void lasersMotionY(){
+void lasersMotionY() {
     /*--------------------LASER MOVEMENT--------------------*/
     // Player lasers Movement
     int i = 0;
@@ -345,7 +349,6 @@ void lasersMotionY(){
     }
 
     // Enemy lasers movement
-    i = 0;
     for(i = 0; i < shots_enemy_count; i++) {
         if (shots_enemy[i] != NULL) {
             // Move laser (enemy) down
@@ -395,12 +398,12 @@ void checkCollisions_Screen() {
     for(i = 0; i < shots_enemy_count; i++) {
         // Check bottom boundary
         if(shots_enemy[i] != NULL && shots_enemy[i]->boundaryD <= -340) {
-            destroyDesallocLaser_Player(i);
+            destroyDesallocLaser_Enemy(i);
         }
     }
 }
 
-void checkCollisions_Player(){
+void checkCollisions_Player() {
     // player laser vs enemy
     int i = 0, j = 0;
     for (i = 0; i < shots_player_count; i++) {
@@ -430,7 +433,6 @@ void checkCollisions_Player(){
                                             player->score += 30; // update score
                                             break;
                                     }
-                                    //destroyEnemy(enemies[j]); // destroy enemy
                                     enemies_left -= 1; // one down, more to go
                                 }
                                 if(shots_player_count <= i){
@@ -446,7 +448,7 @@ void checkCollisions_Player(){
     }
 }
 
-void checkCollisions_Enemy(){
+void checkCollisions_Enemy() {
     int i = 0, j = 0;
     /*--------------------ENEMY LASERS VS PLAYER--------------------*/
     for (i = 0; i < shots_enemy_count; i++) {
@@ -454,9 +456,10 @@ void checkCollisions_Enemy(){
             && shots_enemy[i]->x[2] <= player->boundaryR) {
             // Laser is aligned with player, check if hit
             if (shots_enemy[i]->boundaryD <= -200) {
-                Mix_PlayChannel(-1, explosion, 0);
                 // Laser hit player!
-                player->health -= 1;
+                Mix_PlayChannel(-1, explosion, 0);
+                drawExplosion(shots_enemy[i]->x[0], shots_enemy[i]->boundaryD, 0);
+                killPlayer(player);
                 destroyDesallocLaser_Enemy(i);
             }
         }
@@ -823,6 +826,13 @@ void drawLoop() {
         parallaxMotionY();
 
         if (!paused && !gameover && !victory) {
+            // Enemy fire
+            current_time = glutGet(GLUT_ELAPSED_TIME);
+            int nextTime = 5000/level + rand() % 3000;
+            if (shoot_timer - current_time < - nextTime) {
+                enemyShoot(&shots_enemy, enemies);
+                shoot_timer = current_time;
+            }
             // Check for Game Over
             checkGameOver();
 
