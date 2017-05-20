@@ -249,6 +249,21 @@ void drawEnemy(ENEMY* enemy) {
                     enemy->current_time = time;
             }
 
+            // change color according to health
+            switch(enemy->shape) {
+                    case 3:
+                        if (enemy->health == 2) {
+                                setQuadColor(enemySprite, 0.96, 0.83, 0.25); // yellow
+                        } else if (enemy->health == 1) {
+                                setQuadColor(enemySprite, 0.91, 0.22, 0.22); // red
+                        }
+                        break;
+                    case 2:
+                    if (enemy->health == 1) {
+                            setQuadColor(enemySprite, 0.91, 0.22, 0.22); // red
+                    }
+            }
+
             // set enemy shape
             switch(enemy->shape) {
                     case 1:

@@ -158,9 +158,9 @@ Quadrilateral* createQuad() {
 
     quad->thickness = 1.0f;
 
-    quad->color[0] = 0.0;
-    quad->color[1] = 0.0;
-    quad->color[2] = 0.0;
+    quad->color[0] = 1.0;
+    quad->color[1] = 1.0;
+    quad->color[2] = 1.0;
 
     quad->texture = 0;
 
@@ -251,6 +251,7 @@ void drawQuadTextured(Quadrilateral *quad){
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor3f(quad->color[0], quad->color[1], quad->color[2]);
     glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
         glVertex2f(quad->x[0], quad->y[0]);

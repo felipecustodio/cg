@@ -379,7 +379,7 @@ void destroyDesallocLaser_Enemy(int i) {
     shots_enemy = (LASER **) realloc(shots_enemy, sizeof(LASER *) * shots_enemy_count);
 }
 
-void checkCollisions_Screen(){
+void checkCollisions_Screen() {
     int i = 0, j = 0;
     // Player laser screen collision check
     for(i = 0; i < shots_player_count; i++) {
@@ -389,7 +389,6 @@ void checkCollisions_Screen(){
         }
     }
 
-    i = 0;
     // Enemy screen collision check
     for(i = 0; i < shots_enemy_count; i++) {
         // Check bottom boundary
@@ -400,7 +399,7 @@ void checkCollisions_Screen(){
 }
 
 void checkCollisions_Player(){
-    // Laser enemy collision check
+    // player laser vs enemy
     int i = 0, j = 0;
     for (i = 0; i < shots_player_count; i++) {
         for (j = 0; j < TOTAL_ENEMIES; j++) {
@@ -412,11 +411,12 @@ void checkCollisions_Player(){
                             shots_player[i]->x[2] <= enemies[j]->boundaryR) {
                             // Check Y boundaries
                             if (shots_player[i]->boundaryU <= enemies[j]->boundaryD && shots_player[i]->boundaryD >= enemies[j]->boundaryU) {
+                                // HIT!
                                 Mix_PlayChannel(-1, explosion, 0);
                                 destroyDesallocLaser_Player(i);
                                 enemies[j]->health -= 1;
-                                if (enemies[j]->health == 0){
-                                    switch(enemies[j]->shape){
+                                if (enemies[j]->health == 0) {
+                                    switch(enemies[j]->shape) {
                                         case 1:
                                             player->score += 10; // update score
                                             break;
@@ -491,15 +491,17 @@ void checkCollisions() {
 }
 /*--------------------COLLISION CHECKING-------------------*/
 
-void checkGameOver(){
+void checkGameOver() {
     if(player->health == 0) {
         Mix_PlayChannel(-1, lose, 0);
+        powerup_flag = 0;
         gameover = 1;
     }
 }
 
 void checkVictory() {
     if (enemies_left == 0) {
+        powerup_flag = 0;
         victory = 1;
         // check for victory
         if (enemies_left == 0) {
