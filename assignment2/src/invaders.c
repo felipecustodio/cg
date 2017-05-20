@@ -49,8 +49,8 @@ PLAYER* createPlayer() {
         player->y[3] = -250;
 
         // Set boundaries
-        player->boundary_left = -28;
-        player->boundary_right = 28;
+        player->boundaryL = -28;
+        player->boundaryR = 28;
 
         // Player can take 3 hits
         player->health = 3;
@@ -162,8 +162,8 @@ ENEMY *createEnemy(int xindex, int yindex) {
         // Set boundaries
         enemy->boundaryL = enemy->x[0]; // left
         enemy->boundaryR = enemy->x[2]; // right
-        enemy->boundaryD = enemy->y[1]; // down
-        enemy->boundaryU = enemy->y[0]; // up
+        enemy->boundaryD = enemy->y[1] - 30; // down
+        enemy->boundaryU = enemy->y[0] - 30; // up
 
         // Reset variables
         enemy->pos_x = 0;
@@ -369,13 +369,32 @@ int switchTexture(int frame) {
 /* ----------------------------- ANIMATIONS --------------------------------- */
 
 /* -------------------------------- GAME ------------------------------------ */
+void levelUp(){
+    level += 1;
+    enemyXSpeed = level;
+    enemies_left = 25;
+
+    destroyEnemyMatrix(enemies);
+    enemies = createEnemyMatrix();
+}
+
 void saveGame() {
 
 }
 
 void resetGame() {
     // invaders.c variables
+    shots_player_count = 0;
+    shots_enemy_count = 0;
+    enemies_left = 25;
+
+    level = 1;
+    paused = 0;
+    gameover = 0;
+    victory = 0;
+
     playerPosition = 0;
+    enemyXSpeed = 1.0f;
 
     // scene.c variables
     destroyPlayer(player);
@@ -397,14 +416,5 @@ void resetGame() {
     }
     free(shots_enemy);
     shots_enemy = NULL;
-
-    shots_player_count = 0;
-    shots_enemy_count = 0;
-    enemies_left = 25;
-
-    level = 1;
-    paused = 0;
-    gameover = 0;
-    victory = 0;
 }
 /* -------------------------------- GAME ------------------------------------ */

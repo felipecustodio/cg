@@ -184,18 +184,18 @@ void keyHold() {
         // D - Move right
         if (Adown) {
                 // check for collision with window
-                if((checkBorders(player->boundary_left - playerSpeed))) {
+                if((checkBorders(player->boundaryL - playerSpeed))) {
                         // move left
-                        player->boundary_left -= playerSpeed;
-                        player->boundary_right -= playerSpeed;
+                        player->boundaryL -= playerSpeed;
+                        player->boundaryR -= playerSpeed;
                         playerPosition -= playerSpeed;
                 }
         } else if (Ddown) {
                 // check for collision with window
-                if((checkBorders(player->boundary_right + playerSpeed))) {
+                if((checkBorders(player->boundaryR + playerSpeed))) {
                         // move right
-                        player->boundary_right += playerSpeed;
-                        player->boundary_left += playerSpeed;
+                        player->boundaryR += playerSpeed;
+                        player->boundaryL += playerSpeed;
                         playerPosition += playerSpeed;
                 }
         }
@@ -444,11 +444,11 @@ void checkCollisions_Player(){
 }
 
 void checkCollisions_Enemy(){
-    /*--------------------ENEMY LASERS VS PLAYER--------------------*/
     int i = 0, j = 0;
+    /*--------------------ENEMY LASERS VS PLAYER--------------------*/
     for (i = 0; i < shots_enemy_count; i++) {
-        if (shots_enemy[i]->x[0] >= player->boundary_left
-            && shots_enemy[i]->x[2] <= player->boundary_right) {
+        if (shots_enemy[i]->x[0] >= player->boundaryL
+            && shots_enemy[i]->x[2] <= player->boundaryR) {
             // Laser is aligned with player, check if hit
             if (shots_enemy[i]->boundaryD <= -200) {
                 Mix_PlayChannel(-1, explosion, 0);
@@ -498,13 +498,16 @@ void checkGameOver(){
     }
 }
 
-void checkVictory() {
+void checkLevelUp(){
     if (enemies_left == 0) {
+        levelUp();
+    }
+}
+
+void checkVictory() {
+    if (level == 10 && enemies_left == 0) {
         victory = 1;
-        // check for victory
-        if (enemies_left == 0) {
-                Mix_PlayChannel(-1, fanfare, 0); // play fanfare
-        }
+        Mix_PlayChannel(-1, fanfare, 0); // play fanfare
     }
 }
 
@@ -816,6 +819,9 @@ void drawLoop() {
 
             // Check for Victory
             checkVictory();
+
+            // Check for Level Up
+            checkLevelUp();
 
             // Check for coins
             checkScore();

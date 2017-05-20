@@ -46,8 +46,8 @@ typedef struct player {
         GLfloat y[4];
 
         // Movement
-        GLfloat boundary_left;
-        GLfloat boundary_right;
+        GLfloat boundaryL;
+        GLfloat boundaryR;
 
         // Health
         int health;
@@ -157,6 +157,7 @@ int switchTexture();
 /* ----------------------------- ANIMATIONS --------------------------------- */
 
 /* -------------------------------- GAME ------------------------------------ */
+void levelUp();
 void saveGame();
 void resetGame();
 /* -------------------------------- GAME ------------------------------------ */
