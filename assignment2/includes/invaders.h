@@ -10,8 +10,8 @@
 #include <SDL/SDL.h>
 #include <time.h>
 #include "shapes.h"
+#include "scene.h"
 #include "transforms.h"
-#include "physics.h"
 #include "settings.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -147,6 +147,7 @@ LASER* createLaser(int x, int y, int color);
 void destroyLaser(LASER *laser);
 
 // Action
+void enemyShoot(LASER** shots_enemy, ENEMY** enemies);
 void shootLaser_Player(LASER** shots, int *amount, int x);
 void shootLaser_Enemy(LASER** shots, int *amount, int x, int y);
 void drawLaser(LASER* laser);

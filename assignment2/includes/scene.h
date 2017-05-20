@@ -10,7 +10,6 @@
 #include "../includes/SDL_mixer/SDL_mixer.h"
 #include "shapes.h"
 #include "transforms.h"
-#include "physics.h"
 #include "settings.h"
 #include "invaders.h"
 
@@ -39,6 +38,7 @@ int loadTextures();
 
 /* -------------------------------- AUDIO ----------------------------------- */
 extern Mix_Chunk *bg; // BGM starts playing at main
+extern Mix_Chunk *blaster; // Enemy blaster played at invaders
 int initAudio();
 void audioCleanup();
 /* -------------------------------- AUDIO ----------------------------------- */

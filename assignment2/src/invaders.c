@@ -384,7 +384,7 @@ int switchTexture(int frame) {
 /* ----------------------------- ANIMATIONS --------------------------------- */
 
 /* -------------------------------- GAME ------------------------------------ */
-void levelUp(){
+void levelUp() {
     level += 1;
     enemyXSpeed = level;
     enemies_left = 25;
@@ -395,6 +395,28 @@ void levelUp(){
 
 void saveGame() {
 
+}
+
+void enemyShoot(LASER** shots_enemy, ENEMY** enemies) {
+
+        GLfloat time = glutGet(GLUT_ELAPSED_TIME);
+
+        // Choose enemy that will shoot
+        int random = rand() % 25; // 0 to 24
+        while (enemies[random]->health == 0) {
+                random = rand() % 25;
+        }
+
+        // PEW! PEW! play blaster audio
+        Mix_PlayChannel(-1, blaster, 0);
+        // create new laser
+        if(shots_enemy == NULL) {
+            shots_enemy = (LASER **)malloc(sizeof(LASER*));
+        }
+        else {
+            shots_enemy = (LASER **)realloc(shots_enemy, sizeof(LASER *) * (shots_enemy_count + 1));
+        }
+        shootLaser_Enemy(shots_enemy, &shots_enemy_count, enemies[random]->boundaryL, enemies[random]->boundaryU);
 }
 
 void resetGame() {
