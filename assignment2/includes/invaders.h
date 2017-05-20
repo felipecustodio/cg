@@ -147,7 +147,7 @@ LASER* createLaser(int x, int y, int color);
 void destroyLaser(LASER *laser);
 
 // Action
-void enemyShoot(LASER** shots_enemy, ENEMY** enemies);
+void enemyShoot(LASER*** shots_enemy, ENEMY** enemies);
 void shootLaser_Player(LASER** shots, int *amount, int x);
 void shootLaser_Enemy(LASER** shots, int *amount, int x, int y);
 void drawLaser(LASER* laser);

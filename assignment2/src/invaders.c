@@ -397,7 +397,7 @@ void saveGame() {
 
 }
 
-void enemyShoot(LASER** shots_enemy, ENEMY** enemies) {
+void enemyShoot(LASER*** shots_enemy, ENEMY** enemies) {
 
         GLfloat time = glutGet(GLUT_ELAPSED_TIME);
 
@@ -410,13 +410,13 @@ void enemyShoot(LASER** shots_enemy, ENEMY** enemies) {
         // PEW! PEW! play blaster audio
         Mix_PlayChannel(-1, blaster, 0);
         // create new laser
-        if(shots_enemy == NULL) {
-            shots_enemy = (LASER **)malloc(sizeof(LASER*));
+        if(*shots_enemy == NULL) {
+            *shots_enemy = (LASER **)malloc(sizeof(LASER*));
         }
         else {
-            shots_enemy = (LASER **)realloc(shots_enemy, sizeof(LASER *) * (shots_enemy_count + 1));
+            *shots_enemy = (LASER **)realloc(*shots_enemy, sizeof(LASER *) * (shots_enemy_count + 1));
         }
-        shootLaser_Enemy(shots_enemy, &shots_enemy_count, enemies[random]->boundaryL, enemies[random]->boundaryU);
+        shootLaser_Enemy(*shots_enemy, &shots_enemy_count, enemies[random]->boundaryL, enemies[random]->boundaryU);
 }
 
 void resetGame() {
