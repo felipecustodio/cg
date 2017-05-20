@@ -2,6 +2,10 @@
 #include "../includes/scene.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
+/* --- MECHANICS -- */
+int screen = 0; // 0 = menu, 1 = game
+int rotLogo = 0;
+
 /* ------ BG ----- */
 GLfloat parallax_curYbg = 0.0;
 GLfloat parallax_curYfg = 0.0;
@@ -86,11 +90,15 @@ int loadTextures() {
         game_over = loadTexture("./assets/textures/gameover.png");
         victory_screen = loadTexture("./assets/textures/youwin.png");
 
+        logo = loadTexture("./assets/textures/spaceinvaders.png");
+        press_start = loadTexture("./assets/textures/press_start.png");
+
         if (!(hudL || hudM || hudR || background_texture
                 || player_texture ||alien_1_1 ||
                 alien_1_2 || alien_2_1 ||
                 alien_2_2 || alien_3_1 ||
-                alien_3_2 || pause || game_over || victory_screen)) {
+                alien_3_2 || pause || game_over || victory_screen ||
+                logo || press_start)) {
                 return EXIT_FAILURE;
         }
 
@@ -126,44 +134,56 @@ void mouseHold() {
 // Key presses
 void keyPress(unsigned char key, int x, int y) {
         if (key == 'a' || key == 'A') {
-            if(!paused && !gameover && !victory)
+            if(!paused && !gameover && !victory && screen == 1)
                 Adown = 1; // hold A key
         } else if (key == 'd' || key == 'D') {
-            if(!paused && !gameover && !victory)
+            if(!paused && !gameover && !victory && screen == 1)
                 Ddown = 1; // hold D key
         } else if (key == 'p' || key == 'P') {
-            if (!gameover && !victory) {
+            if (!gameover && !victory && screen == 1) {
                 if(paused == 0)
                     paused = 1;
                 else
                     paused = 0;
             }
-        } else if (key == ' ' && shoot_flag) {
-            if(!paused && !gameover && !victory){
-                // PEW! PEW! play blaster audio
-                Mix_PlayChannel(-1, blaster2, 0);
-                // create new laser
-                if(shots_player == NULL) {
-                    shots_player = (LASER **) malloc(sizeof(LASER *));
+        } else if (key == ' ') {
+            if(screen == 0){
+                //Mix_PlayChannel(-1, coin, 0);
+                screen = 1;
+            } else if(screen == 1){
+                if(!paused && !gameover && !victory && shoot_flag){
+                    // PEW! PEW! play blaster audio
+                    Mix_PlayChannel(-1, blaster2, 0);
+                    // create new laser
+                    if(shots_player == NULL) {
+                        shots_player = (LASER **) malloc(sizeof(LASER *));
+                    }
+                    else {
+                        shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
+                    }
+                    shootLaser_Player(shots_player, &shots_player_count, playerPosition);
+                    if(!player->powerup) shoot_flag = 0;
                 }
-                else {
-                    shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
+                else if(gameover || victory) {
+                    resetGame();
+                    screen = 0;
                 }
-                shootLaser_Player(shots_player, &shots_player_count, playerPosition);
-                if(!player->powerup) shoot_flag = 0;
-            }
-            else if(gameover || victory) {
-                resetGame();
             }
         } else if (key == 'r' || key == 'R') {
+            if(screen == 1){
                 Mix_PlayChannel(-1, wilhelm, 0);
                 resetGame();
+                screen = 0;
+            }
         } else if (key == 'e' || key == 'E') {
                 Mix_PlayChannel(-1, blaster2, 0);
                 exit(0);
         } else if (key == 'g' || key == 'G') {
+            if(screen == 1){
                 gameover = 1;
+            }
         } else if (key == 'k' || key == 'K') {
+            if(screen == 1){
                 Mix_PlayChannel(-1, powerup, 0);
                 if(!powerup_flag) {
                         player->powerup = 1;
@@ -172,6 +192,7 @@ void keyPress(unsigned char key, int x, int y) {
                         powerup_flag = 0;
                         player->powerup = 0;
                 }
+            }
         }
 }
 
@@ -474,7 +495,6 @@ void checkCollisions_Enemy() {
                 if (enemies[i]->health > 0) {
                     if (enemies[i]->boundaryD <= -180) {
                             // Enemy hit base! Game Over!
-                            Mix_PlayChannel(-1, lose, 0);
                             gameover = 1;
                     }
                 }
@@ -528,121 +548,121 @@ void checkScore() {
 /* ------------------------------- MECHANICS -------------------------------- */
 
 /*-------------------------------- RENDERING ---------------------------------*/
-/*--------------------SCENE--------------------*/
-void drawScene() {
-        int i = 0;
-        // Load matrix mode
-        glMatrixMode(GL_MODELVIEW);
+void drawBackground(){
+    /*--------------------BACKGROUND--------------------*/
+    // Refresh matrix for new object
+    glLoadIdentity();
 
-        /*--------------------BACKGROUND--------------------*/
-        // Refresh matrix for new object
-        glLoadIdentity();
+    Quadrilateral *bgSprite = createQuad();
+        setQuadCoordinates(bgSprite, -VIEWPORT_X, -VIEWPORT_Y,
+                            -VIEWPORT_X, VIEWPORT_Y,
+                            VIEWPORT_X, VIEWPORT_Y,
+                            VIEWPORT_X, -VIEWPORT_Y);
+        setQuadTexture(bgSprite, background_texture);
+        drawQuadTextured(bgSprite);
+    freeQuad(bgSprite);
 
-        Quadrilateral *bgSprite = createQuad();
-            setQuadCoordinates(bgSprite, -VIEWPORT_X, -VIEWPORT_Y,
-                                -VIEWPORT_X, VIEWPORT_Y,
-                                VIEWPORT_X, VIEWPORT_Y,
-                                VIEWPORT_X, -VIEWPORT_Y);
-            setQuadTexture(bgSprite, background_texture);
-            drawQuadTextured(bgSprite);
-        freeQuad(bgSprite);
+    // Refresh matrix for new object
+    glLoadIdentity();
 
-        // Refresh matrix for new object
-        glLoadIdentity();
+    // Move parallax relative to player
+    int parallaxfactor = playerPosition / 12;
 
-        // Move parallax relative to player
-        int parallaxfactor = playerPosition / 12;
+    glTranslatef(parallaxfactor, parallax_curYbg, 0.0f);
 
-        glTranslatef(parallaxfactor, parallax_curYbg, 0.0f);
+    Quadrilateral *parallax1Sprite = createQuad();
+        setQuadCoordinates(parallax1Sprite, -VIEWPORT_X - 100, -VIEWPORT_Y - 100,
+                            -VIEWPORT_X - 100, VIEWPORT_Y + 100,
+                            VIEWPORT_X + 100, VIEWPORT_Y + 100,
+                            VIEWPORT_X + 100, -VIEWPORT_Y - 100);
+        setQuadTexture(parallax1Sprite, parallax1_texture);
+        drawQuadTextured(parallax1Sprite);
+        glTranslatef(0.0f, -(2*VIEWPORT_Y + 200), 0.0f);
+        drawQuadTextured(parallax1Sprite);
+    freeQuad(parallax1Sprite);
 
-        Quadrilateral *parallax1Sprite = createQuad();
-            setQuadCoordinates(parallax1Sprite, -VIEWPORT_X - 100, -VIEWPORT_Y - 100,
-                                -VIEWPORT_X - 100, VIEWPORT_Y + 100,
-                                VIEWPORT_X + 100, VIEWPORT_Y + 100,
-                                VIEWPORT_X + 100, -VIEWPORT_Y - 100);
-            setQuadTexture(parallax1Sprite, parallax1_texture);
-            drawQuadTextured(parallax1Sprite);
-            glTranslatef(0.0f, -(2*VIEWPORT_Y + 200), 0.0f);
-            drawQuadTextured(parallax1Sprite);
-        freeQuad(parallax1Sprite);
+    // Refresh matrix for new object
+    glLoadIdentity();
 
-        // Refresh matrix for new object
-        glLoadIdentity();
+    parallaxfactor = playerPosition / 6;
 
-        parallaxfactor = playerPosition / 6;
+    glTranslatef(parallaxfactor, parallax_curYfg, 0.0f);
 
-        glTranslatef(parallaxfactor, parallax_curYfg, 0.0f);
+    Quadrilateral *parallax2Sprite = createQuad();
+        setQuadCoordinates(parallax2Sprite, -VIEWPORT_X - 200, -VIEWPORT_Y - 200,
+                            -VIEWPORT_X - 200, VIEWPORT_Y + 200,
+                            VIEWPORT_X + 200, VIEWPORT_Y + 200,
+                            VIEWPORT_X + 200, -VIEWPORT_Y - 200);
+        setQuadTexture(parallax2Sprite, parallax2_texture);
+        drawQuadTextured(parallax2Sprite);
+        glTranslatef(0.0f, -(2*VIEWPORT_Y + 200), 0.0f);
+        drawQuadTextured(parallax2Sprite);
+    freeQuad(parallax2Sprite);
+    /*--------------------END--------------------*/
+}
 
-        Quadrilateral *parallax2Sprite = createQuad();
-            setQuadCoordinates(parallax2Sprite, -VIEWPORT_X - 200, -VIEWPORT_Y - 200,
-                                -VIEWPORT_X - 200, VIEWPORT_Y + 200,
-                                VIEWPORT_X + 200, VIEWPORT_Y + 200,
-                                VIEWPORT_X + 200, -VIEWPORT_Y - 200);
-            setQuadTexture(parallax2Sprite, parallax2_texture);
-            drawQuadTextured(parallax2Sprite);
-            glTranslatef(0.0f, -(2*VIEWPORT_Y + 200), 0.0f);
-            drawQuadTextured(parallax2Sprite);
-        freeQuad(parallax2Sprite);
-        /*--------------------END--------------------*/
+void drawMenu(){
+    // Load matrix mode
+    glMatrixMode(GL_MODELVIEW);
 
-        /*--------------------BASE--------------------*/
-        glLoadIdentity();
+    drawBackground();
 
-        parallaxfactor = playerPosition / 4;
+    // Refresh matrix for new object
+    glLoadIdentity();
 
-        glTranslatef(parallaxfactor, 50.0f, 0.0f);
+    glColor4f(0.0f, 0.0f, 0.0f, 0.5f);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBegin(GL_QUADS);
+            glVertex2f(-VIEWPORT_X, -VIEWPORT_Y);
+            glVertex2f(-VIEWPORT_X, VIEWPORT_Y);
+            glVertex2f(VIEWPORT_X, VIEWPORT_Y);
+            glVertex2f(VIEWPORT_X, -VIEWPORT_Y);
+        glEnd();
+        glDisable(GL_BLEND);
+    glColor3f(1.0f, 1.0f, 1.0f);
 
-        Quadrilateral *base = createQuad();
-        setQuadCoordinates(base, -VIEWPORT_X, -VIEWPORT_Y - 200,
-                                 -VIEWPORT_X, -200,
-                                VIEWPORT_X, -200,
-                                VIEWPORT_X, -VIEWPORT_Y - 200);
-        setQuadTexture(base, base_texture);
-        drawQuadTextured(base);
-        freeQuad(base);
-        /*--------------------END--------------------*/
+    glTranslatef(0.0f, 150.0f, 0.0f);
+    Quadrilateral *logoSprite = createQuad();
+        setQuadCoordinates(logoSprite, -265, -135,
+                            -265, 135,
+                            265, 135,
+                            265, -135);
+        setQuadTexture(logoSprite, logo);
+        drawQuadTextured(logoSprite);
+    freeQuad(logoSprite);
 
-        /*--------------------PLAYER--------------------*/
-        // matrix for player
-        glLoadIdentity();
-        glColor3f(1.0f, 1.0f, 1.0f);
-        if (player == NULL) {
-            player = createPlayer();
-        }
-        drawPlayer(player);
-        /*--------------------END--------------------*/
+    // Refresh matrix for new object
+    glLoadIdentity();
 
-        /*--------------------LASERS--------------------*/
+    glTranslatef(0.0f, -75.0f, 0.0f);
+    glRotatef(-rotLogo, 0.0f, 0.0f, 1.0f);
+    Quadrilateral *enemySprite = createQuad();
+        setQuadCoordinates(enemySprite, -75, -75,
+                            -75, 75,
+                            75, 75,
+                            75, -75);
+        setQuadTexture(enemySprite, alien_1_1);
+        drawQuadTextured(enemySprite);
+    freeQuad(enemySprite);
 
-        /*------------------------ENEMY------------------------*/
-        if(enemies == NULL) {
-            enemies = createEnemyMatrix();
-        }
+    rotLogo += 1;
+    if(rotLogo >= 360){
+        rotLogo = 0;
+    }
 
-        for (i = 0; i < TOTAL_ENEMIES; i++) {
-            if(enemies[i] != NULL){
-                if (enemies[i]->health > 0) {
-                    drawEnemy(enemies[i]);
-                }
-            }
-        }
-        /*-------------------------END-------------------------*/
+    // Refresh matrix for new object
+    glLoadIdentity();
 
-        /*--------------------LASERS--------------------*/
-        i = 0;
-        for(i = 0; i < shots_player_count; i++) {
-            if (shots_player[i] != NULL) {
-                drawLaser(shots_player[i]);
-            }
-        }
-
-        i = 0;
-        for(i = 0; i < shots_enemy_count; i++) {
-            if (shots_enemy[i] != NULL) {
-                drawLaser(shots_enemy[i]);
-            }
-        }
-        /*--------------------END--------------------*/
+    glTranslatef(0.0f, -225.0f, 0.0f);
+    Quadrilateral *startSprite = createQuad();
+        setQuadCoordinates(startSprite, -325, -25,
+                            -325, 25,
+                            325, 25,
+                            325, -25);
+        setQuadTexture(startSprite, press_start);
+        drawQuadTextured(startSprite);
+    freeQuad(startSprite);
 }
 
 /*--------------------HUD--------------------*/
@@ -724,6 +744,79 @@ void drawHUD() {
         drawText(hudR_cnt, VIEWPORT_X/2 - 317, 20);
     freeText(hudR_cnt);
     // -------------- RIGHT FRAME -------------- //
+}
+
+/*--------------------SCENE--------------------*/
+void drawScene() {
+        int i = 0;
+        // Load matrix mode
+        glMatrixMode(GL_MODELVIEW);
+
+        drawBackground();
+
+        /*--------------------BASE--------------------*/
+        glLoadIdentity();
+
+        int parallaxfactor = playerPosition / 4;
+
+        glTranslatef(parallaxfactor, 50.0f, 0.0f);
+
+        Quadrilateral *base = createQuad();
+        setQuadCoordinates(base, -VIEWPORT_X, -VIEWPORT_Y - 200,
+                                 -VIEWPORT_X, -200,
+                                VIEWPORT_X, -200,
+                                VIEWPORT_X, -VIEWPORT_Y - 200);
+        setQuadTexture(base, base_texture);
+        drawQuadTextured(base);
+        freeQuad(base);
+        /*--------------------END--------------------*/
+
+        /*--------------------PLAYER--------------------*/
+        // matrix for player
+        glLoadIdentity();
+        glColor3f(1.0f, 1.0f, 1.0f);
+        if (player == NULL) {
+            player = createPlayer();
+        }
+        drawPlayer(player);
+        /*--------------------END--------------------*/
+
+        /*--------------------LASERS--------------------*/
+
+        /*------------------------ENEMY------------------------*/
+        if(enemies == NULL) {
+            enemies = createEnemyMatrix();
+        }
+
+        for (i = 0; i < TOTAL_ENEMIES; i++) {
+            if(enemies[i] != NULL){
+                if (enemies[i]->health > 0) {
+                    drawEnemy(enemies[i]);
+                }
+            }
+        }
+        /*-------------------------END-------------------------*/
+
+        /*--------------------LASERS--------------------*/
+        i = 0;
+        for(i = 0; i < shots_player_count; i++) {
+            if (shots_player[i] != NULL) {
+                drawLaser(shots_player[i]);
+            }
+        }
+
+        i = 0;
+        for(i = 0; i < shots_enemy_count; i++) {
+            if (shots_enemy[i] != NULL) {
+                drawLaser(shots_enemy[i]);
+            }
+        }
+        /*--------------------END--------------------*/
+
+        glColor3f(1.0f, 1.0f, 1.0f);
+
+        // Draw HUD
+        drawHUD();
 }
 
 void pauseScreen() {
@@ -814,49 +907,48 @@ void drawLoop() {
         // Repaint screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Draw scene
-        drawScene();
+        if(screen == 0){
+            drawMenu();
+        } else if(screen == 1){
+            // Draw scene
+            drawScene();
 
-        glColor3f(1.0f, 1.0f, 1.0f);
+            if (!paused && !gameover && !victory) {
+                // Enemy fire
+                current_time = glutGet(GLUT_ELAPSED_TIME);
+                int nextTime = 5000/level + rand() % 3000;
+                if (shoot_timer - current_time < - nextTime) {
+                    enemyShoot(&shots_enemy, enemies);
+                    shoot_timer = current_time;
+                }
+                // Check for Game Over
+                checkGameOver();
 
-        // Draw HUD
-        drawHUD();
+                // Check for Victory
+                checkVictory();
+
+                // Check for Level Up
+                checkLevelUp();
+
+                // Check for coins
+                checkScore();
+
+                // Enemy Movement
+                moveEnemies(enemies);
+
+                // Laser Movement
+                lasersMotionY();
+
+                // Check for collisions
+                checkCollisions();
+
+                // Check for key presses
+                keyHold();
+            }
+        }
 
         // Parallax vertical motion
         parallaxMotionY();
-
-        if (!paused && !gameover && !victory) {
-            // Enemy fire
-            current_time = glutGet(GLUT_ELAPSED_TIME);
-            int nextTime = 5000/level + rand() % 3000;
-            if (shoot_timer - current_time < - nextTime) {
-                enemyShoot(&shots_enemy, enemies);
-                shoot_timer = current_time;
-            }
-            // Check for Game Over
-            checkGameOver();
-
-            // Check for Victory
-            checkVictory();
-
-            // Check for Level Up
-            checkLevelUp();
-
-            // Check for coins
-            checkScore();
-
-            // Enemy Movement
-            moveEnemies(enemies);
-
-            // Laser Movement
-            lasersMotionY();
-
-            // Check for collisions
-            checkCollisions();
-
-            // Check for key presses
-            keyHold();
-        }
 
         // Paused Screen
         if (paused)
