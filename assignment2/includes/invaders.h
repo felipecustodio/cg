@@ -34,6 +34,8 @@ extern GLfloat laserSpeed; // laser speed
 extern GLfloat enemyPositionX; // enemy position (x)
 extern GLfloat enemyPositionY; // enemy position (y)
 extern GLfloat enemySpeed; // enemy horizontal speed
+
+extern const int TOTAL_ENEMIES;
 /* ------------------------------- GLOBALS ---------------------------------- */
 
 /* ------------------------------- PLAYER ----------------------------------- */
@@ -106,9 +108,9 @@ typedef struct enemy {
 
 extern ENEMY** enemies; // 25 enemies (5x5)
 
-ENEMY** createEnemyMatrix();
-void destroyEnemyMatrix(ENEMY** enemies);
-void createEnemy(ENEMY* enemy, int xindex, int yindex);
+ENEMY **createEnemyMatrix();
+void destroyEnemyMatrix(ENEMY** enemat);
+ENEMY *createEnemy(int xindex, int yindex);
 void moveEnemies(ENEMY** enemies);
 void drawEnemy(ENEMY* enemy);
 void destroyEnemy(ENEMY* enemy);
