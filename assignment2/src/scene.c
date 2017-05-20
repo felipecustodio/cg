@@ -347,8 +347,6 @@ void lasersMotionY() {
     }
 
     // Enemy lasers movement
-    if (shots_enemy == NULL) printf("its null mate\n");
-    printf("shots_enemy_count = %d\n", shots_enemy_count);
     for(i = 0; i < shots_enemy_count; i++) {
         if (shots_enemy[i] != NULL) {
             // Move laser (enemy) down
@@ -822,7 +820,7 @@ void drawLoop() {
 
             // Enemy fire
             current_time = glutGet(GLUT_ELAPSED_TIME);
-            if (shoot_timer - current_time < -800) {
+            if (shoot_timer - current_time < -800 - (rand() % 200)) {
                 enemyShoot(&shots_enemy, enemies);
                 shoot_timer = current_time;
             }
