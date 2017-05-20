@@ -74,6 +74,8 @@ int loadTextures() {
         alien_3_1 = loadTexture("./assets/textures/alien3_1.png");
         alien_3_2 = loadTexture("./assets/textures/alien3_2.png");
 
+        expsprite = loadTexture("./assets/textures/explosion.png");
+
         laserblur = loadTexture("./assets/textures/laserblur.png");
 
         pause = loadTexture("./assets/textures/paused.png");
@@ -413,6 +415,7 @@ void checkCollisions_Player(){
                             if (shots_player[i]->boundaryU <= enemies[j]->boundaryD && shots_player[i]->boundaryD >= enemies[j]->boundaryU) {
                                 // HIT!
                                 Mix_PlayChannel(-1, explosion, 0);
+                                drawExplosion(shots_player[i]->x[0], shots_player[i]->boundaryU, 0);
                                 destroyDesallocLaser_Player(i);
                                 enemies[j]->health -= 1;
                                 if (enemies[j]->health == 0) {
@@ -581,6 +584,11 @@ void drawScene() {
 
         /*--------------------BASE--------------------*/
         glLoadIdentity();
+
+        parallaxfactor = playerPosition / 4;
+
+        glTranslatef(parallaxfactor, 0.0f, 0.0f);
+
         Quadrilateral *base = createQuad();
         setQuadCoordinates(base, -VIEWPORT_X, -VIEWPORT_Y,
                                  -VIEWPORT_X, -200,

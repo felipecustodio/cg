@@ -368,6 +368,30 @@ void destroyLaser(LASER *laser) {
 }
 /* -------------------------------- LASER ----------------------------------- */
 
+/* ----------------------------- EXPLOSION ---------------------------------- */
+void drawExplosion(float x, float y, int color){
+    glLoadIdentity();
+    Quadrilateral *expSprite = createQuad();
+        setQuadCoordinates(expSprite,
+            -30, -20,
+            -30, 20,
+            30, 20,
+            30, -20); // initial coordinates
+        setQuadTexture(expSprite, expsprite);
+        switch(color) {
+                case 0:
+                    setQuadColor(expSprite, 0.75f, 1.0f, 1.0f); // player laser = blue
+                    break;
+                case 1:
+                    setQuadColor(expSprite, 0.88f, 0.2f, 0.2f); // enemy laser = red
+                    break;
+        }
+        glTranslatef(x, y, 0.0f);
+        drawQuadTextured(expSprite);
+    freeQuad(expSprite);
+}
+/* ----------------------------- EXPLOSION ---------------------------------- */
+
 /* ----------------------------- ANIMATIONS --------------------------------- */
 // Change animation frame
 int switchTexture(int frame) {

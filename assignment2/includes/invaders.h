@@ -152,6 +152,10 @@ void shootLaser_Enemy(LASER** shots, int *amount, int x, int y);
 void drawLaser(LASER* laser);
 /* ------------------------------- LASER ------------------------------------ */
 
+/* ----------------------------- EXPLOSION ---------------------------------- */
+void drawExplosion(float x, float y, int color);
+/* ----------------------------- EXPLOSION ---------------------------------- */
+
 /* ----------------------------- ANIMATIONS --------------------------------- */
 int switchTexture();
 /* ----------------------------- ANIMATIONS --------------------------------- */
