@@ -472,7 +472,7 @@ void checkCollisions_Enemy() {
         if(enemies){
             if(enemies[i]){
                 if (enemies[i]->health > 0) {
-                    if (enemies[i]->boundaryD <= -200) {
+                    if (enemies[i]->boundaryD <= -180) {
                             // Enemy hit base! Game Over!
                             Mix_PlayChannel(-1, lose, 0);
                             gameover = 1;
