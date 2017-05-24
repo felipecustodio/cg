@@ -15,8 +15,9 @@
 
 /* -------------------------------- INPUT ----------------------------------- */
 void on_mouseClick(int button, int click_state,
-    int x_mouse_position, int y_mouse_position);
+    int x, int y);
 void mouseHold();
+void onMouseMove(int x, int y);
 void keyPress(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);
 void keyHold();
@@ -37,10 +38,15 @@ void audioCleanup();
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
-void reshape(int width, int height);
+void reshape(GLsizei width, GLsizei height);
 /* -------------------------------- WINDOW ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
+void repositionCamera(void);
+void updateView(void);
+
+void drawCube(void);
+
 void drawLoop();
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 

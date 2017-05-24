@@ -33,15 +33,17 @@ int main(int argc, char* argv[]) {
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
-        glutCreateWindow("Invaders Must Die"); // Defines the window title
+        glutCreateWindow("コンピューターグラフィックス"); // Defines the window title
 
         // RENDERING
         glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"
         glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
         glutIdleFunc(drawLoop); // Set drawLoop to repeat while no events occur
+        glEnable(GL_DEPTH_TEST); // Enable depth buffer by default
 
         // EVENT HANDLING
         glutMouseFunc(on_mouseClick); // Handles mouse clicks
+        glutMotionFunc(onMouseMove); // Handles mouse motion
         glutKeyboardFunc(keyPress); // Handles keyboard presses
         glutKeyboardUpFunc(keyUp); // Handles keyboard releases
 
