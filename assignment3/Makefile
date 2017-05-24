@@ -15,6 +15,8 @@ SDL_MIXER = ./src/SDL_mixer/dynamic_flac.c ./src/SDL_mixer/dynamic_mp3.c ./src/S
 INCLUDES = ./includes
 # SOIL includes
 SOIL_IN = ./includes/SOIL
+# Object Loader include
+OBJ = ./includes/OBJ
 # SDL includes
 SDL = $(shell sdl-config --cflags --libs)
 # SDL mixer includes
@@ -27,7 +29,7 @@ FLAGS = -O0 -g -pthread -lSDLmain -lSDL
 all: compile clear run clean
 
 compile:
-	$(CC) -o $(BINARY) $(SDL) -I$(SOIL_IN) $(SOIL) -I$(SDL_MIXER_IN) $(SDL_MIXER) -I$(INCLUDES) $(SRC) $(LIBS) $(FLAGS)
+	$(CC) -o $(BINARY) $(SDL) -I$(SOIL_IN) $(SOIL) -I$(SDL_MIXER_IN) $(SDL_MIXER) -I$(OBJ) -I$(INCLUDES) $(SRC) $(LIBS) $(FLAGS)
 
 test:
 	run clean debug

@@ -10,7 +10,9 @@
 
 #include <GL/glut.h>
 #include <SDL/SDL.h>
+#include <time.h>
 
+#include "../includes/OBJ/tinyobjloader.h"
 #include "scene.h"
 #include "settings.h"
 

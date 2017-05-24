@@ -19,7 +19,7 @@ GLfloat aspectRatio;
 
 GLfloat fieldOfView = 90;
 GLfloat zNear = 1.0f;
-GLfloat zFar = 1000.0f;
+GLfloat zFar = 100000.0f;
 
 GLfloat camera_tX = 0.0f;
 GLfloat camera_tY = 0.0f;
