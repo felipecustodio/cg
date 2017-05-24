@@ -55,9 +55,6 @@ int main(int argc, char* argv[]) {
         // SET KEY PRESSES TO NON-REPEAT MODE
         glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 
-        // PLAYER COOLDOWN TIMER INIT
-        glutTimerFunc(500, cooldown, 0);
-
         // SET SEED FOR RANDOM NUMBERS
         srand(time(NULL));
 

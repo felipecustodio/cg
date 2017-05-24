@@ -1,4 +1,4 @@
-# College Assignment 2 - Space Invaders
+# College Assignment 3 - 3D Scene
 
 ## Description
 
