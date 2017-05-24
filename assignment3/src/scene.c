@@ -2,27 +2,6 @@
 #include "../includes/scene.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
-/* --- MECHANICS -- */
-int screen = 0; // 0 = menu, 1 = game
-int rotLogo = 0;
-
-/* ------ BG ----- */
-GLfloat parallax_curYbg = 0.0;
-GLfloat parallax_curYfg = 0.0;
-GLfloat parallax_speedY = 0.5;
-
-/* ------ LASERS -----*/
-int shoot_flag = 1;
-int powerup_flag = 0;
-
-/* ------ SCORE -----*/
-int current_score = 50;
-
-/* ------ UI -----*/
-const char* UI_reset = "Press R to reset game";
-const char* UI_shoot = "Press spacebar to shoot";
-const char* UI_move = "Press A/D to move left/right";
-const char* UI_exit = "Press E to exit";
 
 /* ------ INPUT STATUS -----*/
 char leftMouseButtonDown = 0;
@@ -30,19 +9,7 @@ char rightMouseButtonDown = 0;
 char Adown = 0;
 char Ddown = 0;
 
-/* ------ TIMER -----*/
-GLfloat shoot_timer = 0;
-GLfloat current_time = 0;
-
 /* ------ AUDIOS -----*/
-Mix_Chunk *blaster = NULL;
-Mix_Chunk *blaster2 = NULL;
-Mix_Chunk *wilhelm = NULL;
-Mix_Chunk *explosion = NULL;
-Mix_Chunk *fanfare = NULL;
-Mix_Chunk *coin = NULL;
-Mix_Chunk *lose = NULL;
-Mix_Chunk *powerup = NULL;
 Mix_Chunk *bg = NULL;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -55,50 +22,13 @@ void cooldown(int value) {
 }
 
 int loadTextures() {
-        // HUD
-        hudL = loadTexture("./assets/textures/hud/hudL.png");
-        hudM = loadTexture("./assets/textures/hud/hudM.png");
-        hudR = loadTexture("./assets/textures/hud/hudR.png");
-        hudShips = loadTexture("./assets/textures/hud/ships.png");
-        hudWave = loadTexture("./assets/textures/hud/wave.png");
-        hudScore = loadTexture("./assets/textures/hud/score.png");
 
-        // Background
-        background_texture = loadTexture("./assets/textures/bg.png");
         base_texture = loadTexture("./assets/textures/base.png");
-
         // Parallax
         parallax1_texture = loadTexture("./assets/textures/parallax1.png");
         parallax2_texture = loadTexture("./assets/textures/parallax2.png");
 
-        // Player sprite
-        player_texture = loadTexture("./assets/textures/galaga.png");
-
-        // Enemy sprites
-        alien_1_1 = loadTexture("./assets/textures/alien1_1.png");
-        alien_1_2 = loadTexture("./assets/textures/alien1_2.png");
-        alien_2_1 = loadTexture("./assets/textures/alien2_1.png");
-        alien_2_2 = loadTexture("./assets/textures/alien2_2.png");
-        alien_3_1 = loadTexture("./assets/textures/alien3_1.png");
-        alien_3_2 = loadTexture("./assets/textures/alien3_2.png");
-
-        expsprite = loadTexture("./assets/textures/explosion.png");
-
-        laserblur = loadTexture("./assets/textures/laserblur.png");
-
-        pause = loadTexture("./assets/textures/paused.png");
-        game_over = loadTexture("./assets/textures/gameover.png");
-        victory_screen = loadTexture("./assets/textures/youwin.png");
-
-        logo = loadTexture("./assets/textures/spaceinvaders.png");
-        press_start = loadTexture("./assets/textures/press_start.png");
-
-        if (!(hudL || hudM || hudR || background_texture
-                || player_texture ||alien_1_1 ||
-                alien_1_2 || alien_2_1 ||
-                alien_2_2 || alien_3_1 ||
-                alien_3_2 || pause || game_over || victory_screen ||
-                logo || press_start)) {
+        if (!(/*texturas*/)) {
                 return EXIT_FAILURE;
         }
 
@@ -134,40 +64,19 @@ void mouseHold() {
 // Key presses
 void keyPress(unsigned char key, int x, int y) {
         if (key == 'a' || key == 'A') {
-            if(!paused && !gameover && !victory && screen == 1)
                 Adown = 1; // hold A key
         } else if (key == 'd' || key == 'D') {
-            if(!paused && !gameover && !victory && screen == 1)
                 Ddown = 1; // hold D key
         } else if (key == 'p' || key == 'P') {
-            if (!gameover && !victory && screen == 1) {
-                if(paused == 0)
+                if (paused == 0)
                     paused = 1;
                 else
                     paused = 0;
             }
         } else if (key == ' ') {
-            if(screen == 0){
+            if(screen == 0) {
                 Mix_PlayChannel(-1, coin, 0);
                 screen = 1;
-            } else if(screen == 1){
-                if(!paused && !gameover && !victory && shoot_flag){
-                    // PEW! PEW! play blaster audio
-                    Mix_PlayChannel(-1, blaster2, 0);
-                    // create new laser
-                    if(shots_player == NULL) {
-                        shots_player = (LASER **) malloc(sizeof(LASER *));
-                    }
-                    else {
-                        shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * (shots_player_count + 1));
-                    }
-                    shootLaser_Player(shots_player, &shots_player_count, playerPosition);
-                    if(!player->powerup) shoot_flag = 0;
-                }
-                else if(gameover || victory) {
-                    resetGame();
-                    screen = 0;
-                }
             }
         } else if (key == 'r' || key == 'R') {
             if(screen == 1){
@@ -345,207 +254,6 @@ void audioCleanup() {
 }
 /* -------------------------------- AUDIO ----------------------------------- */
 
-/* ------------------------------- MECHANICS -------------------------------- */
-void parallaxMotionY(){
-    parallax_curYfg += parallax_speedY;
-    parallax_curYbg += parallax_speedY/2;
-    if(parallax_curYbg >= 2*VIEWPORT_Y + 200)
-        parallax_curYbg = 0;
-    if(parallax_curYfg >= 2*VIEWPORT_Y + 200)
-        parallax_curYfg = 0;
-}
-
-void lasersMotionY() {
-    /*--------------------LASER MOVEMENT--------------------*/
-    // Player lasers Movement
-    int i = 0;
-    for(i = 0; i < shots_player_count; i++) {
-        if (shots_player[i] != NULL) {
-            // Move laser (player) up
-            shots_player[i]->position += laserSpeed;
-            // Move boundaries
-            shots_player[i]->boundaryD += laserSpeed;
-            shots_player[i]->boundaryU += laserSpeed;
-        }
-    }
-
-    // Enemy lasers movement
-    for(i = 0; i < shots_enemy_count; i++) {
-        if (shots_enemy[i] != NULL) {
-            // Move laser (enemy) down
-            shots_enemy[i]->position -= laserSpeed;
-            // Move boundaries
-            shots_enemy[i]->boundaryD -= laserSpeed;
-            shots_enemy[i]->boundaryU -= laserSpeed;
-        }
-    }
-    /*--------------------END--------------------*/
-}
-
-/*--------------------DESTRUCTION--------------------*/
-
-/*--------------------COLLISION CHECKING-------------------*/
-void destroyDesallocLaser_Player(int i) {
-    destroyLaser(shots_player[i]);
-    int j = 0;
-    for(j = i + 1; j < shots_player_count; j++) {
-        shots_player[j - 1] = shots_player[j];
-    }
-    shots_player_count = shots_player_count - 1;
-    shots_player = (LASER **) realloc(shots_player, sizeof(LASER *) * shots_player_count);
-}
-
-void destroyDesallocLaser_Enemy(int i) {
-    destroyLaser(shots_enemy[i]);
-    int j = 0;
-    for(j = i + 1; j < shots_enemy_count; j++) {
-        shots_enemy[j - 1] = shots_enemy[j];
-    }
-    shots_enemy_count = shots_enemy_count - 1;
-    shots_enemy = (LASER **) realloc(shots_enemy, sizeof(LASER *) * shots_enemy_count);
-}
-
-void checkCollisions_Screen() {
-    int i = 0, j = 0;
-    // Player laser screen collision check
-    for(i = 0; i < shots_player_count; i++) {
-        // Check top boundary
-        if(shots_player[i] != NULL && shots_player[i]->boundaryU >= 340) {
-            destroyDesallocLaser_Player(i);
-        }
-    }
-
-    // Enemy screen collision check
-    for(i = 0; i < shots_enemy_count; i++) {
-        // Check bottom boundary
-        if(shots_enemy[i] != NULL && shots_enemy[i]->boundaryD <= -340) {
-            destroyDesallocLaser_Enemy(i);
-        }
-    }
-}
-
-void checkCollisions_Player() {
-    // player laser vs enemy
-    int i = 0, j = 0;
-    for (i = 0; i < shots_player_count; i++) {
-        for (j = 0; j < TOTAL_ENEMIES; j++) {
-            if (enemies != NULL) {
-                if(enemies[j] != NULL) {
-                    if (enemies[j]->health > 0) {
-                        // Check X boundaries
-                        if (shots_player[i]->x[0] >= enemies[j]->boundaryL &&
-                            shots_player[i]->x[2] <= enemies[j]->boundaryR) {
-                            // Check Y boundaries
-                            if (shots_player[i]->boundaryU <= enemies[j]->boundaryD && shots_player[i]->boundaryD >= enemies[j]->boundaryU) {
-                                // HIT!
-                                Mix_PlayChannel(-1, explosion, 0);
-                                drawExplosion(shots_player[i]->x[0], shots_player[i]->boundaryU, 0);
-                                destroyDesallocLaser_Player(i);
-                                enemies[j]->health -= 1;
-                                if (enemies[j]->health == 0) {
-                                    switch(enemies[j]->shape) {
-                                        case 1:
-                                            player->score += 10; // update score
-                                            break;
-                                        case 2:
-                                            player->score += 20; // update score
-                                            break;
-                                        case 3:
-                                            player->score += 30; // update score
-                                            break;
-                                    }
-                                    enemies_left -= 1; // one down, more to go
-                                }
-                                if(shots_player_count <= i){
-                                    return;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-void checkCollisions_Enemy() {
-    int i = 0, j = 0;
-    /*--------------------ENEMY LASERS VS PLAYER--------------------*/
-    for (i = 0; i < shots_enemy_count; i++) {
-        if (shots_enemy[i]->x[0] >= player->boundaryL
-            && shots_enemy[i]->x[2] <= player->boundaryR) {
-            // Laser is aligned with player, check if hit
-            if (shots_enemy[i]->boundaryD <= -200) {
-                // Laser hit player!
-                Mix_PlayChannel(-1, explosion, 0);
-                drawExplosion(shots_enemy[i]->x[0], shots_enemy[i]->boundaryD, 0);
-                killPlayer(player);
-                destroyDesallocLaser_Enemy(i);
-            }
-        }
-    }
-    /*-------------------------END-------------------------*/
-
-    /*--------------------ENEMY VS BASE--------------------*/
-    i = 0;
-    for (i = 0; i < TOTAL_ENEMIES; i++) {
-        if(enemies){
-            if(enemies[i]){
-                if (enemies[i]->health > 0) {
-                    if (enemies[i]->boundaryD <= -180) {
-                            // Enemy hit base! Game Over!
-                            gameover = 1;
-                    }
-                }
-            }
-        }
-    }
-    /*-------------------------END-------------------------*/
-}
-
-void checkCollisions() {
-    /*--------------------PLAYER SHOTS--------------------*/
-    // Refresh matrix for new object
-    glLoadIdentity();
-
-    checkCollisions_Screen();
-
-    checkCollisions_Player();
-
-    checkCollisions_Enemy();
-}
-/*--------------------COLLISION CHECKING-------------------*/
-
-void checkGameOver() {
-    if(player->health == 0) {
-        Mix_PlayChannel(-1, lose, 0);
-        powerup_flag = 0;
-        gameover = 1;
-    }
-}
-
-void checkLevelUp(){
-    if (enemies_left == 0) {
-        levelUp();
-    }
-}
-
-void checkVictory() {
-    if (level == 10 && enemies_left == 0) {
-        victory = 1;
-        Mix_PlayChannel(-1, fanfare, 0); // play fanfare
-    }
-}
-
-void checkScore() {
-    if (player->score > current_score) {
-        Mix_PlayChannel(-1, coin, 0);
-        current_score *= 2;
-        player->health += 1;
-    }
-}
-/* ------------------------------- MECHANICS -------------------------------- */
 
 /*-------------------------------- RENDERING ---------------------------------*/
 void drawBackground(){
