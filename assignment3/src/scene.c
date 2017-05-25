@@ -14,6 +14,9 @@ char Sdown = 0;
 /* ------ AUDIOS -----*/
 Mix_Chunk *bg = NULL;
 
+/* ------ TEXTURES -----*/
+GLuint checker, miami, playstation, title;
+
 /* ------ 3D -----*/
 GLfloat aspectRatio;
 
@@ -35,17 +38,19 @@ int depth = 1;
 /* ------------------------------- GLOBALS ---------------------------------- */
 int loadTextures() {
 
-        // base_texture = loadTexture("./assets/textures/base.png");
+        checker = loadTexture("./assets/textures/checker.png");
+        miami = loadTexture("./assets/textures/miami.png");
+        playstation = loadTexture("./assets/textures/playstation.png");
+        title = loadTexture("./assets/textures/title.png");
 
-        //if (!(/*texturas*/)) {
-        //        return EXIT_FAILURE;
-        //}
+        if (!(checker && miami && playstation && title)) {
+                printf("ERROR LOADING TEXTURES\n");
+        }
 
         return 1;
 }
 /* -------------------------------- INPUT ----------------------------------- */
 
-// ------------ MOUSE EVENT HANDLING ------------ //
 // Mouse clicks
 void on_mouseClick(int button, int click_state,
         int x, int y)
@@ -70,7 +75,7 @@ void mouseHold() {
         }
 }
 
-// Mouse hold
+// Mouse movement
 void onMouseMove(int x, int y){
     if(x != lastX)
         camera_rY += lastX - x;
@@ -79,9 +84,7 @@ void onMouseMove(int x, int y){
     lastX = x;
     lastY = y;
 }
-// ------------ MOUSE EVENT HANDLING ------------ //
 
-// ----------- KEYBOARD EVENT HANDLING ---------- //
 // Key presses
 void keyPress(unsigned char key, int x, int y){
     if(key == 'w' || key == 'W') {
@@ -122,16 +125,15 @@ void keyUp(unsigned char key, int x, int y) {
 // Key holding
 void keyHold() {
         if (Adown) {
-                camera_tX -= 10;
+                camera_tX -= 1;
         } else if (Ddown) {
-                camera_tX += 10;
+                camera_tX += 1;
         } else if (Sdown) {
-                camera_tZ += 10;
+                camera_tZ += 1;
         } else if (Wdown) {
-                camera_tZ -= 10;
+                camera_tZ -= 1;
         }
 }
-// ----------- KEYBOARD EVENT HANDLING ---------- //
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
@@ -147,6 +149,8 @@ void reshape(GLsizei width, GLsizei height) {
 /* -------------------------------- WINDOW ---------------------------------- */
 
 /* -------------------------------- AUDIO ----------------------------------- */
+
+// Load audio files and start SDL mixer
 int initAudio() {
 
         // Audio assets
@@ -201,7 +205,7 @@ void updateView(void) {
 void drawCube(void) {
     repositionCamera();
 
-    glColor3f(0.0f, 0.0f, 0.0f);
+    glColor3f(1.0f, 1.0f, 1.0f);
 	glLineWidth(1.6f);
 	glBegin(GL_LINE_LOOP);	// frontal
 		glVertex3f(40.0, -40.0, 40.0);
@@ -229,11 +233,11 @@ void drawCube(void) {
 	// Desenha as faces do cubo preenchidas
 	glBegin(GL_QUADS);
 		// Face frontal
-		glColor3f(1.0f, 0.5f, 1.0f); //Pink
-        glVertex3f(40.0, 40.0, 40.0);
-        glVertex3f(-40.0, 40.0, 40.0);
-        glVertex3f(-40.0, -40.0, 40.0);
-        glVertex3f(40.0, -40.0, 40.0);
+		glColor3f(1.0, 0.31, 0.97); // Pink
+                glVertex3f(40.0, 40.0, 40.0);
+                glVertex3f(-40.0, 40.0, 40.0);
+                glVertex3f(-40.0, -40.0, 40.0);
+                glVertex3f(40.0, -40.0, 40.0);
 	    // Face posterior
 		glColor3f(0.0f, 0.0f, 0.0f); //Black
 		glVertex3f(40.0, 40.0, -40.0);
@@ -241,25 +245,25 @@ void drawCube(void) {
 		glVertex3f(-40.0, -40.0, -40.0);
 		glVertex3f(-40.0, 40.0, -40.0);
 	    // Face lateral esquerda
-		glColor3f(0.0f, 1.0f, 0.0f); //Verde
+		glColor3f(0.0f, 0.0f, 0.0f); //Black
 		glVertex3f(-40.0, 40.0, 40.0);
 		glVertex3f(-40.0, 40.0, -40.0);
 		glVertex3f(-40.0, -40.0, -40.0);
 		glVertex3f(-40.0, -40.0, 40.0);
 	    // Face lateral direita
-		glColor3f(1.0f, 0.0f, 0.0f); //Vermelho
+		glColor3f(0.0f, 0.0f, 0.0f); //Black
 		glVertex3f(40.0, 40.0, 40.0);
 		glVertex3f(40.0, -40.0, 40.0);
 		glVertex3f(40.0, -40.0, -40.0);
 		glVertex3f(40.0, 40.0, -40.0);
 	    // Face superior
-		glColor3f(1.0f, 1.0f, 0.0f); //Amarelo
-        glVertex3f(-40.0, 40.0, -40.0);
+		glColor3f(0.0f, 0.0f, 0.0f); //Black
+                glVertex3f(-40.0, 40.0, -40.0);
 		glVertex3f(-40.0, 40.0, 40.0);
 		glVertex3f(40.0, 40.0, 40.0);
 		glVertex3f(40.0, 40.0, -40.0);
 	    // Face inferior
-		glColor3f(0.0f, 0.0f, 1.0f); //Azul
+		glColor3f(0.0f, 0.0f, 0.0f); //Black
 		glVertex3f(-40.0, -40.0, -40.0);
 		glVertex3f(40.0, -40.0, -40.0);
 		glVertex3f(40.0, -40.0, 40.0);
@@ -275,12 +279,16 @@ void drawScene() {
 }
 
 void drawLoop() {
+
+        // Paint background
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(1.0f, 0.51f, 0.7f, 1.0f);
+        glClearColor(1.0f, 0.71f, 0.89f, 1.0f);
 
         glMatrixMode(GL_MODELVIEW);
 
+        // Check keyboard
         keyHold();
+
         drawCube();
 
         glFlush();
