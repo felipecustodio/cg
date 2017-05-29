@@ -12,8 +12,8 @@
 #include <SDL/SDL.h>
 #include <time.h>
 
-#include "scene.h"
-#include "settings.h"
+#include "../includes/scene.h"
+#include "../includes/settings.h"
 
 int main(int argc, char* argv[]) {
 

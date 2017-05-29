@@ -9,6 +9,7 @@
 #include <SDL/SDL.h>
 #include "../includes/SDL_mixer/SDL_mixer.h"
 
+#include "obj.h"
 #include "shapes.h"
 #include "camera.h"
 #include "settings.h"

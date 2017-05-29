@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-SRC = ./src/shapes.c ./src/camera.c ./src/scene.c ./src/main.c
+SRC = ./src/obj.c ./src/shapes.c ./src/camera.c ./src/scene.c ./src/main.c
 # SOIL sources
 SOIL = ./src/SOIL/image_DXT.c ./src/SOIL/image_helper.c ./src/SOIL/stb_image_aug.c ./src/SOIL/SOIL.c
 # SDL_mixer sources
@@ -15,8 +15,6 @@ SDL_MIXER = ./src/SDL_mixer/dynamic_flac.c ./src/SDL_mixer/dynamic_mp3.c ./src/S
 INCLUDES = ./includes
 # SOIL includes
 SOIL_IN = ./includes/SOIL
-# Object Loader include
-OBJ = ./includes/OBJ
 # SDL includes
 SDL = $(shell sdl-config --cflags --libs)
 # SDL mixer includes
@@ -25,11 +23,12 @@ SDL_MIXER_IN = ./includes/SDL_mixer
 # libraries and flags
 LIBS = -lglut -lGL -lGLU -lm
 FLAGS = -O0 -g -pthread -lSDLmain -lSDL
+GLEW = -lGLEW
 
 all: compile clear run clean
 
 compile:
-	$(CC) -o $(BINARY) $(SDL) -I$(SOIL_IN) $(SOIL) -I$(SDL_MIXER_IN) $(SDL_MIXER) -I$(OBJ) -I$(INCLUDES) $(SRC) $(LIBS) $(FLAGS)
+	$(CC) -o $(BINARY) $(SDL) -I$(SOIL_IN) $(SOIL) -I$(SDL_MIXER_IN) $(SDL_MIXER) -I$(OBJ) -I$(INCLUDES) $(SRC) $(LIBS) $(FLAGS) $(GLEW)
 
 test:
 	run clean debug

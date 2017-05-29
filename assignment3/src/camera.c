@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "../includes/camera.h"
 
 Camera *createCamera(){
     Camera *camera = (Camera *) malloc(sizeof(Camera));
