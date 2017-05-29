@@ -64,17 +64,18 @@ void gravityCamera(){
             jumpBuff = 0;
         }
     }
-    printf("%f\n", cam->pos[1]);
 }
 
 void crouch(int state){
-    if(crouchBuff == 0 && state == 1){
-        cam->pos[1] -= 5.0;
-        crouchBuff = 1;
-    }
-    else if(crouchBuff == 1 && state == 0){
-        cam->pos[1] += 5.0;
-        crouchBuff = 0;
+    if(jumpBuff == 0){
+        if(crouchBuff == 0 && state == 1){
+            cam->pos[1] -= 5.0;
+            crouchBuff = 1;
+        }
+        else if(crouchBuff == 1 && state == 0){
+            cam->pos[1] += 5.0;
+            crouchBuff = 0;
+        }
     }
 }
 
