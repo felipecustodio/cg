@@ -10,17 +10,16 @@
 #include "../includes/SDL_mixer/SDL_mixer.h"
 
 #include "shapes.h"
-#include "transforms.h"
+#include "camera.h"
 #include "settings.h"
 
 /* -------------------------------- INPUT ----------------------------------- */
-void on_mouseClick(int button, int click_state,
+void onMouseClick(int button, int click_state,
     int x, int y);
-void mouseHold();
+void onMouseHold();
+void onKeyPress(unsigned char key, int x, int y);
+void onKeyUp(unsigned char key, int x, int y);
 void onMouseMove(int x, int y);
-void keyPress(unsigned char key, int x, int y);
-void keyUp(unsigned char key, int x, int y);
-void keyHold();
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* ------------------------------- TEXTURES --------------------------------- */
@@ -39,12 +38,9 @@ void reshape(GLsizei width, GLsizei height);
 /* -------------------------------- WINDOW ---------------------------------- */
 
 /* ----------------------------- SCENE DRAWING ------------------------------ */
-void repositionCamera(void);
 void updateView(void);
-
-void drawCube(void);
-
-void drawLoop();
+void drawLoop(void);
+void initializeScene(void);
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 
 #endif

@@ -1,6 +1,6 @@
 /**
  * SCC0250 - Computação Gráfica
- * Trabalho 2 - Space Invaders
+ * Trabalho 3 - Macintosh Plus
  * Alunos:
  *      Felipe Scrochio Custódio - 9442688
  *      Henrique Loschiavo - 8936972
@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
+        glutInitWindowPosition(5,5); // Defines the initial window position on screen
         glutCreateWindow("コンピューターグラフィックス"); // Defines the window title
 
         // RENDERING
@@ -42,16 +43,17 @@ int main(int argc, char* argv[]) {
         glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
         glutIdleFunc(drawLoop); // Set drawLoop to repeat while no events occur
         glEnable(GL_DEPTH_TEST); // Enable depth buffer by default
+        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Enable perspective correction
+        glShadeModel(GL_SMOOTH); // Enable smooth shading
 
         // EVENT HANDLING
-        glutMouseFunc(on_mouseClick); // Handles mouse clicks
-        glutMotionFunc(onMouseMove); // Handles mouse motion
-        glutKeyboardFunc(keyPress); // Handles keyboard presses
-        glutKeyboardUpFunc(keyUp); // Handles keyboard releases
+        glutMouseFunc(onMouseClick); // Handles mouse clicks
+        glutPassiveMotionFunc(onMouseMove); // Handles mouse motion
+        glutKeyboardFunc(onKeyPress); // Handles keyboard presses
+        glutKeyboardUpFunc(onKeyUp); // Handles keyboard releases
 
         glMatrixMode(GL_PROJECTION); // Load matrix projection mode
         glViewport(0, 0, VIEWPORT_X, VIEWPORT_Y); // Set viewport size
-        gluOrtho2D(-ORTHO_X, ORTHO_X, -ORTHO_Y, ORTHO_Y); // Defines the orthogonal plane
 
         // LOAD ALL TEXTURES
         loadTextures();
@@ -63,6 +65,9 @@ int main(int argc, char* argv[]) {
         srand(time(NULL));
 
         // START RENDERING LOOP
+        initializeScene(); // Scene and variable initialization
+        glutWarpPointer(VIEWPORT_X/2, VIEWPORT_Y/2); // Centralize mouse pointer
+        glutSetCursor(GLUT_CURSOR_NONE); // Hide mouse cursor
         glutMainLoop(); // Start operations according to the specifications above
 
         // SHUTDOWN
