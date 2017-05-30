@@ -28,6 +28,10 @@ void onMouseMove(int x, int y);
 int loadTextures();
 /* ------------------------------- TEXTURES --------------------------------- */
 
+/* ------------------------------- MODELS --------------------------------- */
+void loadModels();
+/* ------------------------------- MODELS --------------------------------- */
+
 /* -------------------------------- AUDIO ----------------------------------- */
 extern Mix_Chunk *bg; // BGM starts playing at main
 int initAudio();
@@ -42,6 +46,7 @@ void reshape(GLsizei width, GLsizei height);
 void updateView(void);
 void drawLoop(void);
 void initializeScene(void);
+void skybox();
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 
 #endif

@@ -2221,7 +2221,7 @@ void obj_render(obj *O)
 {
     int si;
 
-    assert(O);
+    // assert(O);
 
     /* Initialize the vertex arrays. */
 

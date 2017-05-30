@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
         initAudio(); // load audio files and set callback functions
 
         // Start BGM on loop
-        Mix_PlayChannel(-1, bg, -1);
+        // Mix_PlayChannel(-1, bg, -1);
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
@@ -56,6 +56,9 @@ int main(int argc, char* argv[]) {
 
         // LOAD ALL TEXTURES
         loadTextures();
+
+        // LOAD MODELS
+        loadModels();
 
         // SET KEY PRESSES TO NON-REPEAT MODE
         glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);

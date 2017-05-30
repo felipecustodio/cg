@@ -31,6 +31,9 @@ GLfloat gforce = 0.98f;
 
 Camera *cam;
 
+/* ------ MODELS ------ */
+obj *pillar;
+
 /* ------ MECHANICS ------ */
 int midX = 0, midY = 0;
 float initialY = 0;
@@ -52,6 +55,11 @@ int loadTextures() {
         return 1;
 }
 /* ------------------------------- GLOBALS ---------------------------------- */
+void loadModels() {
+
+        pillar = obj_create("./assets/pillar.obj");
+        obj_proc(pillar);
+}
 
 /* ------------------------------ MECHANICS --------------------------------- */
 void gravityCamera(){
@@ -230,72 +238,32 @@ void audioCleanup() {
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /*-------------------------------- RENDERING ---------------------------------*/
-void drawCube(void) {
+void skybox(void) {
     repositionCamera(cam);
 
     glColor3f(1.0f, 1.0f, 1.0f);
 	glLineWidth(1.6f);
 	glBegin(GL_LINE_LOOP);	// frontal
-		glVertex3f(40.0, -40.0, 40.0);
-        glVertex3f(-40.0, -40.0, 40.0);
-        glVertex3f(-40.0, 40.0, 40.0);
-        glVertex3f(40.0, 40.0, 40.0);
+		glVertex3f(500.0, -500.0, 500.0);
+        glVertex3f(-500.0, -500.0, 500.0);
+        glVertex3f(-500.0, 500.0, 500.0);
+        glVertex3f(500.0, 500.0, 500.0);
 	glEnd();
 	glBegin(GL_LINE_LOOP);	//  posterior
-		glVertex3f(40.0, 40.0, -40.0);
-		glVertex3f(40.0, -40.0, -40.0);
-		glVertex3f(-40.0, -40.0, -40.0);
-		glVertex3f(-40.0, 40.0, -40.0);
+		glVertex3f(500.0, 500.0, -500.0);
+		glVertex3f(500.0, -500.0, -500.0);
+		glVertex3f(-500.0, -500.0, -500.0);
+		glVertex3f(-500.0, 500.0, -500.0);
 	glEnd();
 	glBegin(GL_LINES);	//  laterais
-		glVertex3f(-40.0, 40.0, -40.0);
-		glVertex3f(-40.0, 40.0, 40.0);
-		glVertex3f(-40.0, -40.0, -40.0);
-		glVertex3f(-40.0, -40.0, 40.0);
-		glVertex3f(40.0, 40.0, -40.0);
-		glVertex3f(40.0, 40.0, 40.0);
-		glVertex3f(40.0, -40.0, -40.0);
-		glVertex3f(40.0, -40.0, 40.0);
-	glEnd();
-
-	// Desenha as faces do cubo preenchidas
-	glBegin(GL_QUADS);
-		// Face frontal
-		glColor3f(1.0, 0.31, 0.97); // Pink
-                glVertex3f(40.0, 40.0, 40.0);
-                glVertex3f(-40.0, 40.0, 40.0);
-                glVertex3f(-40.0, -40.0, 40.0);
-                glVertex3f(40.0, -40.0, 40.0);
-	    // Face posterior
-		glColor3f(0.0f, 0.0f, 0.0f); //Black
-		glVertex3f(40.0, 40.0, -40.0);
-		glVertex3f(40.0, -40.0, -40.0);
-		glVertex3f(-40.0, -40.0, -40.0);
-		glVertex3f(-40.0, 40.0, -40.0);
-	    // Face lateral esquerda
-		glColor3f(0.0f, 0.0f, 0.0f); //Black
-		glVertex3f(-40.0, 40.0, 40.0);
-		glVertex3f(-40.0, 40.0, -40.0);
-		glVertex3f(-40.0, -40.0, -40.0);
-		glVertex3f(-40.0, -40.0, 40.0);
-	    // Face lateral direita
-		glColor3f(0.0f, 0.0f, 0.0f); //Black
-		glVertex3f(40.0, 40.0, 40.0);
-		glVertex3f(40.0, -40.0, 40.0);
-		glVertex3f(40.0, -40.0, -40.0);
-		glVertex3f(40.0, 40.0, -40.0);
-	    // Face superior
-		glColor3f(0.0f, 0.0f, 0.0f); //Black
-                glVertex3f(-40.0, 40.0, -40.0);
-		glVertex3f(-40.0, 40.0, 40.0);
-		glVertex3f(40.0, 40.0, 40.0);
-		glVertex3f(40.0, 40.0, -40.0);
-	    // Face inferior
-		glColor3f(0.0f, 0.0f, 0.0f); //Black
-		glVertex3f(-40.0, -40.0, -40.0);
-		glVertex3f(40.0, -40.0, -40.0);
-		glVertex3f(40.0, -40.0, 40.0);
-		glVertex3f(-40.0, -40.0, 40.0);
+		glVertex3f(-500.0, 500.0, -500.0);
+		glVertex3f(-500.0, 500.0, 500.0);
+		glVertex3f(-500.0, -500.0, -500.0);
+		glVertex3f(-500.0, -500.0, 500.0);
+		glVertex3f(500.0, 500.0, -500.0);
+		glVertex3f(500.0, 500.0, 500.0);
+		glVertex3f(500.0, -500.0, -500.0);
+		glVertex3f(500.0, -500.0, 500.0);
 	glEnd();
 }
 
@@ -319,7 +287,8 @@ void drawGrid(void){
 void drawScene() {
         // Load matrix mode
         glMatrixMode(GL_MODELVIEW);
-        drawCube();
+        skybox();
+        // obj_render(pillar);
         drawGrid();
 }
 
