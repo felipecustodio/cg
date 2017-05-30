@@ -40,6 +40,8 @@ float initialY = 0;
 float jumpBuff = 0;
 int crouchBuff = 0;
 
+GLuint checkered = 0;
+
 /* ------------------------------- GLOBALS ---------------------------------- */
 int loadTextures() {
 
@@ -290,6 +292,14 @@ void drawScene() {
         skybox();
         // obj_render(pillar);
         drawGrid();
+
+        Cube *cube = createCube();
+            setCubeCoordinates(cube, 0.0f, 20.0f, 20.0f);
+            setCubeSize(cube, 10.0f, 30.0f, 10.0f);
+            setCubeColor(cube, 1.0f, 1.0f, 1.0f);
+            setCubeTexture(cube, checkered);
+            drawCubeTextured(cube);
+        freeCube(cube);
 }
 
 void drawLoop(void) {
@@ -312,5 +322,6 @@ void initializeScene(void){
     initialY = cam->pos[1];
     midX = VIEWPORT_X/2;
     midY = VIEWPORT_Y/2;
+    checkered = loadTexture("./assets/textures/checkered.png");
 }
 /* ----------------------------- SCENE DRAWING ------------------------------ */
