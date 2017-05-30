@@ -18,7 +18,7 @@ typedef struct Text {
         const char *string;
 
         //Coordinates
-        float x, y;
+        float x, y, z;
 } Text;
 
 Text *createText(void *font, const char *string);
@@ -26,32 +26,8 @@ void drawText(Text *text, int x, int y);
 void freeText(Text *text);
 /* ---------------------------------- TEXT ---------------------------------- */
 
-/* -------------------------------- TRIANGLE -------------------------------- */
-typedef struct Triangle {
-        //Size
-        float thickness;
-
-        //Color
-        float color[3];
-
-        //Coordinates
-        float x[3];
-        float y[3];
-
-} Triangle;
-
-Triangle *createTriangle();
-void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2, float y2, float x3, float y3);
-void setTriangleThickness(Triangle *tri, float thickness);
-void setTriangleColor(Triangle *tri, float r, float g, float b);
-void drawTriangleHollow(Triangle *tri);
-void drawTriangleFilled(Triangle *tri);
-void freeTriangle(Triangle *tri);
-
-/* -------------------------------- TRIANGLE -------------------------------- */
-
-/* ------------------------------ QUADRILATERAL ----------------------------- */
-typedef struct Quadrilateral {
+/* ---------------------------------- PLANE --------------------------------- */
+typedef struct Plane {
         // Size
         float thickness;
 
@@ -64,39 +40,49 @@ typedef struct Quadrilateral {
         // Coordinates
         float x[4];
         float y[4];
-} Quadrilateral;
+        float z[4];
+} Plane;
 
-Quadrilateral* createQuad();
-void setQuadColor(Quadrilateral *quad, float r, float g, float b);
-void setQuadCoordinates(Quadrilateral *quad, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4);
-void setQuadThickness(Quadrilateral *quad, float thickness);
-void setQuadTexture(Quadrilateral *quad, GLuint texture);
-void drawQuadHollow(Quadrilateral* quad);
-void drawQuadFilled(Quadrilateral* quad);
-void drawQuadTextured(Quadrilateral *quad);
-void freeQuad(Quadrilateral* quad);
-/* ------------------------------ QUADRILATERAL ----------------------------- */
+Plane* createPlane();
+void setPlaneColor(Plane *plane, float r, float g, float b);
+void setPlaneCoordinates(Plane *plane, float x1, float y1, float z1,
+                                    float x2, float y2, float z2,
+                                    float x3, float y3, float z3,
+                                    float x4, float y4, float z4);
+void setPlaneThickness(Plane *plane, float thickness);
+void setPlaneTexture(Plane *plane, GLuint texture);
+void drawPlaneHollow(Plane *plane);
+void drawPlaneFilled(Plane *plane);
+void drawPlaneTextured(Plane *plane);
+void freePlane(Plane *plane);
+/* ---------------------------------- PLANE --------------------------------- */
 
-/* --------------------------------- CIRCLE --------------------------------- */
-typedef struct Circle {
+/* ---------------------------------- CUBE ---------------------------------- */
+typedef struct Cube {
         // Size
-        float thickness, radius;
+        float thickness;
 
         // Color
         float color[3];
 
-        // Coordinates
-        float center[2];
-} Circle;
+        // Texture
+        GLuint texture;
 
-Circle *createCircle();
-void setCircleRadius(Circle *circle, float radius);
-void setCircleThickness(Circle *circle, float thickness);
-void setCircleCoordinates(Circle *circle, float x, float y);
-void setCircleColor(Circle *circle, float r, float g, float b);
-void drawCircleHollow(Circle *circle);
-void drawCircleFilled(Circle *circle);
-void freeCircle(Circle *circle);
-/* --------------------------------- CIRCLE --------------------------------- */
+        // Coordinates
+        float x, y, z;
+        float sizeX, sizeY, sizeZ;
+} Cube;
+
+Cube *createCube();
+void setCubeColor(Cube *cube, float r, float g, float b);
+void setCubeCoordinates(Cube *cube, float x, float y, float z);
+void setCubeSize(Cube *cube, float x, float y, float z);
+void setCubeThickness(Cube *cube, float thickness);
+void setCubeTexture(Cube *cube, GLuint texture);
+void drawCubeHollow(Cube *cube);
+void drawCubeFilled(Cube *cube);
+void drawCubeTextured(Cube *cube);
+void freeCube(Cube *cube);
+/* ---------------------------------- CUBE ---------------------------------- */
 
 #endif

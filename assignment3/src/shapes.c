@@ -33,6 +33,7 @@ Text *createText(void *font, const char *string) {
 
     newTxt->x = 0.0;
     newTxt->y = 0.0;
+    newTxt->z = 0.0;
 
     return newTxt;
 }
@@ -45,7 +46,7 @@ void drawText(Text *text, int x, int y) {
 
     int strsize = strlen(text->string);
 
-    glRasterPos2f(text->x, text->y);
+    glRasterPos3f(text->x, text->y, text->z);
 
     int i = 0;
     for(i = 0; i < strsize; i++) {
@@ -61,305 +62,320 @@ void freeText(Text *text) {
 }
 /* ---------------------------------- TEXT ---------------------------------- */
 
-/* -------------------------------- TRIANGLE -------------------------------- */
-
-Triangle *createTriangle() {
-
-    Triangle *tri = (Triangle *) malloc(sizeof(Triangle));
-
-    tri->thickness = 1.0f;
-
-    tri->color[0] = 0.0;
-    tri->color[1] = 0.0;
-    tri->color[2] = 0.0;
-
-    tri->x[0] = 0.0;
-    tri->y[0] = 0.0;
-
-    tri->x[1] = 0.0;
-    tri->y[1] = 0.0;
-
-    tri->x[2] = 0.0;
-    tri->y[2] = 0.0;
-
-    return tri;
-}
-
-void setTriangleCoordinates(Triangle *tri, float x1, float y1, float x2,
-                                           float y2, float x3, float y3) {
-    if (tri == NULL) return;
-
-    tri->x[0] = x1;
-    tri->y[0] = y1;
-
-    tri->x[1] = x2;
-    tri->y[1] = y2;
-
-    tri->x[2] = x3;
-    tri->y[2] = y3;
-}
-
-void setTriangleThickness(Triangle *tri, float thickness){
-    if (tri == NULL) return;
-
-    tri->thickness = thickness;
-}
-
-void setTriangleColor(Triangle *tri, float r, float g, float b){
-    if (tri == NULL) return;
-
-    tri->color[0] = r;
-    tri->color[1] = g;
-    tri->color[2] = b;
-}
-
-void drawTriangleHollow(Triangle *tri) {
-    if(tri == NULL) return;
-
-    glColor3f(tri->color[0], tri->color[1], tri->color[2]);
-
-    glLineWidth(tri->thickness);
-
-    glBegin(GL_LINE_LOOP);
-        glVertex2f(tri->x[0], tri->y[0]);
-        glVertex2f(tri->x[1], tri->y[1]);
-        glVertex2f(tri->x[2], tri->y[2]);
-    glEnd();
-}
-
-void drawTriangleFilled(Triangle *tri) {
-    if(tri == NULL) return;
-
-    glColor3f(tri->color[0], tri->color[1], tri->color[2]);
-
-    glBegin(GL_TRIANGLES);
-        glVertex2f(tri->x[0], tri->y[0]);
-        glVertex2f(tri->x[1], tri->y[1]);
-        glVertex2f(tri->x[2], tri->y[2]);
-    glEnd();
-}
-
-void freeTriangle(Triangle *tri){
-    if (tri) {
-      free(tri);
-      tri = NULL;
-    }
-}
-/* -------------------------------- TRIANGLE -------------------------------- */
-
-/* ----------------------------- QUADRILATERAL ------------------------------ */
+/* ---------------------------------- PLANE --------------------------------- */
 // 0-------1
 // |   .   |
 // |       |
 // 3-------2
-// Quad Coordinates
-Quadrilateral* createQuad() {
-    Quadrilateral* quad = (Quadrilateral *) malloc(sizeof(Quadrilateral));
+// Plane Coordinates
+Plane* createPlane(){
+    Plane *plane = (Plane *) malloc(sizeof(Plane));
 
-    quad->thickness = 1.0f;
+    plane->thickness = 1.0f;
 
-    quad->color[0] = 1.0;
-    quad->color[1] = 1.0;
-    quad->color[2] = 1.0;
+    plane->color[0] = 1.0;
+    plane->color[1] = 1.0;
+    plane->color[2] = 1.0;
 
-    quad->texture = 0;
+    plane->texture = 0;
 
-    quad->x[0] = 0.0;
-    quad->y[0] = 0.0;
+    plane->x[0] = 0.0;
+    plane->y[0] = 0.0;
+    plane->z[0] = 0.0;
 
-    quad->x[1] = 0.0;
-    quad->y[1] = 0.0;
+    plane->x[1] = 0.0;
+    plane->y[1] = 0.0;
+    plane->z[1] = 0.0;
 
-    quad->x[2] = 0.0;
-    quad->y[2] = 0.0;
+    plane->x[2] = 0.0;
+    plane->y[2] = 0.0;
+    plane->z[2] = 0.0;
 
-    quad->x[3] = 0.0;
-    quad->y[3] = 0.0;
+    plane->x[3] = 0.0;
+    plane->y[3] = 0.0;
+    plane->z[3] = 0.0;
 
-    return quad;
+    return plane;
 }
 
-void setQuadCoordinates(Quadrilateral *quad, float x1, float y1, float x2, float y2,
-                                             float x3, float y3, float x4, float y4) {
-    if (quad == NULL) return;
+void setPlaneCoordinates(Plane *plane, float x1, float y1, float z1,
+                                             float x2, float y2, float z2,
+                                             float x3, float y3, float z3,
+                                             float x4, float y4, float z4) {
+    if (plane == NULL) return;
 
-    quad->x[0] = x1;
-    quad->y[0] = y1;
+    plane->x[0] = x1;
+    plane->y[0] = y1;
+    plane->z[0] = z1;
 
-    quad->x[1] = x2;
-    quad->y[1] = y2;
+    plane->x[1] = x2;
+    plane->y[1] = y2;
+    plane->z[1] = z2;
 
-    quad->x[2] = x3;
-    quad->y[2] = y3;
+    plane->x[2] = x3;
+    plane->y[2] = y3;
+    plane->z[2] = z3;
 
-    quad->x[3] = x4;
-    quad->y[3] = y4;
+    plane->x[3] = x4;
+    plane->y[3] = y4;
+    plane->z[3] = z4;
 }
 
-void setQuadThickness(Quadrilateral *quad, float thickness){
-    if (quad == NULL) return;
+void setPlaneThickness(Plane *plane, float thickness){
+    if (plane == NULL) return;
 
-    quad->thickness = thickness;
+    plane->thickness = thickness;
 }
 
-void setQuadColor(Quadrilateral *quad, float r, float g, float b){
-    if (quad == NULL) return;
+void setPlaneColor(Plane *plane, float r, float g, float b){
+    if (plane == NULL) return;
 
-    quad->color[0] = r;
-    quad->color[1] = g;
-    quad->color[2] = b;
+    plane->color[0] = r;
+    plane->color[1] = g;
+    plane->color[2] = b;
 }
 
-void setQuadTexture(Quadrilateral *quad, GLuint texture){
-    if (quad == NULL) return;
+void setPlaneTexture(Plane *plane, GLuint texture){
+    if (plane == NULL) return;
 
-    quad->texture = texture;
+    plane->texture = texture;
 }
 
-void drawQuadHollow(Quadrilateral* quad) {
-    if (quad == NULL) return;
+void drawPlaneHollow(Plane* plane) {
+    if (plane == NULL) return;
 
-    glColor3f(quad->color[0], quad->color[1], quad->color[2]);
+    glColor3f(plane->color[0], plane->color[1], plane->color[2]);
 
-    glLineWidth(quad->thickness);
+    glLineWidth(plane->thickness);
 
     glBegin(GL_LINE_LOOP);
-        glVertex2f(quad->x[0], quad->y[0]);
-        glVertex2f(quad->x[1], quad->y[1]);
-        glVertex2f(quad->x[2], quad->y[2]);
-        glVertex2f(quad->x[3], quad->y[3]);
+        glVertex3f(plane->x[0], plane->y[0], plane->z[0]);
+        glVertex3f(plane->x[1], plane->y[1], plane->z[1]);
+        glVertex3f(plane->x[2], plane->y[2], plane->z[2]);
+        glVertex3f(plane->x[3], plane->y[3], plane->z[3]);
     glEnd();
 }
 
-void drawQuadFilled(Quadrilateral* quad) {
-    if (quad == NULL) return;
+void drawPlaneFilled(Plane* plane) {
+    if (plane == NULL) return;
 
-    glColor3f(quad->color[0], quad->color[1], quad->color[2]);
+    glColor3f(plane->color[0], plane->color[1], plane->color[2]);
 
     glBegin(GL_QUADS);
-        glVertex2f(quad->x[0], quad->y[0]);
-        glVertex2f(quad->x[1], quad->y[1]);
-        glVertex2f(quad->x[2], quad->y[2]);
-        glVertex2f(quad->x[3], quad->y[3]);
+        glVertex3f(plane->x[0], plane->y[0], plane->z[0]);
+        glVertex3f(plane->x[1], plane->y[1], plane->z[1]);
+        glVertex3f(plane->x[2], plane->y[2], plane->z[2]);
+        glVertex3f(plane->x[3], plane->y[3], plane->z[3]);
     glEnd();
 }
 
-void drawQuadTextured(Quadrilateral *quad){
-    if (quad == NULL) return;
+void drawPlaneTextured(Plane *plane){
+    if (plane == NULL) return;
 
-    glBindTexture(GL_TEXTURE_2D, quad->texture);
+    glBindTexture(GL_TEXTURE_2D, plane->texture);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glColor3f(quad->color[0], quad->color[1], quad->color[2]);
+    glColor3f(plane->color[0], plane->color[1], plane->color[2]);
     glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
-        glVertex2f(quad->x[0], quad->y[0]);
+        glVertex3f(plane->x[0], plane->y[0], plane->z[0]);
         glTexCoord2f(0, 1);
-        glVertex2f(quad->x[1], quad->y[1]);
+        glVertex3f(plane->x[1], plane->y[1], plane->z[1]);
         glTexCoord2f(1, 1);
-        glVertex2f(quad->x[2], quad->y[2]);
+        glVertex3f(plane->x[2], plane->y[2], plane->z[2]);
         glTexCoord2f(1, 0);
-        glVertex2f(quad->x[3], quad->y[3]);
+        glVertex3f(plane->x[3], plane->y[3], plane->z[3]);
     glEnd();
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
 }
 
-void freeQuad(Quadrilateral* quad) {
-    if(quad){
-            free(quad);
-            quad = NULL;
+void freePlane(Plane *plane) {
+    if(plane){
+        free(plane);
+        plane = NULL;
     }
 }
-/* ----------------------------- QUADRILATERAL ------------------------------ */
+/* ---------------------------------- PLANE --------------------------------- */
 
-/* --------------------------------- CIRCLE --------------------------------- */
-Circle *createCircle() {
-    Circle *circle = (Circle *) malloc(sizeof(Circle));
+/* ---------------------------------- CUBE ---------------------------------- */
+Cube *createCube(){
+    Cube *cube = (Cube *) malloc(sizeof(Cube));
 
-    circle->radius = 1.0;
-    circle->thickness = 1.0;
+    cube->thickness = 1.0f;
 
-    circle->color[0] = 0.0;
-    circle->color[1] = 0.0;
-    circle->color[2] = 0.0;
+    cube->color[0] = 1.0;
+    cube->color[1] = 1.0;
+    cube->color[2] = 1.0;
 
-    circle->center[0] = 0.0;
-    circle->center[1] = 0.0;
+    cube->texture = 0;
 
-    return circle;
+    cube->x = 0.0;
+    cube->y = 0.0;
+    cube->z = 0.0;
+
+    cube->sizeX = 0.0;
+    cube->sizeY = 0.0;
+    cube->sizeZ = 0.0;
+
+    return cube;
 }
 
-void setCircleRadius(Circle *circle, float radius){
-    if (circle == NULL) return;
+void setCubeColor(Cube *cube, float r, float g, float b){
+    if (cube == NULL) return;
 
-    if(radius > 0.0)
-        circle->radius = radius;
-    else
-        circle->radius = 1.0;
+    cube->color[0] = r;
+    cube->color[1] = g;
+    cube->color[2] = b;
 }
 
-void setCircleThickness(Circle *circle, float thickness){
-    if (circle == NULL) return;
+void setCubeCoordinates(Cube *cube, float x, float y, float z){
+    if (cube == NULL) return;
 
-    if(thickness > 0.0)
-        circle->thickness = thickness;
-    else
-        circle->thickness = 1.0;
+    cube->x = x;
+    cube->y = y;
+    cube->z = z;
 }
 
-void setCircleCoordinates(Circle *circle, float x, float y){
-    if (circle == NULL) return;
+void setCubeThickness(Cube *cube, float thickness){
+    if (cube == NULL) return;
 
-    circle->center[0] = x;
-    circle->center[1] = y;
+    cube->thickness = thickness;
 }
 
-void setCircleColor(Circle *circle, float r, float g, float b){
-    if (circle == NULL) return;
+void setCubeSize(Cube *cube, float x, float y, float z){
+    if (cube == NULL) return;
 
-    circle->color[0] = r;
-    circle->color[1] = g;
-    circle->color[2] = b;
+    cube->sizeX = x;
+    cube->sizeY = y;
+    cube->sizeZ = z;
 }
 
-void drawCircleHollow(Circle *circle) {
-    float x = 0.0, y = 0.0;
-
-    glColor3f(circle->color[0], circle->color[1], circle->color[2]);
-
-    glLineWidth(circle->thickness);
-    glBegin(GL_LINE_LOOP);
-        int i = 0;
-        for(i = 0; i < 360; i++) {
-            x = circle->center[0] + (circle->radius * sin(i));
-            y = circle->center[1] + (circle->radius * cos(i));
-            glVertex2f(x, y);
-        }
-    glEnd();
+void setCubeTexture(Cube *cube, GLuint texture){
+    cube->texture = texture;
 }
 
-void drawCircleFilled(Circle *circle){
-    float x = 0.0, y = 0.0;
+void drawCubeHollow(Cube *cube){
+    if (cube == NULL) return;
 
-    glColor3f(circle->color[0], circle->color[1], circle->color[2]);
-
-    glBegin(GL_TRIANGLE_FAN);
-        int i = 0;
-        glVertex2f(circle->center[0], circle->center[1]);
-        for(i = 0; i < 360; i++) {
-            x = circle->center[0] + (circle->radius * sin(i));
-            y = circle->center[1] + (circle->radius * cos(i));
-            glVertex2f(x, y);
-        }
-    glEnd();
+    Plane *plane = createPlane();
+        setPlaneColor(plane, cube->color[0], cube->color[1], cube->color[2]);
+        setPlaneThickness(plane, cube->thickness);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z);
+        drawPlaneHollow(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneHollow(plane);
+        setPlaneCoordinates(plane, (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneHollow(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneHollow(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneHollow(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneHollow(plane);
+    freePlane(plane);
 }
 
-void freeCircle(Circle *circle){
-    if(circle){
-        free(circle);
-        circle = NULL;
+void drawCubeFilled(Cube *cube){
+    if (cube == NULL) return;
+
+    Plane *plane = createPlane();
+        setPlaneColor(plane, cube->color[0], cube->color[1], cube->color[2]);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z);
+        drawPlaneFilled(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneFilled(plane);
+        setPlaneCoordinates(plane, (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneFilled(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneFilled(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneFilled(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneFilled(plane);
+    freePlane(plane);
+}
+
+void drawCubeTextured(Cube *cube){
+    if (cube == NULL) return;
+
+    Plane *plane = createPlane();
+        setPlaneColor(plane, cube->color[0], cube->color[1], cube->color[2]);
+        setPlaneTexture(plane, cube->texture);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z);
+        drawPlaneTextured(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneTextured(plane);
+        setPlaneCoordinates(plane, (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneTextured(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneTextured(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneTextured(plane);
+        setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
+                                (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z,
+                                -(cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, -(cube->sizeZ/2) + cube->z);
+        drawPlaneTextured(plane);
+    freePlane(plane);
+}
+
+void freeCube(Cube *cube){
+    if(cube){
+        free(cube);
+        cube = NULL;
     }
 }
-/* --------------------------------- CIRCLE --------------------------------- */
+/* ---------------------------------- CUBE ---------------------------------- */
