@@ -11,7 +11,7 @@ GLuint loadTexture(const char *filename) {
         SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y);
 
         if (!tex) {
-                return EXIT_FAILURE;
+            return EXIT_FAILURE;
         }
 
         // Texture parameters

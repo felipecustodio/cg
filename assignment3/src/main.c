@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
-        glutInitWindowPosition(5,5); // Defines the initial window position on screen
+        glutInitWindowPosition(50, 50); // Defines the initial window position on screen
         glutCreateWindow("コンピューターグラフィックス"); // Defines the window title
 
         // RENDERING
@@ -50,9 +50,6 @@ int main(int argc, char* argv[]) {
         glutPassiveMotionFunc(onMouseMove); // Handles mouse motion
         glutKeyboardFunc(onKeyPress); // Handles keyboard presses
         glutKeyboardUpFunc(onKeyUp); // Handles keyboard releases
-
-        glMatrixMode(GL_PROJECTION); // Load matrix projection mode
-        glViewport(0, 0, VIEWPORT_X, VIEWPORT_Y); // Set viewport size
 
         // LOAD ALL TEXTURES
         loadTextures();

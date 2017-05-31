@@ -31,16 +31,15 @@ GLfloat gforce = 0.98f;
 
 Camera *cam;
 
-/* ------ MODELS ------ */
-obj *pillar;
+Obj *alexander;
+Obj *pyramid;
 
 /* ------ MECHANICS ------ */
 int midX = 0, midY = 0;
 float initialY = 0;
 float jumpBuff = 0;
 int crouchBuff = 0;
-
-GLuint checkered = 0;
+float pyramidRot = 0;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
 int loadTextures() {
@@ -57,10 +56,14 @@ int loadTextures() {
         return 1;
 }
 /* ------------------------------- GLOBALS ---------------------------------- */
-void loadModels() {
+int loadModels() {
+        alexander = loadObj("./assets/models/alexander/alexander.obj");
+        setObjTexture(alexander, loadTexture("./assets/models/alexander/OCM.png"));
 
-        pillar = obj_create("./assets/pillar.obj");
-        obj_proc(pillar);
+        pyramid = loadObj("./assets/models/pyramid.obj");
+        setObjTexture(pyramid, loadTexture("./assets/models/AO.png"));
+
+        return 1;
 }
 
 /* ------------------------------ MECHANICS --------------------------------- */
@@ -201,7 +204,7 @@ void reshape(GLsizei width, GLsizei height){
     midX = width/2;
     midY = height/2;
 
-    aspectRatio = width / height;
+    aspectRatio = (GLfloat) width / (GLfloat) height;
 
     updateView();
 }
@@ -240,7 +243,7 @@ void audioCleanup() {
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /*-------------------------------- RENDERING ---------------------------------*/
-void skybox(void) {
+void drawSkybox(void) {
     repositionCamera(cam);
 
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -285,36 +288,76 @@ void drawGrid(void){
 	}
 }
 
+void drawPyramid(){
+    repositionCamera(cam);
+
+    glTranslatef(0.0f, 0.0f, 15.0f);
+    glRotatef(pyramidRot, 0, 1, 0);
+
+    pyramidRot += 0.5;
+    if(pyramidRot >= 360)
+        pyramidRot = 0;
+
+    drawObjTextured(pyramid);
+
+    glColor3f(1.0f, 0.0f, 0.0f);
+    drawObjWireframe(pyramid);
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+    drawObjVertices(pyramid);
+    glColor3f(1.0f, 1.0f, 1.0f);
+}
+
+void drawAlex(){
+    repositionCamera(cam);
+
+    glTranslatef(50.0f, 0.0f, 0.0f);
+    glRotatef(-90, 0, 1, 0);
+    glScalef(1.5f, 1.5f, 1.5f);
+
+    drawObjTextured(alexander);
+
+    /*glColor3f(0.0f, 0.0f, 1.0f);
+    drawObjWireframe(alexander);
+
+    glColor3f(0.0f, 0.0f, 0.0f);
+    drawObjVertices(alexander);
+    glColor3f(1.0f, 1.0f, 1.0f);*/
+}
+
 /*--------------------SCENE--------------------*/
 void drawScene() {
-        // Load matrix mode
-        glMatrixMode(GL_MODELVIEW);
-        skybox();
-        // obj_render(pillar);
-        drawGrid();
+    // Load matrix mode
+    glMatrixMode(GL_MODELVIEW);
 
-        Cube *cube = createCube();
-            setCubeCoordinates(cube, 0.0f, 20.0f, 20.0f);
-            setCubeSize(cube, 10.0f, 30.0f, 10.0f);
-            setCubeColor(cube, 1.0f, 1.0f, 1.0f);
-            setCubeTexture(cube, checkered);
-            drawCubeTextured(cube);
-        freeCube(cube);
+    drawSkybox();
+    drawPyramid();
+    drawAlex();
+    drawGrid();
+
+    Cube *cube = createCube();
+        setCubeCoordinates(cube, 0.0f, 20.0f, 20.0f);
+        setCubeSize(cube, 30.0f, 30.0f, 10.0f);
+        setCubeColor(cube, 1.0f, 1.0f, 1.0f);
+        setCubeTexture(cube, checker);
+        glTranslatef(0.0f, 0.0f, 30.0f);
+        drawCubeTextured(cube);
+    freeCube(cube);
 }
 
 void drawLoop(void) {
-        // Paint background
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(1.0f, 0.71f, 0.89f, 1.0f);
-        glClearDepth(1.0f);
+    // Paint background
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(1.0f, 0.71f, 0.89f, 1.0f);
+    glClearDepth(1.0f);
 
-        drawScene();
+    drawScene();
 
-        gravityCamera();
-        onKeyHold();
+    gravityCamera();
+    onKeyHold();
 
-        glFlush();
-        glutSwapBuffers();
+    glFlush();
+    glutSwapBuffers();
 }
 
 void initializeScene(void){
@@ -322,6 +365,5 @@ void initializeScene(void){
     initialY = cam->pos[1];
     midX = VIEWPORT_X/2;
     midY = VIEWPORT_Y/2;
-    checkered = loadTexture("./assets/textures/checkered.png");
 }
 /* ----------------------------- SCENE DRAWING ------------------------------ */

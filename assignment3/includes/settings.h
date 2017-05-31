@@ -6,7 +6,7 @@
 */
 
 /*------------------------------ DEBUG & INIT ------------------------------- */
-#define DEBUG     0
+#define DEBUG     1
 #define CONSOLE   1
 // Macro for checking if debug is on
 #define IF_DEBUG if(CONSOLE && DEBUG)
