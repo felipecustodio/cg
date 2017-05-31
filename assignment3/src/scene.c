@@ -16,7 +16,7 @@ int cDown = 0;
 Mix_Chunk *bg = NULL;
 
 /* ------ TEXTURES -----*/
-GLuint checker, miami, playstation, title;
+GLuint checker, skyline, macplus, marble;
 
 /* ------ 3D -----*/
 GLfloat aspectRatio;
@@ -34,6 +34,7 @@ Camera *cam;
 
 Obj *alexander;
 Obj *pyramid;
+Obj *pillar;
 
 /* ------ MECHANICS ------ */
 int midX = 0, midY = 0;
@@ -47,11 +48,11 @@ float pyramidRot = 0;
 int loadTextures() {
 
         checker = loadTexture("./assets/textures/checker.png");
-        miami = loadTexture("./assets/textures/miami.png");
-        playstation = loadTexture("./assets/textures/playstation.png");
-        title = loadTexture("./assets/textures/title.png");
+        skyline = loadTexture("./assets/textures/skyline.png");
+        macplus = loadTexture("./assets/textures/macplus.png");
+        marble = loadTexture("./assets/textures/marble.png");
 
-        if (!(checker && miami && playstation && title)) {
+        if (!(checker && skyline && macplus && marble)) {
                 printf("ERROR LOADING TEXTURES\n");
         }
 
@@ -60,10 +61,13 @@ int loadTextures() {
 /* ------------------------------- GLOBALS ---------------------------------- */
 int loadModels() {
         alexander = loadObj("./assets/models/alexander/alexander.obj");
-        setObjTexture(alexander, loadTexture("./assets/models/alexander/OCM.png"));
+        setObjTexture(alexander, loadTexture("./assets/models/alexander/CLM.png"));
 
         pyramid = loadObj("./assets/models/pyramid.obj");
         setObjTexture(pyramid, loadTexture("./assets/models/AO.png"));
+
+        pillar = loadObj("./assets/models/pillar/pillar.obj");
+        setObjTexture(pillar, loadTexture("./assets/models/pillar/AO.png"));
 
         return 1;
 }
@@ -309,6 +313,20 @@ void drawGrid(void){
 	}
 }
 
+void drawFloor(void){
+    repositionCamera(cam);
+
+    Plane *flr = createPlane();
+        setPlaneCoordinates(flr, -100.0f, 0.0f, -100.0f,
+                                -100.0f, 0.0f, 100.0f,
+                                100.0f, 0.0f, 100.0f,
+                                100.0f, 0.0f, -100.0f);
+        setPlaneTexture(flr, checker);
+        glTranslatef(0.0f, 0.0f, 70.0f);
+        drawPlaneTextured(flr);
+    freePlane(flr);
+}
+
 void drawPyramid(){
     repositionCamera(cam);
 
@@ -329,21 +347,58 @@ void drawPyramid(){
     glColor3f(1.0f, 1.0f, 1.0f);
 }
 
+void drawMac(){
+    repositionCamera(cam);
+
+    Plane *mac = createPlane();
+        setPlaneCoordinates(mac, -11.0f, -5.0f, 0.0f,
+                                -11.0f, 5.0f, 0.0f,
+                                11.0f, 5.0f, 0.0f,
+                                11.0f, -5.0f, 0.0f);
+        setPlaneTexture(mac, macplus);
+        glTranslatef(6.5f, 20.0f, -20.0f);
+        drawPlaneTextured(mac);
+        setPlaneCoordinates(mac, -12.0f, -7.5f, 0.0f,
+                                -12.0f, 7.5f, 0.0f,
+                                12.0f, 7.5f, 0.0f,
+                                12.0f, -7.5f, 0.0f);
+        glTranslatef(4.0f, -11.0f, -10.0f);
+        setPlaneTexture(mac, skyline);
+        drawPlaneTextured(mac);
+    freePlane(mac);
+}
+
 void drawAlex(){
     repositionCamera(cam);
 
-    glTranslatef(50.0f, 0.0f, 0.0f);
-    glRotatef(-90, 0, 1, 0);
-    glScalef(1.5f, 1.5f, 1.5f);
+    Cube *cube = createCube();
+        setCubeCoordinates(cube, 0.0f, 0.0f, 0.0f);
+        setCubeSize(cube, 8.5f, 5.0f, 8.5f);
+        setCubeTexture(cube, marble);
+        glRotatef(-30, 0, 1, 0);
+        glTranslatef(-12.5f, 2.25f, -7.75f);
+        drawCubeTextured(cube);
+    freeCube(cube);
+
+    repositionCamera(cam);
+
+    glTranslatef(-6.0f, 8.0f, -12.75f);
+    glRotatef(25, 0, 1, 0);
+    glScalef(-0.6f, 0.6f, 0.6f);
 
     drawObjTextured(alexander);
+}
 
-    /*glColor3f(0.0f, 0.0f, 1.0f);
-    drawObjWireframe(alexander);
+void drawPillar(){
+    repositionCamera(cam);
+    glTranslatef(75.0f, 0.5f, -15.0f);
+    glScalef(0.05f, 0.05f, 0.05f);
+    drawObjTextured(pillar);
 
-    glColor3f(0.0f, 0.0f, 0.0f);
-    drawObjVertices(alexander);
-    glColor3f(1.0f, 1.0f, 1.0f);*/
+    repositionCamera(cam);
+    glTranslatef(-75.0f, 0.5f, -15.0f);
+    glScalef(0.05f, 0.05f, 0.05f);
+    drawObjTextured(pillar);
 }
 
 /*--------------------SCENE--------------------*/
@@ -352,24 +407,18 @@ void drawScene() {
     glMatrixMode(GL_MODELVIEW);
 
     drawSkybox();
-    drawPyramid();
+    //drawGrid();
+    drawFloor();
     drawAlex();
-    drawGrid();
-
-    Cube *cube = createCube();
-        setCubeCoordinates(cube, 0.0f, 20.0f, 20.0f);
-        setCubeSize(cube, 30.0f, 30.0f, 10.0f);
-        setCubeColor(cube, 1.0f, 1.0f, 1.0f);
-        setCubeTexture(cube, checker);
-        glTranslatef(0.0f, 0.0f, 30.0f);
-        drawCubeTextured(cube);
-    freeCube(cube);
+    //drawPyramid();
+    drawPillar();
+    drawMac();
 }
 
 void drawLoop(void) {
     // Paint background
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0f, 0.71f, 0.89f, 1.0f);
+    glClearColor(1.0f, 0.52f, 0.61f, 1.0f);
     glClearDepth(1.0f);
 
     drawScene();

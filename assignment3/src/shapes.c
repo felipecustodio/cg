@@ -63,10 +63,6 @@ void freeText(Text *text) {
 /* ---------------------------------- TEXT ---------------------------------- */
 
 /* ---------------------------------- PLANE --------------------------------- */
-// 0-------1
-// |   .   |
-// |       |
-// 3-------2
 // Plane Coordinates
 Plane* createPlane(){
     Plane *plane = (Plane *) malloc(sizeof(Plane));
@@ -98,10 +94,10 @@ Plane* createPlane(){
     return plane;
 }
 
-void setPlaneCoordinates(Plane *plane, float x1, float y1, float z1,
-                                             float x2, float y2, float z2,
-                                             float x3, float y3, float z3,
-                                             float x4, float y4, float z4) {
+void setPlaneCoordinates(Plane *plane, GLfloat x1, GLfloat y1, GLfloat z1,
+                                             GLfloat x2, GLfloat y2, GLfloat z2,
+                                             GLfloat x3, GLfloat y3, GLfloat z3,
+                                             GLfloat x4, GLfloat y4, GLfloat z4) {
     if (plane == NULL) return;
 
     plane->x[0] = x1;
@@ -230,7 +226,7 @@ void setCubeColor(Cube *cube, float r, float g, float b){
     cube->color[2] = b;
 }
 
-void setCubeCoordinates(Cube *cube, float x, float y, float z){
+void setCubeCoordinates(Cube *cube, GLfloat x, GLfloat y, GLfloat z){
     if (cube == NULL) return;
 
     cube->x = x;
@@ -244,7 +240,7 @@ void setCubeThickness(Cube *cube, float thickness){
     cube->thickness = thickness;
 }
 
-void setCubeSize(Cube *cube, float x, float y, float z){
+void setCubeSize(Cube *cube, GLfloat x, GLfloat y, GLfloat z){
     if (cube == NULL) return;
 
     cube->sizeX = x;
