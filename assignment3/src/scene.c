@@ -27,6 +27,7 @@ GLfloat zFar = 10000.0f;
 
 GLfloat moveSpeed = 0.6f;
 GLfloat lookSpeed = 0.1f;
+GLfloat jumpSpeed = 2.0f;
 GLfloat gforce = 0.98f;
 
 Camera *cam;
@@ -36,8 +37,9 @@ Obj *pyramid;
 
 /* ------ MECHANICS ------ */
 int midX = 0, midY = 0;
-float initialY = 0;
-float jumpBuff = 0;
+float bobX = 0.05, bobY = 0.15;
+float bobXbuff = 0, bobYbuff = 0;
+float jumpBuff = 0, jumpSet = 0;
 int crouchBuff = 0;
 float pyramidRot = 0;
 
@@ -68,14 +70,34 @@ int loadModels() {
 
 /* ------------------------------ MECHANICS --------------------------------- */
 void gravityCamera(){
-    if(jumpBuff != 0){
+    if(jumpSet >= 1){
+        jumpSet += jumpSpeed;
+        cam->pos[1] += jumpSpeed;
+        if(jumpSet >= jumpBuff)
+            jumpSet = 0;
+    }
+    if(jumpBuff != 0 && jumpSet == 0){
         jumpBuff -= gforce;
         if(jumpBuff > 0)
             cam->pos[1] -= gforce;
         else{
-            cam->pos[1] = initialY;
+            cam->pos[1] -= jumpBuff;
             jumpBuff = 0;
         }
+    }
+}
+
+void bobCamera(){
+    if(jumpBuff == 0 && (wDown || aDown || sDown || dDown)){
+        if(bobXbuff <= -1 || bobXbuff >= 1)
+            bobX = -bobX;
+        cam->pos[0] += bobX;
+        bobXbuff += bobX;
+
+        if(bobYbuff <= -1.5 || bobYbuff >= 0)
+            bobY = -bobY;
+        cam->pos[1] += bobY;
+        bobYbuff += bobY;
     }
 }
 
@@ -94,9 +116,8 @@ void crouch(int state){
 
 void jump(){
     if(jumpBuff == 0){
-        initialY = cam->pos[1];
-        cam->pos[1] += 15;
         jumpBuff = 15;
+        jumpSet = 1;
     }
 }
 /* ------------------------------ MECHANICS --------------------------------- */
@@ -354,6 +375,7 @@ void drawLoop(void) {
     drawScene();
 
     gravityCamera();
+    bobCamera();
     onKeyHold();
 
     glFlush();
@@ -362,7 +384,6 @@ void drawLoop(void) {
 
 void initializeScene(void){
     cam = createCamera();
-    initialY = cam->pos[1];
     midX = VIEWPORT_X/2;
     midY = VIEWPORT_Y/2;
 }
