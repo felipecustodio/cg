@@ -6,17 +6,6 @@
 #include <string.h>
 #include "settings.h"
 
-/* ------- OBJ LOADER by meist3r-ed ------- */
-/* FEATURES: 								*/
-/*	-> Loads vertices, texture coordinates,	*/
-/* 		faces and UV maps					*/
-/*	-> Draws models vertices, edges, faces 	*/
-/* 		and texture-mapped faces			*/
-/* NOTES: 									*/
-/* 	-> Currently supports triangle-faced 	*/
-/*		objects only						*/
-/*	-> Does not load vertex or face normals	*/
-
 typedef struct Obj{
 	GLfloat *v;
 	GLfloat *vt;

@@ -406,7 +406,7 @@ void drawScene() {
     // Load matrix mode
     glMatrixMode(GL_MODELVIEW);
 
-    drawSkybox();
+    //drawSkybox();
     //drawGrid();
     drawFloor();
     drawAlex();
