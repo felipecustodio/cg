@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include "../includes/scene.h"
 
 /* ------------------------------- GLOBALS ---------------------------------- */
@@ -11,6 +12,11 @@ int sDown = 0;
 int aDown = 0;
 int dDown = 0;
 int cDown = 0;
+
+int iDown = 0;
+int kDown = 0;
+int jDown = 0;
+int lDown = 0;
 
 /* ------ AUDIOS -----*/
 Mix_Chunk *bg = NULL;
@@ -35,6 +41,10 @@ Camera *cam;
 Obj *alexander;
 Obj *pyramid;
 Obj *pillar;
+
+GLfloat alex_x = -6.0f;
+GLfloat alex_y = 8.0f;
+GLfloat alex_z = -12.75f;
 
 /* ------ MECHANICS ------ */
 int midX = 0, midY = 0;
@@ -156,6 +166,18 @@ void onKeyPress(unsigned char key, int x, int y){
     if(key == 'd' || key == 'D'){
         dDown = 1;
     }
+    if(key == 'i' || key == 'I'){
+        iDown = 1;
+    }
+    if(key == 'k' || key == 'K'){
+        kDown = 1;
+    }
+    if(key == 'j' || key == 'J'){
+        jDown = 1;
+    }
+    if(key == 'l' || key == 'L'){
+        lDown = 1;
+    }
     if(key == 'c' || key == 'C'){
         cDown = 1;
     }
@@ -181,6 +203,18 @@ void onKeyUp(unsigned char key, int x, int y){
         cDown = 0;
         crouch(0);
     }
+    if(key == 'i' || key == 'I'){
+        iDown = 0;
+    }
+    if(key == 'k' || key == 'K'){
+        kDown = 0;
+    }
+    if(key == 'j' || key == 'J'){
+        jDown = 0;
+    }
+    if(key == 'l' || key == 'L'){
+        lDown = 0;
+    }
 }
 
 void onKeyHold(){
@@ -195,6 +229,18 @@ void onKeyHold(){
     }
     if(dDown == 1){
         strafeCamera(cam, moveSpeed);
+    }
+    if(iDown == 1){
+        moveAlex('i');
+    }
+    if(kDown == 1){
+        moveAlex('k');
+    }
+    if(jDown == 1){
+        moveAlex('j');
+    }
+    if(lDown == 1){
+        moveAlex('l');        
     }
     if(cDown == 1){
         crouch(1);
@@ -382,11 +428,34 @@ void drawAlex(){
 
     repositionCamera(cam);
 
-    glTranslatef(-6.0f, 8.0f, -12.75f);
+    glTranslatef(alex_x, alex_y, alex_z);
     glRotatef(25, 0, 1, 0);
     glScalef(-0.6f, 0.6f, 0.6f);
 
     drawObjTextured(alexander);
+}
+
+void moveAlex(char key){
+    if (key == 'l')
+    {
+        alex_x = (alex_x + cos(cam->rot[1] / 180 * 3.141592654f)/2);
+        alex_z = (alex_z + sin(cam->rot[1] / 180 * 3.141592654f))/2;
+    }
+    if (key == 'j')
+    {
+        alex_x = (alex_x - cos(cam->rot[1] / 180 * 3.141592654f)/2);
+        alex_z = (alex_z - sin(cam->rot[1] / 180 * 3.141592654f)/2);
+    }
+    if (key == 'i')
+    {
+        alex_x = (alex_x + sin(cam->rot[1] / 180 * 3.141592654f)/2);
+        alex_z = (alex_z - cos(cam->rot[1] / 180 * 3.141592654f)/2);
+    }
+    if (key == 'k')
+    {
+        alex_x = (alex_x - sin(cam->rot[1] / 180 * 3.141592654f)/2);
+        alex_z = (alex_z + cos(cam->rot[1] / 180 * 3.141592654f)/2);
+    }
 }
 
 void drawPillar(){
