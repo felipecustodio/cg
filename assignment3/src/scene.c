@@ -46,6 +46,12 @@ GLfloat alex_x = -6.0f;
 GLfloat alex_y = 8.0f;
 GLfloat alex_z = -12.75f;
 
+GLfloat alex_rot = 25;
+GLfloat alex_rx = 0;
+GLfloat alex_ry = 1;
+GLfloat alex_rz = 0;
+
+
 /* ------ MECHANICS ------ */
 int midX = 0, midY = 0;
 float bobX = 0.05, bobY = 0.15;
@@ -138,7 +144,8 @@ void jump(){
 
 /* -------------------------------- INPUT ----------------------------------- */
 // Mouse clicks
-void onMouseClick(int button, int click_state, int x, int y){
+void onMouseClick(int button, int click_state, int x, int y) {
+
 }
 
 // Mouse status
@@ -183,6 +190,17 @@ void onKeyPress(unsigned char key, int x, int y){
     }
     if(key == ' '){
         jump();
+    }
+    if (key == 'r' || key == 'R') {
+        // reset Alex model
+        alex_x = -6.0f;
+        alex_y = 8.0f;
+        alex_z = -12.75f;
+
+        alex_rot = 25;
+        alex_rx = 0;
+        alex_ry = 1;
+        alex_rz = 0;
     }
 }
 
@@ -240,14 +258,32 @@ void onKeyHold(){
         moveAlex('j');
     }
     if(lDown == 1){
-        moveAlex('l');        
+        moveAlex('l');
     }
     if(cDown == 1){
         crouch(1);
     }
 }
 
-void onMouseMove(int x, int y){
+void onMouseDrag(int x, int y) {
+    if(x == midX && y == midY) return;
+    // change alex_rot
+    float diffX = x - midX;
+    float diffY = y - midY;
+
+    alex_rx += diffY * lookSpeed;
+    alex_ry += diffX * lookSpeed;
+
+    if (diffX > midX) {
+        alex_rot -= lookSpeed;
+    } else {
+        alex_rot += lookSpeed;
+    }
+
+    glutWarpPointer(midX, midY);
+}
+
+void onMouseMove(int x, int y) {
     if(x == midX && y == midY) return;
     float diffX = x - midX;
     float diffY = y - midY;
@@ -255,6 +291,7 @@ void onMouseMove(int x, int y){
     rotateCameraY(cam, diffX * lookSpeed);
     glutWarpPointer(midX, midY);
 }
+
 /* -------------------------------- INPUT ----------------------------------- */
 
 /* -------------------------------- WINDOW ---------------------------------- */
@@ -417,6 +454,7 @@ void drawMac(){
 void drawAlex(){
     repositionCamera(cam);
 
+    // Statue base
     Cube *cube = createCube();
         setCubeCoordinates(cube, 0.0f, 0.0f, 0.0f);
         setCubeSize(cube, 8.5f, 5.0f, 8.5f);
@@ -428,31 +466,37 @@ void drawAlex(){
 
     repositionCamera(cam);
 
+    // Movement
     glTranslatef(alex_x, alex_y, alex_z);
-    glRotatef(25, 0, 1, 0);
+    glRotatef(alex_rot, alex_rx, alex_ry, alex_rz);
     glScalef(-0.6f, 0.6f, 0.6f);
 
+    // Rendering
     drawObjTextured(alexander);
 }
 
-void moveAlex(char key){
+void moveAlex(char key) {
     if (key == 'l')
     {
+        // alex_x += moveSpeed; // fallback
         alex_x = (alex_x + cos(cam->rot[1] / 180 * 3.141592654f)/2);
         alex_z = (alex_z + sin(cam->rot[1] / 180 * 3.141592654f))/2;
     }
     if (key == 'j')
     {
+        // alex_x -= moveSpeed; // fallback
         alex_x = (alex_x - cos(cam->rot[1] / 180 * 3.141592654f)/2);
         alex_z = (alex_z - sin(cam->rot[1] / 180 * 3.141592654f)/2);
     }
     if (key == 'i')
     {
+        // alex_z -= moveSpeed; // fallback
         alex_x = (alex_x + sin(cam->rot[1] / 180 * 3.141592654f)/2);
         alex_z = (alex_z - cos(cam->rot[1] / 180 * 3.141592654f)/2);
     }
     if (key == 'k')
     {
+        // alex_z += moveSpeed; // fallback
         alex_x = (alex_x - sin(cam->rot[1] / 180 * 3.141592654f)/2);
         alex_z = (alex_z + cos(cam->rot[1] / 180 * 3.141592654f)/2);
     }
@@ -475,11 +519,8 @@ void drawScene() {
     // Load matrix mode
     glMatrixMode(GL_MODELVIEW);
 
-    //drawSkybox();
-    //drawGrid();
     drawFloor();
     drawAlex();
-    //drawPyramid();
     drawPillar();
     drawMac();
 }
@@ -492,8 +533,11 @@ void drawLoop(void) {
 
     drawScene();
 
+    // Camera movement
     gravityCamera();
     bobCamera();
+
+    // Keyboard handling
     onKeyHold();
 
     glFlush();

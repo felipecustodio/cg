@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
         initAudio(); // load audio files and set callback functions
 
         // Start BGM on loop
-        // Mix_PlayChannel(-1, bg, -1);
+        Mix_PlayChannel(-1, bg, -1);
 
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
@@ -47,6 +47,7 @@ int main(int argc, char* argv[]) {
 
         // EVENT HANDLING
         glutMouseFunc(onMouseClick); // Handles mouse clicks
+        glutMotionFunc(onMouseDrag); // Handles mouse click drag
         glutPassiveMotionFunc(onMouseMove); // Handles mouse motion
         glutKeyboardFunc(onKeyPress); // Handles keyboard presses
         glutKeyboardUpFunc(onKeyUp); // Handles keyboard releases

@@ -17,6 +17,7 @@
 /* -------------------------------- INPUT ----------------------------------- */
 void onMouseClick(int button, int click_state,
     int x, int y);
+void onMouseDrag();
 void onMouseHold();
 void onKeyPress(unsigned char key, int x, int y);
 void onKeyUp(unsigned char key, int x, int y);
@@ -30,6 +31,7 @@ int loadTextures();
 
 /* ------------------------------- MODELS --------------------------------- */
 int loadModels();
+void moveAlex(char key);
 /* ------------------------------- MODELS --------------------------------- */
 
 /* -------------------------------- AUDIO ----------------------------------- */
