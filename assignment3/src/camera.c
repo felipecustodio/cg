@@ -27,11 +27,11 @@ void repositionCamera(Camera *camera){
     if(camera == NULL) return;
     glLoadIdentity();
     //gluLookAt(camera->pos[0],  camera->pos[1],  camera->pos[2],
-	//		  camera->view[0], camera->view[1], camera->view[2],
-	//		  camera->up[0],   camera->up[1],   camera->up[2]);
-    glRotatef(camera->rot[0], 1, 0, 0);
-    glRotatef(camera->rot[1], 0, 1, 0);
-    glRotatef(camera->rot[2], 0, 0, 1);
+	  //		      camera->view[0], camera->view[1], camera->view[2],
+	  //		      camera->up[0],   camera->up[1],   camera->up[2]);
+    glRotatef(camera->rot[0], 1, 0, 0); // Rotate x-axis
+    glRotatef(camera->rot[1], 0, 1, 0); // Rotate y-axis
+    glRotatef(camera->rot[2], 0, 0, 1); // Rotate z-axis
     glTranslatef(-camera->pos[0], -camera->pos[1], -camera->pos[2]);
 }
 

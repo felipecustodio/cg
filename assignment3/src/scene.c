@@ -480,7 +480,7 @@ void moveAlex(char key) {
     {
         // alex_x += moveSpeed; // fallback
         alex_x = (alex_x + cos(cam->rot[1] / 180 * 3.141592654f)/2);
-        alex_z = (alex_z + sin(cam->rot[1] / 180 * 3.141592654f))/2;
+        alex_z = (alex_z + sin(cam->rot[1] / 180 * 3.141592654f)/2);
     }
     if (key == 'j')
     {
