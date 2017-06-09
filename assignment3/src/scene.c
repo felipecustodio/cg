@@ -7,6 +7,7 @@
 /* ------ INPUT STATUS -----*/
 char leftMouseButtonDown = 0;
 char rightMouseButtonDown = 0;
+
 int wDown = 0;
 int sDown = 0;
 int aDown = 0;
@@ -173,17 +174,29 @@ void onKeyPress(unsigned char key, int x, int y){
     if(key == 'd' || key == 'D'){
         dDown = 1;
     }
-    if(key == 'i' || key == 'I'){
-        iDown = 1;
+    if(key == 'i'){
+      iDown = 1;
     }
-    if(key == 'k' || key == 'K'){
-        kDown = 1;
+    if(key == 'I'){
+      iDown = 2;
     }
-    if(key == 'j' || key == 'J'){
-        jDown = 1;
+    if(key == 'k'){
+      kDown = 1;
     }
-    if(key == 'l' || key == 'L'){
-        lDown = 1;
+    if(key == 'K'){
+      kDown = 2;
+    }
+    if(key == 'j'){
+      jDown = 1;
+    }
+    if(key == 'J'){
+      jDown = 2;
+    }
+    if(key == 'l'){
+      lDown = 1;
+    }
+    if(key == 'L'){
+      lDown = 2;
     }
     if(key == 'c' || key == 'C'){
         cDown = 1;
@@ -259,6 +272,18 @@ void onKeyHold(){
     }
     if(lDown == 1){
         moveAlex('l');
+    }
+    if(iDown == 2){
+        rotateAlex('I');
+    }
+    if(kDown == 2){
+        rotateAlex('K');
+    }
+    if(jDown == 2){
+        rotateAlex('J');
+    }
+    if(lDown == 2){
+        rotateAlex('L');
     }
     if(cDown == 1){
         crouch(1);
@@ -500,6 +525,38 @@ void moveAlex(char key) {
         alex_x = (alex_x - sin(cam->rot[1] / 180 * 3.141592654f)/2);
         alex_z = (alex_z + cos(cam->rot[1] / 180 * 3.141592654f)/2);
     }
+}
+
+void rotateAlex(char key)
+{
+  if (key == 'L')
+  {
+    alex_rot += 1;
+    alex_rx = 0;
+    alex_ry = 1;
+    alex_rz = 0;
+  }
+  if (key == 'J')
+  {
+    alex_rot -= 1;
+    alex_rx = 0;
+    alex_ry = 1;
+    alex_rz = 0;
+  }
+  if (key == 'I')
+  {
+    alex_rot += 1;
+    alex_rx = 1;
+    alex_ry = 0;
+    alex_rz = 0;
+  }
+  if (key == 'K')
+  {
+    alex_rot -= 1;
+    alex_rx = 1;
+    alex_ry = 0;
+    alex_rz = 0;
+  }
 }
 
 void drawPillar(){
