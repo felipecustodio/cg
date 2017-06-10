@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
         glutInitWindowPosition(50, 50); // Defines the initial window position on screen
-        glutCreateWindow("コンピューターグラフィックス"); // Defines the window title
+        glutCreateWindow("macintosh plus - floral shoppe"); // Defines the window title (コンピューターグラフィックス)
 
         // RENDERING
         glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"

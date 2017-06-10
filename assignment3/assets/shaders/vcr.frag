@@ -21,7 +21,7 @@ void main(){
 	float freq = sin(pow(mod(time, flicker) + flicker, 1.9));
 
     //Generate noise seed
-    float seed = rand(gl_FragCoord.xy + mod(time, freq)) / 10.0;
+    float seed = rand(gl_FragCoord.xy + mod(time, freq)) / 12.0;
 
     //float x = rand(textureColor.gb);
     gl_FragColor = vec4(r + seed, g + seed, b + seed, 1.0);
