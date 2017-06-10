@@ -10,9 +10,9 @@ float rand(vec2 seed){
 void main(){
     vec2 displacement = vec2(0.004, 0.0);
 
-    float r = texture2D(texture, vTexCoord - displacement).r - 0.05;
-	float g = texture2D(texture, vTexCoord).g - 0.05;
-    float b = texture2D(texture, vTexCoord).b - 0.05;
+    float r = texture2D(texture, vTexCoord - displacement).r;
+	float g = texture2D(texture, vTexCoord).g;
+    float b = texture2D(texture, vTexCoord).b;
 
     //Flicker frequency
 	float flicker = 10.0;
