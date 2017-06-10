@@ -6,34 +6,51 @@
 #include <string.h>
 #include "settings.h"
 
-typedef struct Obj{
-	GLfloat *v;
-	GLfloat *vt;
-	GLint *f;
-	GLint *ft;
+/* Wavefront .OBJ Loader & API :3 */
+/* Check functions headers for usage */
 
-	int vcount;
-	int vtcount;
-	int fcount;
-	int ftcount;
+typedef struct Obj{		// Structure for OBJ files (normals not included)
+	GLfloat *v;			// V = object vertices
+	GLfloat *vt;		// Vt = object texture coordinates (UVMAP)
+	GLint *f;			// F = face vertices
+	GLint *ft;			// Ft = face texture mapping
 
-	GLuint texture;
+	int vcount;			// V count
+	int vtcount;		// Vt count
+	int fcount;			// F count
+	int ftcount;		// Ft count
+
+	GLuint texture;		// Object color map
 } Obj;
 
-/* ----------- Object Handling ----------- */
+/* ----------------------------- MAIN FUNCTIONS ----------------------------- */
+
+/* --------------------------- STRUCTURE HANDLING --------------------------- */
+/* LOAD OBJ */
+/* arguments: directory to object file */
+/* return: Obj structure with loaded vectices or NULL */
 Obj *loadObj(char *fname);
+
+/* FREE OBJ */
+/* arguments: Obj structure */
 void freeObj(Obj *obj);
-/* --------------------------------------- */
+/* --------------------------- STRUCTURE HANDLING --------------------------- */
 
-/* ---------- Getters & Setters ---------- */
+/* --------------------------- GETTERS & SETTERS ---------------------------- */
+/* SET OBJ TEXTURE */
+/* arguments: Obj structure and loaded texture */
 void setObjTexture(Obj *obj, GLuint texture);
-/* --------------------------------------- */
+/* --------------------------- GETTERS & SETTERS ---------------------------- */
 
-/* -------------- Rendering -------------- */
+/* ------------------------------- RENDERING -------------------------------- */
+/* DRAW OBJ FUNCTIONS */
+/* arguments: Obj structure */
 void drawObjVertices(Obj *obj);
 void drawObjWireframe(Obj *obj);
 void drawObjSolid(Obj *obj);
 void drawObjTextured(Obj *obj);
-/* --------------------------------------- */
+/* ------------------------------- RENDERING -------------------------------- */
+
+/* ----------------------------- MAIN FUNCTIONS ----------------------------- */
 
 #endif

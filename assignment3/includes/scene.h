@@ -5,10 +5,14 @@
 * Handles scene drawing and animations
 */
 
+#define GLEW_STATIC
+
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include <SDL/SDL.h>
 #include "../includes/SDL_mixer/SDL_mixer.h"
 
+#include "glsl.h"
 #include "obj.h"
 #include "shapes.h"
 #include "camera.h"

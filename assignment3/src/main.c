@@ -8,6 +8,7 @@
  *      Gustavo Santiago - 8937416
  **/
 
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include <SDL/SDL.h>
 #include <time.h>
@@ -16,7 +17,6 @@
 #include "../includes/settings.h"
 
 int main(int argc, char* argv[]) {
-
         // INITIALIZE GLUT
         glutInit(&argc, argv); // Instanciate Glut
         glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE); // Defines the buffer display mode
@@ -63,6 +63,9 @@ int main(int argc, char* argv[]) {
 
         // SET SEED FOR RANDOM NUMBERS
         srand(time(NULL));
+
+        // INITIALIZE GLEW
+        glewInit(); // Instanciate Glew
 
         // START RENDERING LOOP
         initializeScene(); // Scene and variable initialization

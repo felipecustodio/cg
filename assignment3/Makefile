@@ -5,7 +5,7 @@ CC = gcc
 BINARY = ./build/output
 
 # sources directory
-SRC = ./src/obj.c ./src/shapes.c ./src/camera.c ./src/scene.c ./src/main.c
+SRC = ./src/glsl.c ./src/obj.c ./src/shapes.c ./src/camera.c ./src/scene.c ./src/main.c
 # SOIL sources
 SOIL = ./src/SOIL/image_DXT.c ./src/SOIL/image_helper.c ./src/SOIL/stb_image_aug.c ./src/SOIL/SOIL.c
 # SDL_mixer sources
@@ -21,7 +21,7 @@ SDL = $(shell sdl-config --cflags --libs)
 SDL_MIXER_IN = ./includes/SDL_mixer
 
 # libraries and flags
-LIBS = -lglut -lGL -lGLU -lm
+LIBS = -lglut -lGL -lGLU -lGLEW -lm
 FLAGS = -O0 -g -pthread -lSDLmain -lSDL
 GLEW = -lGLEW
 

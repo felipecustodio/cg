@@ -1,13 +1,5 @@
 #include "../includes/obj.h"
 
-void freeObj(Obj *obj){
-    if(obj == NULL) return;
-    if(obj->v) free(obj->v);
-    if(obj->vt) free(obj->vt);
-    if(obj->f) free(obj->f);
-    free(obj);
-}
-
 void insertV(Obj *obj, GLfloat x, GLfloat y, GLfloat z){
     obj->v = (GLfloat *) realloc(obj->v, sizeof(GLfloat) * 3 * (obj->vcount + 1));
     obj->v[obj->vcount * 3] = x;
@@ -39,6 +31,21 @@ void insertFt(Obj *obj, GLfloat x, GLfloat y, GLfloat z){
     obj->ftcount += 1;
 }
 
+/* ----------------------------- MAIN FUNCTIONS ----------------------------- */
+/* --------------------------- STRUCTURE HANDLING --------------------------- */
+/* FREE OBJ */
+/* arguments: Obj structure */
+void freeObj(Obj *obj){
+    if(obj == NULL) return;
+    if(obj->v) free(obj->v);
+    if(obj->vt) free(obj->vt);
+    if(obj->f) free(obj->f);
+    free(obj);
+}
+
+/* LOAD OBJ */
+/* arguments: directory to object file */
+/* return: Obj structure with loaded vectices or NULL */
 Obj *loadObj(char *fname){
     FILE *file = NULL;
     file = fopen(fname, "r");
@@ -46,6 +53,8 @@ Obj *loadObj(char *fname){
         printf("Error loading \"%s\": file does not exist\n", fname);
         return NULL;
     }
+
+    IF_DEBUG printf("Model: \"%s\"\n", fname);
 
     Obj *obj = (Obj *) malloc(sizeof(Obj));
 
@@ -137,16 +146,26 @@ Obj *loadObj(char *fname){
         free(obj->ft);
     }
 
+    IF_DEBUG printf("\n");
+
     fclose(file);
     return obj;
 }
+/* --------------------------- STRUCTURE HANDLING --------------------------- */
 
+/* --------------------------- GETTERS & SETTERS ---------------------------- */
+/* SET OBJ TEXTURE */
+/* arguments: Obj structure and loaded texture */
 void setObjTexture(Obj *obj, GLuint texture){
     if(obj == NULL) return;
 
     obj->texture = texture;
 }
+/* --------------------------- GETTERS & SETTERS ---------------------------- */
 
+/* ------------------------------- RENDERING -------------------------------- */
+/* DRAW OBJ FUNCTIONS */
+/* arguments: Obj structure */
 void drawObjVertices(Obj *obj){
     if(obj == NULL) return;
 
@@ -204,6 +223,8 @@ void drawObjTextured(Obj *obj){
 
     glBindTexture(GL_TEXTURE_2D, obj->texture);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     int i = 0, v1 = 0, v2 = 0, v3 = 0, vt1 = 0, vt2 = 0, vt3 = 0;
     for(i = 0; i < obj->fcount; i++){
@@ -224,4 +245,7 @@ void drawObjTextured(Obj *obj){
     }
 
     glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
 }
+/* ------------------------------- RENDERING -------------------------------- */
+/* ----------------------------- MAIN FUNCTIONS ----------------------------- */
