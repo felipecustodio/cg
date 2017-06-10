@@ -10,9 +10,9 @@ float rand(vec2 seed){
 void main(){
     vec2 displacement = vec2(0.004, 0.0);
 
-    float r = texture2D(texture, vTexCoord - displacement).r - 0.1;
-	float g = texture2D(texture, vTexCoord).g - 0.1;
-    float b = texture2D(texture, vTexCoord).b - 0.1;
+    float r = texture2D(texture, vTexCoord - displacement).r - 0.05;
+	float g = texture2D(texture, vTexCoord).g - 0.05;
+    float b = texture2D(texture, vTexCoord).b - 0.05;
 
     //Flicker frequency
 	float flicker = 10.0;
@@ -21,7 +21,7 @@ void main(){
 	float freq = sin(pow(mod(time, flicker) + flicker, 1.9));
 
     //Generate noise seed
-    float seed = rand(gl_FragCoord.xy + mod(time, freq)) / 12.0;
+    float seed = rand(gl_FragCoord.xy + mod(time, freq)) / 10.0;
 
     //float x = rand(textureColor.gb);
     gl_FragColor = vec4(r + seed, g + seed, b + seed, 1.0);
