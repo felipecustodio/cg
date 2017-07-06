@@ -13,6 +13,7 @@
 #include "../includes/SDL_mixer/SDL_mixer.h"
 
 #include "glsl.h"
+#include "material.h"
 #include "obj.h"
 #include "shapes.h"
 #include "camera.h"
@@ -53,7 +54,6 @@ void reshape(GLsizei width, GLsizei height);
 void updateView(void);
 void drawLoop(void);
 void initializeScene(void);
-void skybox();
 /* ----------------------------- SCENE DRAWING ------------------------------ */
 
 #endif

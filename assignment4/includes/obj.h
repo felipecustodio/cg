@@ -4,6 +4,7 @@
 #include <GL/glut.h>
 #include <stdio.h>
 #include <string.h>
+#include "material.h"
 #include "settings.h"
 
 /* Wavefront .OBJ Loader & API :3 */
@@ -24,7 +25,8 @@ typedef struct Obj{		// Structure for OBJ files (normals not included)
 	int ftcount;		// Ft count
 	int fncount;		// Ft count
 
-	GLuint texture;		// Object color map
+	GLuint texture;		// Object texture
+	Material *material;	// Object material
 } Obj;
 
 /* ----------------------------- MAIN FUNCTIONS ----------------------------- */
@@ -44,6 +46,10 @@ void freeObj(Obj *obj);
 /* SET OBJ TEXTURE */
 /* arguments: Obj structure and loaded texture */
 void setObjTexture(Obj *obj, GLuint texture);
+
+/* SET OBJ MATERIAL */
+/* arguments: Obj structure and loaded material */
+void setObjMaterial(Obj *obj, Material *material);
 /* --------------------------- GETTERS & SETTERS ---------------------------- */
 
 /* ------------------------------- RENDERING -------------------------------- */

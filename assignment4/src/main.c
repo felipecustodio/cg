@@ -35,16 +35,20 @@ int main(int argc, char* argv[]) {
         // WINDOW
         glutInitWindowSize(VIEWPORT_X, VIEWPORT_Y); // Defines the size in pixels of the window
         glutInitWindowPosition(50, 50); // Defines the initial window position on screen
-        glutCreateWindow("macintosh plus - floral shoppe"); // Defines the window title (コンピューターグラフィックス)
+        glutCreateWindow("Rooftop"); // Defines the window title
 
         // RENDERING
         glutDisplayFunc(drawLoop); // Set rendering function as "drawLoop()"
         glutReshapeFunc(reshape); // Set reshaping function as "reshape()"
         glutIdleFunc(drawLoop); // Set drawLoop to repeat while no events occur
         glEnable(GL_DEPTH_TEST); // Enable depth buffer by default
+        glEnable(GL_LIGHTING); // Enable scene lighting
+        glEnable(GL_LIGHT0); // Enable 1 light source
+        glEnable(GL_LIGHT1); // Enable 1 light source
+        glEnable(GL_LIGHT2); // Enable 1 light source
         glCullFace(GL_BACK); // Backface culling parameter
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Enable perspective correction
-        glShadeModel(GL_SMOOTH); // Enable smooth shading
+        glShadeModel(GL_SMOOTH); // Enable Gouraud smooth shading
 
         // EVENT HANDLING
         glutMouseFunc(onMouseClick); // Handles mouse clicks

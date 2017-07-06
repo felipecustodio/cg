@@ -1,4 +1,10 @@
 #include "../includes/camera.h"
+#include<stdio.h>
+
+GLfloat limitXl = 44.0f;
+GLfloat limitXr = -44.0f;
+GLfloat limitZu = -27.0f;
+GLfloat limitZd = 47.0f;
 
 Camera *createCamera(){
     Camera *camera = (Camera *) malloc(sizeof(Camera));
@@ -35,13 +41,23 @@ void repositionCamera(Camera *camera){
     glTranslatef(-camera->pos[0], -camera->pos[1], -camera->pos[2]);
 }
 
+void checkBoundings(Camera *camera){
+    if(camera->pos[0] > limitXl)
+        camera->pos[0] = limitXl;
+    if(camera->pos[0] < limitXr)
+        camera->pos[0] = limitXr;
+    if(camera->pos[2] > limitZd)
+        camera->pos[2] = limitZd;
+    if(camera->pos[2] < limitZu)
+        camera->pos[2] = limitZu;
+}
+
 void moveCamera(Camera *camera, GLfloat speed){
     if(camera == NULL) return;
-    float xrotRad = (camera->rot[0] / 180 * 3.141592654f);
     float yrotRad = (camera->rot[1] / 180 * 3.141592654f);
     camera->pos[0] += (float)(sin(yrotRad)) * speed;
     camera->pos[2] -= (float)(cos(yrotRad)) * speed;
-    //camera->pos[1] -= (float)(sin(xrotRad)) * speed;
+    checkBoundings(camera);
 }
 
 void strafeCamera(Camera *camera, GLfloat speed){
@@ -49,6 +65,7 @@ void strafeCamera(Camera *camera, GLfloat speed){
     float yrotRad = (camera->rot[1] / 180 * 3.141592654f);
     camera->pos[0] += (float)(cos(yrotRad)) * speed;
     camera->pos[2] += (float)(sin(yrotRad)) * speed;
+    checkBoundings(camera);
 }
 
 void rotateCameraX(Camera *camera, GLfloat angle){

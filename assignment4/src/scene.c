@@ -25,7 +25,7 @@ int uDown = 0;
 Mix_Chunk *bg = NULL;
 
 /* ------ TEXTURES -----*/
-GLuint checker, skyline, macplus, marble, overlay, reflection;
+GLuint flrtex, skyline, macplus, marble;
 
 /* ------ SHADERS ------ */
 Shader *screenShader;
@@ -33,7 +33,13 @@ Shader *screenShader;
 /* ------ MODELS ------ */
 Obj *alexander;
 Obj *pyramid;
-Obj *pillar;
+Obj *skybox;
+Obj *edgeNoG;
+Obj *edge;
+Obj *scaffold;
+
+/* ------ MATERIALS ------ */
+Material *defaultmat;
 
 /* ------ 3D -----*/
 GLfloat aspectRatio;
@@ -73,18 +79,13 @@ float bobX = 0.05, bobY = 0.15;
 float bobXbuff = 0, bobYbuff = 0;
 float jumpBuff = 0, jumpSet = 0;
 int crouchBuff = 0;
-float pyramidRot = 0;
-float parallaxY = 0.0, parallaxYSpd = 0.005;
-float parallaxAlpha = 0.0, parallaxAlphaSpd = 0.01;
 
 /* ------------------------------- GLOBALS ---------------------------------- */
 int loadTextures() {
-        checker = loadTexture("./assets/textures/checker.png");
-        skyline = loadTexture("./assets/textures/skyline.png");
-        macplus = loadTexture("./assets/textures/macplus.png");
+        flrtex = loadTexture("./assets/textures/flrtex.png");
         marble = loadTexture("./assets/textures/marble.png");
 
-        if (!(checker && skyline && macplus && marble)) {
+        if (!(flrtex && marble)) {
             printf("ERROR LOADING TEXTURES\n");
         }
 
@@ -98,8 +99,17 @@ int loadModels() {
         pyramid = loadObj("./assets/models/pyramid.obj");
         setObjTexture(pyramid, loadTexture("./assets/models/AO.png"));
 
-        pillar = loadObj("./assets/models/pillar/pillar.obj");
-        setObjTexture(pillar, loadTexture("./assets/models/pillar/AO.png"));
+        skybox = loadObj("./assets/models/skybox/skybox.obj");
+        setObjTexture(skybox, loadTexture("./assets/models/skybox/CLM.png"));
+
+        edgeNoG = loadObj("./assets/models/rooftop/edgeNoG.obj");
+        setObjTexture(edgeNoG, loadTexture("./assets/models/rooftop/edgeCLM.png"));
+
+        edge = loadObj("./assets/models/rooftop/edge.obj");
+        setObjTexture(edge, loadTexture("./assets/models/rooftop/edgeCLM.png"));
+
+        scaffold = loadObj("./assets/models/rooftop/scaffold.obj");
+        setObjTexture(scaffold, loadTexture("./assets/models/rooftop/edgeCLM.png"));
 
         return 1;
 }
@@ -499,30 +509,11 @@ void audioCleanup() {
 void drawSkybox(void) {
     repositionCamera(cam);
 
-    glColor3f(1.0f, 1.0f, 1.0f);
-	glLineWidth(1.6f);
-	glBegin(GL_LINE_LOOP);	// frontal
-		glVertex3f(500.0, -500.0, 500.0);
-        glVertex3f(-500.0, -500.0, 500.0);
-        glVertex3f(-500.0, 500.0, 500.0);
-        glVertex3f(500.0, 500.0, 500.0);
-	glEnd();
-	glBegin(GL_LINE_LOOP);	//  posterior
-		glVertex3f(500.0, 500.0, -500.0);
-		glVertex3f(500.0, -500.0, -500.0);
-		glVertex3f(-500.0, -500.0, -500.0);
-		glVertex3f(-500.0, 500.0, -500.0);
-	glEnd();
-	glBegin(GL_LINES);	//  laterais
-		glVertex3f(-500.0, 500.0, -500.0);
-		glVertex3f(-500.0, 500.0, 500.0);
-		glVertex3f(-500.0, -500.0, -500.0);
-		glVertex3f(-500.0, -500.0, 500.0);
-		glVertex3f(500.0, 500.0, -500.0);
-		glVertex3f(500.0, 500.0, 500.0);
-		glVertex3f(500.0, -500.0, -500.0);
-		glVertex3f(500.0, -500.0, 500.0);
-	glEnd();
+    glDisable(GL_LIGHTING);
+    glRotatef(180.0f, 0.0f, 1.0f, 0.0f);
+    glScalef(10.0f, 10.0f, 10.0f);
+    drawObjTextured(skybox);
+    glEnable(GL_LIGHTING);
 }
 
 void drawGrid(void){
@@ -544,56 +535,96 @@ void drawGrid(void){
 void drawFloor(void){
     repositionCamera(cam);
 
-    Plane *flr = createPlane();
-        setPlaneCoordinates(flr, -100.0f, 0.0f, -100.0f,
-                                -100.0f, 0.0f, 100.0f,
-                                100.0f, 0.0f, 100.0f,
-                                100.0f, 0.0f, -100.0f);
-        setPlaneTexture(flr, checker);
-        glTranslatef(0.0f, 0.0f, 70.0f);
-        drawPlaneTextured(flr);
-    freePlane(flr);
+    Material *floormat = createMaterial();
+    setMaterialDiffuse(floormat, 1.0, 1.0, 1.0, 1.0);
+    setMaterialSpecular(floormat, 1.0, 1.0, 1.0, 1.0);
+    setMaterialShininess(floormat, 90);
+    useMaterial(floormat);
+    freeMaterial(floormat);
+
+    glTranslatef(0.0f, 0.0f, 70.0f);
+
+    glBindTexture(GL_TEXTURE_2D, flrtex);
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 0);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(-50.0f, 0.0f, -100.0f);
+
+        glTexCoord2f(0, 1);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(-50.0f, 0.0f, 0.0f);
+
+        glTexCoord2f(1, 1);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(50.0f, 0.0f, 0.0f);
+
+        glTexCoord2f(1, 0);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(50.0f, 0.0f, -100.0f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    useMaterial(defaultmat);
 }
 
-void drawPyramid(){
+void drawEdges(){
     repositionCamera(cam);
 
-    glTranslatef(0.0f, 0.0f, 15.0f);
-    glRotatef(pyramidRot, 0, 1, 0);
+    glTranslatef(0.0f, 0.0f, 50.0f);
+    glScalef(10.0f, 10.0f, 10.0f);
+    glPushMatrix();
 
-    pyramidRot += 0.5;
-    if(pyramidRot >= 360)
-        pyramidRot = 0;
+    drawObjTextured(edgeNoG);
 
-    drawObjTextured(pyramid);
+    glTranslatef(2.0f, 0.0f, 0.0f);
+    drawObjTextured(edgeNoG);
+    glTranslatef(2.0f, 0.0f, 0.0f);
+    drawObjTextured(edgeNoG);
 
-    glColor3f(1.0f, 0.0f, 0.0f);
-    drawObjWireframe(pyramid);
+    glTranslatef(-6.0f, 0.0f, 0.0f);
+    drawObjTextured(edgeNoG);
+    glTranslatef(-2.0f, 0.0f, 0.0f);
+    drawObjTextured(edgeNoG);
 
-    glColor3f(0.0f, 0.0f, 0.0f);
-    drawObjVertices(pyramid);
-    glColor3f(1.0f, 1.0f, 1.0f);
+    glPopMatrix();
+    glPushMatrix();
+
+    glTranslatef(3.0f, 0.0f, -7.0f);
+    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+    drawObjTextured(edge);
+
+    glTranslatef(-2.0f, 0.0f, 0.0f);
+    drawObjTextured(edge);
+    glTranslatef(-2.0f, 0.0f, 0.0f);
+    drawObjTextured(edge);
+    glTranslatef(-2.0f, 0.0f, 0.0f);
+    drawObjTextured(edge);
+
+    glPopMatrix();
+
+    glTranslatef(-3.0f, 0.0f, -1.0f);
+    glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
+    drawObjTextured(edge);
+
+    glTranslatef(-2.0f, 0.0f, 0.0f);
+    drawObjTextured(edge);
+    glTranslatef(-2.0f, 0.0f, 0.0f);
+    drawObjTextured(edge);
+    glTranslatef(-2.0f, 0.0f, 0.0f);
+    drawObjTextured(edge);
 }
 
-void drawMac(){
+void drawRooftop(){
     repositionCamera(cam);
-
-    Plane *mac = createPlane();
-        setPlaneCoordinates(mac, -11.0f, -5.0f, 0.0f,
-                                -11.0f, 5.0f, 0.0f,
-                                11.0f, 5.0f, 0.0f,
-                                11.0f, -5.0f, 0.0f);
-        setPlaneTexture(mac, macplus);
-        glTranslatef(6.5f, 20.0f, -20.0f);
-        drawPlaneTextured(mac);
-        setPlaneCoordinates(mac, -12.0f, -7.5f, 0.0f,
-                                -12.0f, 7.5f, 0.0f,
-                                12.0f, 7.5f, 0.0f,
-                                12.0f, -7.5f, 0.0f);
-        glTranslatef(4.0f, -11.0f, -10.0f);
-        setPlaneTexture(mac, skyline);
-        drawPlaneTextured(mac);
-    freePlane(mac);
+    glPushMatrix();
+    glTranslatef(0.0f, 0.0f, 42.0f);
+    glScalef(6.5f, 10.0f, 7.5f);
+    drawObjTextured(scaffold);
+    glPopMatrix();
 }
 
 void drawAlex(){
@@ -623,18 +654,6 @@ void drawAlex(){
     drawObjTextured(alexander);
 }
 
-void drawPillar(){
-    repositionCamera(cam);
-    glTranslatef(75.0f, 0.5f, -15.0f);
-    glScalef(0.05f, 0.05f, 0.05f);
-    drawObjTextured(pillar);
-
-    repositionCamera(cam);
-    glTranslatef(-75.0f, 0.5f, -15.0f);
-    glScalef(0.05f, 0.05f, 0.05f);
-    drawObjTextured(pillar);
-}
-
 /*--------------------SCENE--------------------*/
 void drawScene() {
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo); // Bind our frame buffer for rendering
@@ -642,16 +661,19 @@ void drawScene() {
     glViewport(0, 0, VIEWPORT_CURX, VIEWPORT_CURY);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0f, 0.52f, 0.61f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClearDepth(1.0f);
 
     // Load matrix mode
     glMatrixMode(GL_MODELVIEW);
 
+    drawSkybox();
     drawFloor();
+
     drawAlex();
-    drawPillar();
-    drawMac();
+
+    drawRooftop();
+    drawEdges();
 
     glPopAttrib(); // Restore our glEnable and glViewport states
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0); // Unbind our texture
@@ -667,11 +689,12 @@ void setTime(){
 
 void drawScreen(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(1.0f, 0.52f, 0.61f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     glClearDepth(1.0f);
 
     glEnable(GL_TEXTURE_2D); // Enable texturing so we can bind our frame buffer texture
     glEnable(GL_DEPTH_TEST); // Enable depth testing
+    glDisable(GL_LIGHTING); // Disable lighting for a while
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -700,6 +723,8 @@ void drawScreen(){
     glUseProgram(0);
     glDisable(GL_BLEND);
     glBindTexture(GL_TEXTURE_2D, 0); // Unbind any textures
+
+    glEnable(GL_LIGHTING); // Re-enable scene lighting
 }
 
 void drawLoop(void) {
@@ -718,6 +743,62 @@ void drawLoop(void) {
     glutSwapBuffers();
 }
 
+void initLight(void){
+    glMatrixMode(GL_MODELVIEW);
+    
+    glEnable(GL_COLOR_MATERIAL);
+
+    defaultmat = createMaterial();
+    setMaterialDiffuse(defaultmat, 1.0, 1.0, 1.0, 1.0);
+    setMaterialSpecular(defaultmat, 0.8, 0.8, 0.8, 1.0);
+    //setMaterialEmission(defaultmat, 0.2, 0.2, 0.2, 1.0);
+    setMaterialShininess(defaultmat, 20);
+    useMaterial(defaultmat);
+
+    GLfloat ambient[4] = {0.27, 0.27, 0.3, 1.0};
+
+    GLfloat diffuse0[4] = {0.05, 0.05, 0.05, 1.0};
+    GLfloat specular0[4] = {0.3, 0.3, 0.3, 1.0};
+    GLfloat position0[4] = {0.0, -1.0, -0.5, 0.0};
+
+    glLoadIdentity();
+
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specular0);
+    glLightfv(GL_LIGHT0, GL_POSITION, position0);
+    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0f);
+    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5f);
+    glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
+
+    GLfloat diffuse1[4] = {0.0, 0.4, 0.4, 1.0};
+    GLfloat specular1[4] = {0.0, 0.6, 0.6, 1.0};
+    GLfloat position1[4] = {20.0, 30.0, -100.0, 1.0};
+
+    glLoadIdentity();
+
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, specular1);
+    glLightfv(GL_LIGHT1, GL_POSITION, position1);
+    glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.0f);
+    glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5f);
+    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.0f);
+
+    GLfloat diffuse2[4] = {0.4, 0.0, 0.1, 1.0};
+    GLfloat specular2[4] = {0.6, 0.0, 0.2, 1.0};
+    GLfloat position2[4] = {-20.0, 30.0, -100.0, 1.0};
+
+    glLoadIdentity();
+
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse2);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, specular2);
+    glLightfv(GL_LIGHT2, GL_POSITION, position2);
+    glLightf(GL_LIGHT2, GL_CONSTANT_ATTENUATION, 1.0f);
+    glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.5f);
+    glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.0f);
+}
+
 void initializeScene(void){
     cam = createCamera();
     midX = VIEWPORT_X/2;
@@ -726,5 +807,6 @@ void initializeScene(void){
     VIEWPORT_CURY = VIEWPORT_Y;
     initFrameBuffer();
     initShaders();
+    initLight();
 }
 /* ----------------------------- SCENE DRAWING ------------------------------ */

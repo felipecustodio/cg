@@ -55,7 +55,11 @@ void freeObj(Obj *obj){
     if(obj == NULL) return;
     if(obj->v) free(obj->v);
     if(obj->vt) free(obj->vt);
+    if(obj->vn) free(obj->vn);
     if(obj->f) free(obj->f);
+    if(obj->ft) free(obj->ft);
+    if(obj->fn) free(obj->fn);
+    if(obj->material) freeMaterial(obj->material);
     free(obj);
 }
 
@@ -80,6 +84,8 @@ Obj *loadObj(char *fname){
     obj->f = (GLint *) malloc(sizeof(GLint) * 3);
     obj->ft = (GLint *) malloc(sizeof(GLint) * 3);
     obj->fn = (GLint *) malloc(sizeof(GLint) * 3);
+
+    obj->material = NULL;
 
     obj->vcount = 0;
     obj->vtcount = 0;
@@ -205,6 +211,14 @@ void setObjTexture(Obj *obj, GLuint texture){
 
     obj->texture = texture;
 }
+
+/* SET OBJ MATERIAL */
+/* arguments: Obj structure and loaded material */
+void setObjMaterial(Obj *obj, Material *material){
+    if(obj == NULL) return;
+
+    obj->material = material;
+}
 /* --------------------------- GETTERS & SETTERS ---------------------------- */
 
 /* ------------------------------- RENDERING -------------------------------- */
@@ -270,6 +284,9 @@ void drawObjTextured(Obj *obj){
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    if(obj->material != NULL)
+        useMaterial(obj->material);
 
     int i = 0, v1 = 0, v2 = 0, v3 = 0,
             vt1 = 0, vt2 = 0, vt3 = 0,
