@@ -85,6 +85,9 @@ Obj *loadObj(char *fname){
     obj->ft = (GLint *) malloc(sizeof(GLint) * 3);
     obj->fn = (GLint *) malloc(sizeof(GLint) * 3);
 
+    obj->colormap = 0;
+    obj->normalmap = 0;
+
     obj->material = NULL;
 
     obj->vcount = 0;
@@ -204,12 +207,20 @@ Obj *loadObj(char *fname){
 /* --------------------------- STRUCTURE HANDLING --------------------------- */
 
 /* --------------------------- GETTERS & SETTERS ---------------------------- */
-/* SET OBJ TEXTURE */
+/* SET OBJ COLORMAP */
 /* arguments: Obj structure and loaded texture */
-void setObjTexture(Obj *obj, GLuint texture){
+void setObjColormap(Obj *obj, GLuint texture){
     if(obj == NULL) return;
 
-    obj->texture = texture;
+    obj->colormap = texture;
+}
+
+/* SET OBJ NORMALMAP */
+/* arguments: Obj structure and loaded texture */
+void setObjNormalmap(Obj *obj, GLuint texture){
+    if(obj == NULL) return;
+
+    obj->normalmap = texture;
 }
 
 /* SET OBJ MATERIAL */
@@ -279,8 +290,76 @@ void drawObjTextured(Obj *obj){
     if(obj->f == NULL) return;
     if(obj->ft == NULL) return;
 
-    glBindTexture(GL_TEXTURE_2D, obj->texture);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glBindTexture(GL_TEXTURE_2D, obj->colormap);
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    int i = 0, v1 = 0, v2 = 0, v3 = 0,
+            vt1 = 0, vt2 = 0, vt3 = 0,
+            vn1 = 0, vn2 = 0, vn3 = 0;
+    for(i = 0; i < obj->fcount; i++){
+        v1 = obj->f[i * 3] - 1;
+        v2 = obj->f[i * 3 + 1] - 1;
+        v3 = obj->f[i * 3 + 2] - 1;
+        vt1 = obj->ft[i * 3] - 1;
+        vt2 = obj->ft[i * 3 + 1] - 1;
+        vt3 = obj->ft[i * 3 + 2] - 1;
+        if(obj->vncount != 0){
+            vn1 = obj->fn[i * 3] - 1;
+            vn2 = obj->fn[i * 3 + 1] - 1;
+            vn3 = obj->fn[i * 3 + 2] - 1;
+        }
+        glBegin(GL_TRIANGLES);
+            glNormal3f(obj->vn[vn1 * 3], obj->vn[vn1 * 3 + 1], obj->vn[vn1 * 3 + 2]);
+            glTexCoord2f(obj->vt[vt1 * 2], obj->vt[vt1 * 2 + 1]);
+            glVertex3f(obj->v[v1 * 3], obj->v[v1 * 3 + 1], obj->v[v1 * 3 + 2]);
+
+            glNormal3f(obj->vn[vn2 * 3], obj->vn[vn2 * 3 + 1], obj->vn[vn2 * 3 + 2]);
+            glTexCoord2f(obj->vt[vt2 * 2], obj->vt[vt2 * 2 + 1]);
+            glVertex3f(obj->v[v2 * 3], obj->v[v2 * 3 + 1], obj->v[v2 * 3 + 2]);
+
+            glNormal3f(obj->vn[vn3 * 3], obj->vn[vn3 * 3 + 1], obj->vn[vn3 * 3 + 2]);
+            glTexCoord2f(obj->vt[vt3 * 2], obj->vt[vt3 * 2 + 1]);
+            glVertex3f(obj->v[v3 * 3], obj->v[v3 * 3 + 1], obj->v[v3 * 3 + 2]);
+        glEnd();
+    }
+
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_BLEND);
+}
+
+void drawObjMaterial(Obj *obj, Shader *shader){
+    if(obj == NULL) return;
+    if(obj->vt == NULL) return;
+    if(obj->f == NULL) return;
+    if(obj->ft == NULL) return;
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+    if(shader != NULL){
+        useShader(shader);
+
+        glActiveTexture(GL_TEXTURE0);
+        glEnable(GL_TEXTURE_2D);
+        int texture_location = glGetUniformLocation(shader->program, "color_texture");
+        glUniform1i(texture_location, 0);
+        glBindTexture(GL_TEXTURE_2D, obj->colormap);
+
+        glActiveTexture(GL_TEXTURE1);
+        glEnable(GL_TEXTURE_2D);
+        int normal_location = glGetUniformLocation(shader->program, "normal_texture");
+        glUniform1i(normal_location, 1);
+        glBindTexture(GL_TEXTURE_2D, obj->normalmap);
+    }
+    else{
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, obj->colormap);
+    }
+
     glEnable(GL_CULL_FACE);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -318,7 +397,22 @@ void drawObjTextured(Obj *obj){
         glEnd();
     }
 
-    glDisable(GL_TEXTURE_2D);
+    if(shader != NULL){
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_TEXTURE_2D);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDisable(GL_TEXTURE_2D);
+
+        glUseProgram(0);
+    }
+    else{
+        glDisable(GL_TEXTURE_2D);
+    }
+
+
     glDisable(GL_CULL_FACE);
     glDisable(GL_BLEND);
 }

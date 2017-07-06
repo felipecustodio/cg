@@ -140,8 +140,6 @@ void setPlaneTexture(Plane *plane, GLuint texture){
 void drawPlaneHollow(Plane* plane) {
     if (plane == NULL) return;
 
-    glColor3f(plane->color[0], plane->color[1], plane->color[2]);
-
     glLineWidth(plane->thickness);
 
     glBegin(GL_LINE_LOOP);
@@ -155,8 +153,6 @@ void drawPlaneHollow(Plane* plane) {
 void drawPlaneFilled(Plane* plane) {
     if (plane == NULL) return;
 
-    glColor3f(plane->color[0], plane->color[1], plane->color[2]);
-
     glBegin(GL_QUADS);
         glVertex3f(plane->x[0], plane->y[0], plane->z[0]);
         glVertex3f(plane->x[1], plane->y[1], plane->z[1]);
@@ -168,6 +164,7 @@ void drawPlaneFilled(Plane* plane) {
 void drawPlaneTextured(Plane *plane){
     if (plane == NULL) return;
 
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glBindTexture(GL_TEXTURE_2D, plane->texture);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
@@ -256,7 +253,6 @@ void drawCubeHollow(Cube *cube){
     if (cube == NULL) return;
 
     Plane *plane = createPlane();
-        setPlaneColor(plane, cube->color[0], cube->color[1], cube->color[2]);
         setPlaneThickness(plane, cube->thickness);
         setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
                                 (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
@@ -295,7 +291,6 @@ void drawCubeFilled(Cube *cube){
     if (cube == NULL) return;
 
     Plane *plane = createPlane();
-        setPlaneColor(plane, cube->color[0], cube->color[1], cube->color[2]);
         setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
                                 (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
                                 (cube->sizeX/2) + cube->x, -(cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
@@ -333,7 +328,6 @@ void drawCubeTextured(Cube *cube){
     if (cube == NULL) return;
 
     Plane *plane = createPlane();
-        setPlaneColor(plane, cube->color[0], cube->color[1], cube->color[2]);
         setPlaneTexture(plane, cube->texture);
         setPlaneCoordinates(plane, -(cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,
                                 (cube->sizeX/2) + cube->x, (cube->sizeY/2) + cube->y, (cube->sizeZ/2) + cube->z,

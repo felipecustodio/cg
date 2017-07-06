@@ -1,9 +1,11 @@
 #ifndef OBJ_H
 #define OBJ_H
 
+#include <GL/glew.h>
 #include <GL/glut.h>
 #include <stdio.h>
 #include <string.h>
+#include "glsl.h"
 #include "material.h"
 #include "settings.h"
 
@@ -25,7 +27,9 @@ typedef struct Obj{		// Structure for OBJ files (normals not included)
 	int ftcount;		// Ft count
 	int fncount;		// Ft count
 
-	GLuint texture;		// Object texture
+	GLuint colormap;	// Object colormap
+	GLuint normalmap;	// Object normalmap
+
 	Material *material;	// Object material
 } Obj;
 
@@ -43,9 +47,13 @@ void freeObj(Obj *obj);
 /* --------------------------- STRUCTURE HANDLING --------------------------- */
 
 /* --------------------------- GETTERS & SETTERS ---------------------------- */
-/* SET OBJ TEXTURE */
+/* SET OBJ COLORMAP */
 /* arguments: Obj structure and loaded texture */
-void setObjTexture(Obj *obj, GLuint texture);
+void setObjColormap(Obj *obj, GLuint texture);
+
+/* SET OBJ NORMALMAP */
+/* arguments: Obj structure and loaded texture */
+void setObjNormalmap(Obj *obj, GLuint texture);
 
 /* SET OBJ MATERIAL */
 /* arguments: Obj structure and loaded material */
@@ -59,6 +67,7 @@ void drawObjVertices(Obj *obj);
 void drawObjWireframe(Obj *obj);
 void drawObjSolid(Obj *obj);
 void drawObjTextured(Obj *obj);
+void drawObjMaterial(Obj *obj, Shader *shader);
 /* ------------------------------- RENDERING -------------------------------- */
 
 /* ----------------------------- MAIN FUNCTIONS ----------------------------- */

@@ -19,7 +19,7 @@
 int main(int argc, char* argv[]) {
         // INITIALIZE GLUT
         glutInit(&argc, argv); // Instanciate Glut
-        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE); // Defines the buffer display mode
+        glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE | GLUT_STENCIL); // Defines the buffer display mode
         glEnable(GL_MULTISAMPLE); // Enables antialiasing
 
         // TEXTURES
@@ -44,8 +44,8 @@ int main(int argc, char* argv[]) {
         glEnable(GL_DEPTH_TEST); // Enable depth buffer by default
         glEnable(GL_LIGHTING); // Enable scene lighting
         glEnable(GL_LIGHT0); // Enable 1 light source
-        glEnable(GL_LIGHT1); // Enable 1 light source
-        glEnable(GL_LIGHT2); // Enable 1 light source
+        //glEnable(GL_LIGHT1); // Enable 1 light source
+        //glEnable(GL_LIGHT2); // Enable 1 light source
         glCullFace(GL_BACK); // Backface culling parameter
         glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST); // Enable perspective correction
         glShadeModel(GL_SMOOTH); // Enable Gouraud smooth shading

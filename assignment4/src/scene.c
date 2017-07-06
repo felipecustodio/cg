@@ -29,6 +29,29 @@ GLuint flrtex, skyline, macplus, marble;
 
 /* ------ SHADERS ------ */
 Shader *screenShader;
+Shader *normalShader;
+
+/* ------ LIGHTS ------ */
+float glShadowMatrix[16];
+float glShadowPlane[4];
+
+GLfloat ambient[4] = {0.27, 0.27, 0.3, 1.0};
+
+GLfloat diffuse0[4] = {0.05, 0.05, 0.05, 1.0};
+GLfloat specular0[4] = {0.3, 0.3, 0.3, 1.0};
+GLfloat position0[4] = {0.0, -1.0, -0.5, 0.0};
+GLfloat position0s[4] = {60.0, 200.0, -200.0, 0.0};
+GLfloat shadow0[4] = {0.0, 0.0, 0.0, 0.1};
+
+GLfloat diffuse1[4] = {0.0, 0.4, 0.4, 1.0};
+GLfloat specular1[4] = {0.0, 0.6, 0.6, 1.0};
+GLfloat position1[4] = {-50.0, 30.0, 0.0, 1.0};
+GLfloat shadow1[4] = {0.0, 0.4, 0.4, 0.5};
+
+GLfloat diffuse2[4] = {0.4, 0.0, 0.1, 1.0};
+GLfloat specular2[4] = {0.6, 0.0, 0.2, 1.0};
+GLfloat position2[4] = {50.0, 30.0, 0.0, 1.0};
+GLfloat shadow2[4] = {0.4, 0.0, 0.1, 0.5};
 
 /* ------ MODELS ------ */
 Obj *alexander;
@@ -94,22 +117,23 @@ int loadTextures() {
 /* ------------------------------- GLOBALS ---------------------------------- */
 int loadModels() {
         alexander = loadObj("./assets/models/alexander/alexander.obj");
-        setObjTexture(alexander, loadTexture("./assets/models/alexander/CLM.png"));
+        setObjColormap(alexander, loadTexture("./assets/models/alexander/CLM.png"));
+        setObjNormalmap(alexander, loadTexture("./assets/models/alexander/NRM.png"));
 
         pyramid = loadObj("./assets/models/pyramid.obj");
-        setObjTexture(pyramid, loadTexture("./assets/models/AO.png"));
+        setObjColormap(pyramid, loadTexture("./assets/models/AO.png"));
 
         skybox = loadObj("./assets/models/skybox/skybox.obj");
-        setObjTexture(skybox, loadTexture("./assets/models/skybox/CLM.png"));
+        setObjColormap(skybox, loadTexture("./assets/models/skybox/CLM.png"));
 
         edgeNoG = loadObj("./assets/models/rooftop/edgeNoG.obj");
-        setObjTexture(edgeNoG, loadTexture("./assets/models/rooftop/edgeCLM.png"));
+        setObjColormap(edgeNoG, loadTexture("./assets/models/rooftop/edgeCLM.png"));
 
         edge = loadObj("./assets/models/rooftop/edge.obj");
-        setObjTexture(edge, loadTexture("./assets/models/rooftop/edgeCLM.png"));
+        setObjColormap(edge, loadTexture("./assets/models/rooftop/edgeCLM.png"));
 
         scaffold = loadObj("./assets/models/rooftop/scaffold.obj");
-        setObjTexture(scaffold, loadTexture("./assets/models/rooftop/edgeCLM.png"));
+        setObjColormap(scaffold, loadTexture("./assets/models/rooftop/edgeCLM.png"));
 
         return 1;
 }
@@ -447,6 +471,7 @@ void initFrameBuffer(){
 
 void initShaders(void){
     screenShader = createShader("./assets/shaders/vcr.vert", "./assets/shaders/vcr.frag");
+    normalShader = createShader("./assets/shaders/normal.vert", "./assets/shaders/normal.frag");
 }
 /* ------------------------- FRAMEBUFFER & SHADERS -------------------------- */
 
@@ -506,6 +531,56 @@ void audioCleanup() {
 /* -------------------------------- AUDIO ----------------------------------- */
 
 /*-------------------------------- RENDERING ---------------------------------*/
+void generateShadowMatrix(float matrix[16], float lightPos[4], float plane[4]){
+    float point;
+    // Calculates the produced point between the light position and plane
+    point = plane[0] * lightPos[0] +
+            plane[1] * lightPos[1] +
+            plane[2] * lightPos[2] +
+            plane[3] * lightPos[3];
+
+    matrix[0] = point - lightPos[0] * plane[0];
+    matrix[4] = 0.0f - lightPos[0] * plane[1];
+    matrix[8] = 0.0f - lightPos[0] * plane[2];
+    matrix[12] = 0.0f - lightPos[0] * plane[3];
+
+    matrix[1] = 0.0f - lightPos[1] * plane[0];
+    matrix[5] = point - lightPos[1] * plane[1];
+    matrix[9] = 0.0f - lightPos[1] * plane[2];
+    matrix[13] = 0.0f - lightPos[1] * plane[3];
+
+    matrix[2] = 0.0f - lightPos[2] * plane[0];
+    matrix[6] = 0.0f - lightPos[2] * plane[1];
+    matrix[10] = point - lightPos[2] * plane[2];
+    matrix[14] = 0.0f - lightPos[2] * plane[3];
+
+    matrix[3] = 0.0f - lightPos[3] * plane[0];
+    matrix[7] = 0.0f - lightPos[3] * plane[1];
+    matrix[11] = 0.0f - lightPos[3] * plane[2];
+    matrix[15] = point - lightPos[3] * plane[3];
+}
+
+void findPlaneEquation(GLfloat plane[4], GLfloat v0[3], GLfloat v1[3], GLfloat v2[3]){
+    GLfloat vec0[3], vec1[3];
+	// Requires 2 points for interssection
+	vec0[0] = v1[0] - v0[0];
+	vec0[1] = v1[1] - v0[1];
+	vec0[2] = v1[2] - v0[2];
+	vec1[0] = v2[0] - v0[0];
+	vec1[1] = v2[1] - v0[1];
+	vec1[2] = v2[2] - v0[2];
+	// Finds interssection point to find A, B, and C from equation point
+	plane[0] = vec0[1] * vec1[2] - vec0[2] * vec1[1];
+	plane[1] = -(vec0[0] * vec1[2] - vec0[2] * vec1[0]);
+	plane[2] = vec0[0] * vec1[1] - vec0[1] * vec1[0];
+	plane[3] = -(plane[0] * v0[0] + plane[1] * v0[1] + plane[2] * v0[2]);
+}
+
+void calculateShadow(GLfloat v0[3], GLfloat v1[3], GLfloat v2[3], GLfloat lightPos[4]){
+    findPlaneEquation(glShadowPlane, v0, v1, v2);
+    generateShadowMatrix(glShadowMatrix, lightPos, glShadowPlane);
+}
+
 void drawSkybox(void) {
     repositionCamera(cam);
 
@@ -536,15 +611,16 @@ void drawFloor(void){
     repositionCamera(cam);
 
     Material *floormat = createMaterial();
-    setMaterialDiffuse(floormat, 1.0, 1.0, 1.0, 1.0);
+    setMaterialDiffuse(floormat, 0.5, 0.5, 0.5, 1.0);
     setMaterialSpecular(floormat, 1.0, 1.0, 1.0, 1.0);
-    setMaterialShininess(floormat, 90);
+    setMaterialShininess(floormat, 15);
     useMaterial(floormat);
-    freeMaterial(floormat);
 
     glTranslatef(0.0f, 0.0f, 70.0f);
 
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     glBindTexture(GL_TEXTURE_2D, flrtex);
+
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -568,6 +644,12 @@ void drawFloor(void){
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_BLEND);
 
+    GLfloat v0[3] = {-50.0f, 0.0f, -100.0f};
+    GLfloat v1[3] = {-50.0f, 0.0f, 0.0f};
+    GLfloat v2[3] = {50.0f, 0.0f, 0.0f};
+    calculateShadow(v0, v1, v2, position0s);
+
+    freeMaterial(floormat);
     useMaterial(defaultmat);
 }
 
@@ -620,6 +702,7 @@ void drawEdges(){
 
 void drawRooftop(){
     repositionCamera(cam);
+
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, 42.0f);
     glScalef(6.5f, 10.0f, 7.5f);
@@ -635,6 +718,39 @@ void drawAlex(){
         setCubeCoordinates(cube, 0.0f, 0.0f, 0.0f);
         setCubeSize(cube, 8.5f, 5.0f, 8.5f);
         setCubeTexture(cube, marble);
+
+    /* Draw Shadows */
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glPushMatrix();
+    {
+        glMultMatrixf((GLfloat *)glShadowMatrix);
+        glRotatef(-30, 0, 1, 0);
+        glTranslatef(-12.5f, 2.25f, -7.75f);
+        glColor4f(shadow0[0], shadow0[1], shadow0[2], shadow0[3]);
+        drawCubeFilled(cube);
+    }
+    glPopMatrix();
+    glPushMatrix();
+    {
+        glMultMatrixf((GLfloat *)glShadowMatrix);
+        glTranslatef(alex_x, alex_y, alex_z);
+        glRotatef(alex_rotX, 1.0f, 0.0f, 0.0f);
+        glRotatef(alex_rotY, 0.0f, 1.0f, 0.0f);
+        glRotatef(alex_rotZ, 0.0f, 0.0f, 1.0f);
+        glScalef(-0.6f, 0.6f, 0.6f);
+        glColor4f(shadow0[0], shadow0[1], shadow0[2], shadow0[3]);
+        drawObjSolid(alexander);
+    }
+    glPopMatrix();
+    glDisable(GL_BLEND);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+
+    // Rest of the cube pseudo-function
         glRotatef(-30, 0, 1, 0);
         glTranslatef(-12.5f, 2.25f, -7.75f);
         drawCubeTextured(cube);
@@ -644,17 +760,24 @@ void drawAlex(){
 
     // Movement
     glTranslatef(alex_x, alex_y, alex_z);
-    //printf("ROT ANGLE: %f\tX: %f\tY: %f\tZ: %fz\n", alex_rot, alex_rx, alex_ry, alex_rz);
     glRotatef(alex_rotX, 1.0f, 0.0f, 0.0f);
     glRotatef(alex_rotY, 0.0f, 1.0f, 0.0f);
     glRotatef(alex_rotZ, 0.0f, 0.0f, 1.0f);
     glScalef(-0.6f, 0.6f, 0.6f);
 
     // Rendering
-    drawObjTextured(alexander);
+    drawObjMaterial(alexander, NULL);
 }
 
 /*--------------------SCENE--------------------*/
+void updateLight(){
+    repositionCamera(cam);
+
+    glLightfv(GL_LIGHT0, GL_POSITION, position0);
+    glLightfv(GL_LIGHT1, GL_POSITION, position1);
+    glLightfv(GL_LIGHT2, GL_POSITION, position2);
+}
+
 void drawScene() {
     glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo); // Bind our frame buffer for rendering
     glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT); // Push our glEnable and glViewport states
@@ -666,6 +789,8 @@ void drawScene() {
 
     // Load matrix mode
     glMatrixMode(GL_MODELVIEW);
+
+    updateLight();
 
     drawSkybox();
     drawFloor();
@@ -744,8 +869,6 @@ void drawLoop(void) {
 }
 
 void initLight(void){
-    glMatrixMode(GL_MODELVIEW);
-    
     glEnable(GL_COLOR_MATERIAL);
 
     defaultmat = createMaterial();
@@ -755,15 +878,8 @@ void initLight(void){
     setMaterialShininess(defaultmat, 20);
     useMaterial(defaultmat);
 
-    GLfloat ambient[4] = {0.27, 0.27, 0.3, 1.0};
-
-    GLfloat diffuse0[4] = {0.05, 0.05, 0.05, 1.0};
-    GLfloat specular0[4] = {0.3, 0.3, 0.3, 1.0};
-    GLfloat position0[4] = {0.0, -1.0, -0.5, 0.0};
-
-    glLoadIdentity();
-
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambient);
+
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse0);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular0);
@@ -772,24 +888,12 @@ void initLight(void){
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5f);
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
 
-    GLfloat diffuse1[4] = {0.0, 0.4, 0.4, 1.0};
-    GLfloat specular1[4] = {0.0, 0.6, 0.6, 1.0};
-    GLfloat position1[4] = {20.0, 30.0, -100.0, 1.0};
-
-    glLoadIdentity();
-
     glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
     glLightfv(GL_LIGHT1, GL_SPECULAR, specular1);
     glLightfv(GL_LIGHT1, GL_POSITION, position1);
     glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.0f);
     glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5f);
     glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.0f);
-
-    GLfloat diffuse2[4] = {0.4, 0.0, 0.1, 1.0};
-    GLfloat specular2[4] = {0.6, 0.0, 0.2, 1.0};
-    GLfloat position2[4] = {-20.0, 30.0, -100.0, 1.0};
-
-    glLoadIdentity();
 
     glLightfv(GL_LIGHT2, GL_DIFFUSE, diffuse2);
     glLightfv(GL_LIGHT2, GL_SPECULAR, specular2);
