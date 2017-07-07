@@ -39,7 +39,7 @@ GLfloat ambient[4] = {0.17, 0.17, 0.2, 1.0};
 
 GLfloat diffuse0[4] = {0.05, 0.05, 0.05, 1.0};
 GLfloat specular0[4] = {0.3, 0.3, 0.3, 1.0};
-GLfloat position0[4] = {0.0, -1.0, -0.5, 0.0};
+GLfloat position0[4] = {0.15, -1.0, 0.7, 0.0};
 GLfloat position0s[4] = {60.0, 200.0, -200.0, 0.0};
 GLfloat shadow0[4] = {0.0, 0.0, 0.0, 0.1};
 
