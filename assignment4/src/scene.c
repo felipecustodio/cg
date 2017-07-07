@@ -25,7 +25,7 @@ int uDown = 0;
 Mix_Chunk *bg = NULL;
 
 /* ------ TEXTURES -----*/
-GLuint flrtex, skyline, macplus, marble;
+GLuint flrtex, marble, streets;
 
 /* ------ SHADERS ------ */
 Shader *screenShader;
@@ -35,7 +35,7 @@ Shader *normalShader;
 float glShadowMatrix[16];
 float glShadowPlane[4];
 
-GLfloat ambient[4] = {0.27, 0.27, 0.3, 1.0};
+GLfloat ambient[4] = {0.17, 0.17, 0.2, 1.0};
 
 GLfloat diffuse0[4] = {0.05, 0.05, 0.05, 1.0};
 GLfloat specular0[4] = {0.3, 0.3, 0.3, 1.0};
@@ -60,6 +60,11 @@ Obj *skybox;
 Obj *edgeNoG;
 Obj *edge;
 Obj *scaffold;
+Obj *entrance;
+Obj *conc;
+Obj *build01;
+Obj *build02;
+Obj *build03;
 
 /* ------ MATERIALS ------ */
 Material *defaultmat;
@@ -107,8 +112,9 @@ int crouchBuff = 0;
 int loadTextures() {
         flrtex = loadTexture("./assets/textures/flrtex.png");
         marble = loadTexture("./assets/textures/marble.png");
+        streets = loadTexture("./assets/textures/streets.png");
 
-        if (!(flrtex && marble)) {
+        if (!(flrtex && marble && streets)) {
             printf("ERROR LOADING TEXTURES\n");
         }
 
@@ -134,6 +140,21 @@ int loadModels() {
 
         scaffold = loadObj("./assets/models/rooftop/scaffold.obj");
         setObjColormap(scaffold, loadTexture("./assets/models/rooftop/edgeCLM.png"));
+
+        entrance = loadObj("./assets/models/rooftop/entrance.obj");
+        setObjColormap(entrance, loadTexture("./assets/models/rooftop/entranceCLM.png"));
+
+        conc = loadObj("./assets/models/rooftop/conc.obj");
+        setObjColormap(conc, loadTexture("./assets/models/rooftop/concCLM.png"));
+
+        build01 = loadObj("./assets/models/buildings/build01.obj");
+        setObjColormap(build01, loadTexture("./assets/models/buildings/build01.png"));
+
+        build02 = loadObj("./assets/models/buildings/build02.obj");
+        setObjColormap(build02, loadTexture("./assets/models/buildings/build02.png"));
+
+        build03 = loadObj("./assets/models/buildings/build03.obj");
+        setObjColormap(build03, loadTexture("./assets/models/buildings/build03.png"));
 
         return 1;
 }
@@ -591,6 +612,43 @@ void drawSkybox(void) {
     glEnable(GL_LIGHTING);
 }
 
+void drawStreets(void) {
+    repositionCamera(cam);
+
+    Material *streetmat = createMaterial();
+    setMaterialEmission(streetmat, 0.3, 0.3, 0.3, 1.0);
+    useMaterial(streetmat);
+
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glBindTexture(GL_TEXTURE_2D, streets);
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBegin(GL_QUADS);
+        glTexCoord2f(0, 0);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(-500.0f, -100.0f, -500.0f);
+
+        glTexCoord2f(0, 1);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(-500.0f, -100.0f, 500.0f);
+
+        glTexCoord2f(1, 1);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(500.0f, -100.0f, 500.0f);
+
+        glTexCoord2f(1, 0);
+        glNormal3f(0.0f, 1.0f, 0.0f);
+        glVertex3f(500.0f, -100.0f, -500.0f);
+    glEnd();
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_BLEND);
+
+    useMaterial(defaultmat);
+    freeMaterial(streetmat);
+}
+
 void drawGrid(void){
     repositionCamera(cam);
 
@@ -706,8 +764,77 @@ void drawRooftop(){
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, 42.0f);
     glScalef(6.5f, 10.0f, 7.5f);
+    drawObjTextured(conc);
+    Material *ent = createMaterial();
+        setMaterialDiffuse(ent, 0.5, 0.5, 0.5, 1.0);
+        setMaterialSpecular(ent, 1.0, 1.0, 1.0, 1.0);
+        setMaterialEmission(ent, 0.5, 0.5, 0.5, 1.0);
+        setMaterialShininess(ent, 100);
+        useMaterial(ent);
+        drawObjTextured(entrance);
+    freeMaterial(ent);
+    useMaterial(defaultmat);
     drawObjTextured(scaffold);
     glPopMatrix();
+}
+
+void drawBuildings(){
+    repositionCamera(cam);
+
+    Material *buildmat = createMaterial();
+    setMaterialEmission(buildmat, 0.3, 0.3, 0.2, 1.0);
+    useMaterial(buildmat);
+
+    glPushMatrix();
+        glTranslatef(0.0f, 0.0f, 600.0f);
+        glScalef(20.0f, 20.0f, 20.0f);
+        drawObjTextured(build01);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(200.0f, 0.0f, 0.0f);
+        glScalef(5.0f, 5.0f, 5.0f);
+        drawObjTextured(build02);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(200.0f, 0.0f, 200.0f);
+        glScalef(5.0f, 10.0f, 5.0f);
+        drawObjTextured(build03);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-200.0f, 0.0f, 0.0f);
+        glScalef(5.0f, 15.0f, 5.0f);
+        drawObjTextured(build03);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-200.0f, 0.0f, 200.0f);
+        glScalef(5.0f, 10.0f, 5.0f);
+        drawObjTextured(build02);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-400.0f, 0.0f, -400.0f);
+        glScalef(10.0f, 10.0f, 10.0f);
+        drawObjTextured(build01);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(400.0f, 0.0f, -400.0f);
+        glScalef(10.0f, 10.0f, 10.0f);
+        drawObjTextured(build02);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(0.0f, 0.0f, -400.0f);
+        glScalef(5.0f, 10.0f, 5.0f);
+        drawObjTextured(build03);
+    glPopMatrix();
+
+    useMaterial(defaultmat);
+    freeMaterial(buildmat);
 }
 
 void drawAlex(){
@@ -793,10 +920,12 @@ void drawScene() {
     updateLight();
 
     drawSkybox();
+    drawStreets();
     drawFloor();
 
     drawAlex();
 
+    drawBuildings();
     drawRooftop();
     drawEdges();
 
